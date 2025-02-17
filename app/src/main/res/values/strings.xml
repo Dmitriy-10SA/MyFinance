@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">MyFinance</string>
+    <string name="expenses">Расходы</string>
+    <string name="incomes">Доходы</string>
+    <string name="select_incomes">Выбор доходов</string>
+    <string name="select_expenses">Выбор расходов</string>
+    <string name="day">День</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
+    <string name="year">Год</string>
+    <string name="period">Период</string>
 </resources>
