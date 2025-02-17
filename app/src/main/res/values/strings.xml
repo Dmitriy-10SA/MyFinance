@@ -9,4 +9,6 @@
     <string name="month">Месяц</string>
     <string name="year">Год</string>
     <string name="period">Период</string>
+    <string name="expense_icon">Значок расхода</string>
+    <string name="add_income">Добавить доход</string>
 </resources>

@@ -6,9 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.andef.myfinance.databinding.FragmentIncomesBinding
 import com.andef.myfinance.domain.entities.Date
+import com.andef.myfinance.presentation.app.MyFinanceApplication
+import com.andef.myfinance.presentation.factory.ViewModelFactory
+import com.andef.myfinance.presentation.viewmodel.ExpensesViewModel
+import com.andef.myfinance.presentation.viewmodel.IncomesViewModel
 import java.time.LocalDate
+import javax.inject.Inject
 
 class IncomesFragment : Fragment() {
     private var _binding: FragmentIncomesBinding? = null
@@ -18,7 +24,18 @@ class IncomesFragment : Fragment() {
     private lateinit var startDate: Date
     private lateinit var endDate: Date
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[IncomesViewModel::class.java]
+    }
+
+    private val component by lazy {
+        (requireActivity().application as MyFinanceApplication).component
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
         super.onCreate(savedInstanceState)
         getScreenModeAndDate()
     }
