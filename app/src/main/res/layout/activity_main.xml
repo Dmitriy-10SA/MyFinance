@@ -143,7 +143,7 @@
         app:cardBackgroundColor="#F0F0F0"
         app:cardCornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/cardViewFinance"
         app:layout_constraintStart_toEndOf="@id/cardViewIncomes">
 
         <LinearLayout
@@ -168,6 +168,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/expenses"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewFinance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#F0F0F0"
+        app:cardCornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cardViewExpenses">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/select_expenses"
+                android:maxWidth="75dp"
+                android:maxHeight="23dp"
+                android:src="@drawable/money_refund_dollar_svgrepo_com" />
+
+            <TextView
+                android:id="@+id/textViewFinance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/finance"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
         </LinearLayout>
