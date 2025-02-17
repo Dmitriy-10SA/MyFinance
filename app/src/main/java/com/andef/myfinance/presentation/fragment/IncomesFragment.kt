@@ -1,5 +1,6 @@
 package com.andef.myfinance.presentation.fragment
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.andef.myfinance.R
+import com.andef.myfinance.data.formatter.DateFormatter
 import com.andef.myfinance.databinding.FragmentIncomesBinding
 import com.andef.myfinance.domain.entities.Date
 import com.andef.myfinance.presentation.app.MyFinanceApplication
 import com.andef.myfinance.presentation.factory.ViewModelFactory
+import com.andef.myfinance.presentation.fragment.ExpensesFragment.Companion
 import com.andef.myfinance.presentation.viewmodel.ExpensesViewModel
 import com.andef.myfinance.presentation.viewmodel.IncomesViewModel
 import java.time.LocalDate
@@ -108,6 +112,24 @@ class IncomesFragment : Fragment() {
     ): View {
         _binding = FragmentIncomesBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun initViews() {
+        with(binding) {
+            if (screenMode == DAY_MODE) {
+                textViewDate.setText(R.string.today)
+            } else {
+                val formatStartDate = DateFormatter.formatDate(startDate)
+                val formatEndDate = DateFormatter.formatDate(endDate)
+                textViewDate.text = "$formatStartDate - $formatEndDate"
+            }
+        }
     }
 
     override fun onDestroyView() {

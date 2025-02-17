@@ -12,5 +12,7 @@
     <string name="period">Период</string>
     <string name="expense_icon">Значок расхода</string>
     <string name="add_income">Добавить доход</string>
+    <string name="add_expenses">Добавить расход</string>
     <string name="check_all">Просмотр итого</string>
+    <string name="today">Сегодня</string>
 </resources>
