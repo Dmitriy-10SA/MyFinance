@@ -1,4 +1,4 @@
-package com.andef.myfinance.domain
+package com.andef.myfinance.domain.entities
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

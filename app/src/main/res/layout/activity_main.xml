@@ -6,7 +6,7 @@
     android:background="@drawable/app_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.MainActivity">
+    tools:context=".presentation.activity.MainActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewPeriods"

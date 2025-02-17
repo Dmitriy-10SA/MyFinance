@@ -1,13 +1,14 @@
-package com.andef.myfinance.presentation
+package com.andef.myfinance.presentation.activity
 
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.andef.myfinance.R
 import com.andef.myfinance.databinding.ActivityMainBinding
-import com.andef.myfinance.domain.Date
+import com.andef.myfinance.domain.entities.Date
+import com.andef.myfinance.presentation.fragment.ExpensesFragment
+import com.andef.myfinance.presentation.fragment.IncomesFragment
 import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.builders.DatePickerBuilder
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener
@@ -53,11 +54,12 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
             } else {
                 savedInstanceState.getParcelable(END_DATE, Date::class.java)
             }
-            firstNotice()
+            noticeCardView()
+            firstNoticeTextView()
         }
     }
 
-    private fun firstNotice() {
+    private fun firstNoticeTextView() {
         when (screenMode) {
             DAY_MODE -> noticeTextView(isDay = true)
             WEEK_MODE -> noticeTextView(isWeek = true)
@@ -190,6 +192,14 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
         }
     }
 
+    private fun noticeCardView() {
+        when (financeMode) {
+            INCOME_MODE -> noticeIncomesCardView()
+            EXPENSES_MODE -> noticeExpensesCardView()
+            else -> throw RuntimeException("Unknown screenMode: $this.")
+        }
+    }
+
     private fun noticeIncomesCardView() {
         with(binding) {
             textViewIncomes.typeface = Typeface.DEFAULT_BOLD
@@ -228,7 +238,26 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
     }
 
     private fun showExpensesFragment() {
-        TODO()
+        val expensesFragment = if (screenMode == DAY_MODE) {
+            ExpensesFragment.newInstanceNotPeriod(isDayMode = true)
+        } else if (screenMode == WEEK_MODE) {
+            ExpensesFragment.newInstanceNotPeriod(isWeekMode = true)
+        } else if (screenMode == MONTH_MODE) {
+            ExpensesFragment.newInstanceNotPeriod(isMonthMode = true)
+        } else if (screenMode == YEAR_MODE) {
+            ExpensesFragment.newInstanceNotPeriod(isYearMode = true)
+        } else if (screenMode == PERIOD_MODE) {
+            if (startDate != null && endDate != null) {
+                ExpensesFragment.newInstancePeriod(startDate!!, endDate!!)
+            } else {
+                throw RuntimeException("Not initial values: $this.")
+            }
+        } else {
+            throw RuntimeException("Unknown screen mode: $this.")
+        }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainerViewMain, expensesFragment)
+            .commit()
     }
 
     companion object {

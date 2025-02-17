@@ -1,16 +1,14 @@
-package com.andef.myfinance.presentation
+package com.andef.myfinance.presentation.fragment
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.andef.myfinance.databinding.FragmentIncomesBinding
-import com.andef.myfinance.domain.Date
+import com.andef.myfinance.domain.entities.Date
 import java.time.LocalDate
-import kotlin.math.E
 
 class IncomesFragment : Fragment() {
     private var _binding: FragmentIncomesBinding? = null
@@ -23,7 +21,6 @@ class IncomesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getScreenModeAndDate()
-        Log.d("TEST", "$screenMode, $startDate, $endDate")
     }
 
     private fun getScreenModeAndDate() {
@@ -73,8 +70,7 @@ class IncomesFragment : Fragment() {
         if (isDayMode) {
             endDate = startDate
             return
-        }
-        else if (isWeekMode) {
+        } else if (isWeekMode) {
             currentDate = currentDate.plusWeeks(1)
         } else if (isMonthMode) {
             currentDate = currentDate.plusMonths(1)
