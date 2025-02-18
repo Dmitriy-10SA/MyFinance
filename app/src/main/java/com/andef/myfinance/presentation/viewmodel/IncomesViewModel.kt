@@ -2,6 +2,8 @@ package com.andef.myfinance.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.andef.myfinance.domain.usecases.income.AddIncomeUseCase
+import com.andef.myfinance.domain.usecases.income.GetFullIncomeByDayUseCase
+import com.andef.myfinance.domain.usecases.income.GetFullIncomeByPeriodUseCase
 import com.andef.myfinance.domain.usecases.income.GetIncomesByDayUseCase
 import com.andef.myfinance.domain.usecases.income.GetIncomesByPeriodUseCase
 import com.andef.myfinance.domain.usecases.income.RemoveIncomeUseCase
@@ -11,6 +13,8 @@ class IncomesViewModel  @Inject constructor(
     private val addIncomeUseCase: AddIncomeUseCase,
     private val removeIncomeUseCase: RemoveIncomeUseCase,
     private val getIncomesByDayUseCase: GetIncomesByDayUseCase,
-    private val getIncomesByPeriodUseCase: GetIncomesByPeriodUseCase
+    private val getIncomesByPeriodUseCase: GetIncomesByPeriodUseCase,
+    private val getFullIncomeByDayUseCase: GetFullIncomeByDayUseCase,
+    private val getFullIncomeByPeriodUseCase: GetFullIncomeByPeriodUseCase
 ) : ViewModel() {
 }

@@ -31,4 +31,20 @@ interface ExpenseDao {
 
     @Query("DELETE FROM expenses WHERE id = :id")
     suspend fun removeExpense(id: Int)
+
+    @Query("SELECT SUM(price) FROM expenses WHERE dateString = :dateString")
+    fun getFullExpenseByDay(dateString: String): LiveData<Double>
+
+    @Query("""
+        SELECT SUM(price) FROM expenses
+        WHERE 
+            SUBSTR(dateString, 7, 4) || '-' ||
+            SUBSTR(dateString, 4, 2) || '-' || 
+            SUBSTR(dateString, 1, 2) 
+            BETWEEN :startDateString AND :endDateString
+    """)
+    fun getFullExpenseByPeriod(
+        startDateString: String,
+        endDateString: String
+    ): LiveData<Double>
 }

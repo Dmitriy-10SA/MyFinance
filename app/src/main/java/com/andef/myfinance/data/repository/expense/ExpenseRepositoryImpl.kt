@@ -40,4 +40,15 @@ class ExpenseRepositoryImpl @Inject constructor(
     override suspend fun removeExpense(id: Int) {
         expenseDao.removeExpense(id)
     }
+
+    override fun getFullExpenseByDay(date: Date): LiveData<Double> {
+        val formatDate = DateFormatter.formatDate(date)
+        return expenseDao.getFullExpenseByDay(formatDate)
+    }
+
+    override fun getFullExpenseByPeriod(startDate: Date, endDate: Date): LiveData<Double> {
+        val formatStartDate = DateFormatter.formatDate(startDate)
+        val formatEndDate = DateFormatter.formatDate(endDate)
+        return expenseDao.getFullExpenseByPeriod(formatStartDate, formatEndDate)
+    }
 }

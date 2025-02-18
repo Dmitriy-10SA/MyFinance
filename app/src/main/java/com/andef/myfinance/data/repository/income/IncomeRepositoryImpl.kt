@@ -40,4 +40,15 @@ class IncomeRepositoryImpl @Inject constructor(
     override suspend fun removeIncome(id: Int) {
         incomesDao.removeIncome(id)
     }
+
+    override fun getFullIncomeByDay(date: Date): LiveData<Double> {
+        val formatDate = DateFormatter.formatDate(date)
+        return incomesDao.getFullIncomeByDay(formatDate)
+    }
+
+    override fun getFullIncomeByPeriod(startDate: Date, endDate: Date): LiveData<Double> {
+        val formatStartDate = DateFormatter.formatDate(startDate)
+        val formatEndDate = DateFormatter.formatDate(endDate)
+        return incomesDao.getFullIncomeByPeriod(formatStartDate, formatEndDate)
+    }
 }

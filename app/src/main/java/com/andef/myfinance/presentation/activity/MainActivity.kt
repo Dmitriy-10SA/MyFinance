@@ -8,6 +8,7 @@ import com.andef.myfinance.R
 import com.andef.myfinance.databinding.ActivityMainBinding
 import com.andef.myfinance.domain.entities.Date
 import com.andef.myfinance.presentation.fragment.ExpensesFragment
+import com.andef.myfinance.presentation.fragment.FinanceFragment
 import com.andef.myfinance.presentation.fragment.IncomesFragment
 import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.builders.DatePickerBuilder
@@ -278,7 +279,26 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
     }
 
     private fun showFinanceFragment() {
-
+        val financeFragment = if (screenMode == DAY_MODE) {
+            FinanceFragment.newInstanceNotPeriod(isDayMode = true)
+        } else if (screenMode == WEEK_MODE) {
+            FinanceFragment.newInstanceNotPeriod(isWeekMode = true)
+        } else if (screenMode == MONTH_MODE) {
+            FinanceFragment.newInstanceNotPeriod(isMonthMode = true)
+        } else if (screenMode == YEAR_MODE) {
+            FinanceFragment.newInstanceNotPeriod(isYearMode = true)
+        } else if (screenMode == PERIOD_MODE) {
+            if (startDate != null && endDate != null) {
+                FinanceFragment.newInstancePeriod(startDate!!, endDate!!)
+            } else {
+                throw RuntimeException("Not initial values: $this.")
+            }
+        } else {
+            throw RuntimeException("Unknown screen mode: $this.")
+        }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainerViewMain, financeFragment)
+            .commit()
     }
 
     companion object {
