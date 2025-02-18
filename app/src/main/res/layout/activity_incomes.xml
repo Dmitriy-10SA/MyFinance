@@ -58,6 +58,7 @@
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/black"
                 android:textSize="24sp"
+                android:autofillHints="no"
                 android:textColor="@color/black"
                 android:hint="@string/input_income"
                 android:textColorHint="@color/black"
@@ -104,11 +105,13 @@
                         android:padding="8dp"
                         android:gravity="center"
                         android:layout_gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:contentDescription="@string/salary"
                             android:adjustViewBounds="true"
                             android:maxWidth="50dp"
                             android:src="@drawable/salesman_salesman_svgrepo_com"/>
@@ -141,11 +144,13 @@
                         android:gravity="center"
                         android:padding="8dp"
                         android:layout_gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:contentDescription="@string/bank"
                             android:adjustViewBounds="true"
                             android:maxWidth="50dp"
                             android:src="@drawable/bank_svgrepo_com"/>
@@ -178,11 +183,13 @@
                         android:gravity="center"
                         android:padding="8dp"
                         android:layout_gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:contentDescription="@string/lucky"
                             android:adjustViewBounds="true"
                             android:maxWidth="50dp"
                             android:src="@drawable/casino_slot_lucky_seven_svgrepo_com"/>
@@ -215,11 +222,13 @@
                         android:gravity="center"
                         android:padding="8dp"
                         android:layout_gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:contentDescription="@string/gift"
                             android:adjustViewBounds="true"
                             android:maxWidth="50dp"
                             android:src="@drawable/gift_svgrepo_com"/>
@@ -256,6 +265,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
+                    android:autofillHints="no"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/black"
                     android:textSize="20sp"
@@ -290,6 +300,7 @@
                     android:id="@+id/floatingActionButtonCalendar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/date_chose"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
