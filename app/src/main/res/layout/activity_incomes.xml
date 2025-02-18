@@ -59,7 +59,7 @@
                 android:backgroundTint="@color/black"
                 android:textSize="24sp"
                 android:textColor="@color/black"
-                android:hint="@string/input_price"
+                android:hint="@string/input_income"
                 android:textColorHint="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

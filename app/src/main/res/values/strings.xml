@@ -19,6 +19,7 @@
     <string name="add_new_expense">Добавление траты</string>
     <string name="add">Добавить</string>
     <string name="input_price">Введите цену (₽)</string>
+    <string name="input_income">Введите доход (₽)</string>
     <string name="category">Категория:</string>
     <string name="products">Продукты</string>
     <string name="eat">Еда</string>
