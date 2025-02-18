@@ -3,16 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".presentation.app.MyFinanceApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:name=".presentation.app.MyFinanceApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyFinance"
         tools:targetApi="31">
+        <activity
+            android:name=".presentation.activity.IncomesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.activity.ExpensesActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.activity.MainActivity"
             android:exported="true">

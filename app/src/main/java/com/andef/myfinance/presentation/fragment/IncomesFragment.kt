@@ -12,6 +12,7 @@ import com.andef.myfinance.R
 import com.andef.myfinance.data.formatter.DateFormatter
 import com.andef.myfinance.databinding.FragmentIncomesBinding
 import com.andef.myfinance.domain.entities.Date
+import com.andef.myfinance.presentation.activity.IncomesActivity
 import com.andef.myfinance.presentation.app.MyFinanceApplication
 import com.andef.myfinance.presentation.factory.ViewModelFactory
 import com.andef.myfinance.presentation.fragment.ExpensesFragment.Companion
@@ -28,18 +29,7 @@ class IncomesFragment : Fragment() {
     private lateinit var startDate: Date
     private lateinit var endDate: Date
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-    private val viewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[IncomesViewModel::class.java]
-    }
-
-    private val component by lazy {
-        (requireActivity().application as MyFinanceApplication).component
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        component.inject(this)
         super.onCreate(savedInstanceState)
         getScreenModeAndDate()
     }
@@ -129,7 +119,15 @@ class IncomesFragment : Fragment() {
                 val formatEndDate = DateFormatter.formatDate(endDate)
                 textViewDate.text = "$formatStartDate - $formatEndDate"
             }
+            floatingActionButtonAddIncome.setOnClickListener {
+                incomesScreen()
+            }
         }
+    }
+
+    private fun incomesScreen() {
+        val intent = IncomesActivity.newIntent(requireContext())
+        startActivity(intent)
     }
 
     override fun onDestroyView() {
