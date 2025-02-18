@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.andef.myfinance.R
-import com.andef.myfinance.di.annotation.ApplicationScope
 import com.andef.myfinance.domain.entities.ExpenseItem
-import javax.inject.Inject
+import com.andef.myfinance.presentation.formatter.PriceAndIncomeFormatter
 
 class ExpenseAdapter : ListAdapter<ExpenseItem, ExpenseViewHolder>(ExpenseCallback()) {
     private var onExpenseItemClickListener: OnExpenseItemClickListener? = null
@@ -24,10 +23,9 @@ class ExpenseAdapter : ListAdapter<ExpenseItem, ExpenseViewHolder>(ExpenseCallba
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ExpenseViewHolder, position: Int) {
         val expenseItem = getItem(position)
-        holder.textViewPriceOfExpense.text = "${expenseItem.price}"
+        holder.textViewPriceOfExpense.text = PriceAndIncomeFormatter.formatPrice(expenseItem.price)
         holder.textViewTypeOfExpense.text = expenseItem.type
-        holder.imageViewExpenseIcon.background =
-            holder.itemView.context.getDrawable(R.drawable.green_circle)
+        holder.imageViewExpenseIcon.setImageResource(expenseItem.iconResId)
         holder.constraintLayoutExpensesItem.setOnClickListener {
             onExpenseItemClickListener?.onClick(expenseItem)
         }

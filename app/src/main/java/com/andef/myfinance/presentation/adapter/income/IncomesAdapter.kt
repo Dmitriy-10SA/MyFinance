@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.andef.myfinance.R
 import com.andef.myfinance.domain.entities.IncomeItem
-import javax.inject.Inject
+import com.andef.myfinance.presentation.formatter.PriceAndIncomeFormatter
 
 class IncomesAdapter : ListAdapter<IncomeItem, IncomesViewHolder>(IncomesCallback()) {
     private var onIncomeItemClickListeners: OnIncomeItemClickListeners? = null
@@ -20,13 +20,12 @@ class IncomesAdapter : ListAdapter<IncomeItem, IncomesViewHolder>(IncomesCallbac
     }
 
     override fun onBindViewHolder(holder: IncomesViewHolder, position: Int) {
-        val expenseItem = getItem(position)
-        holder.textViewIncomeOfIncomes.text = "${expenseItem.income}"
-        holder.textViewTypeOfIncomes.text = expenseItem.type
-        holder.imageViewIncomesIcon.background =
-            holder.itemView.context.getDrawable(R.drawable.green_circle)
+        val incomeItem = getItem(position)
+        holder.textViewIncomeOfIncomes.text = PriceAndIncomeFormatter.formatPrice(incomeItem.income)
+        holder.textViewTypeOfIncomes.text = incomeItem.type
+        holder.imageViewIncomesIcon.setImageResource(incomeItem.iconResId)
         holder.constraintLayoutIncomesItem.setOnClickListener {
-            onIncomeItemClickListeners?.onClick(expenseItem)
+            onIncomeItemClickListeners?.onClick(incomeItem)
         }
     }
 

@@ -18,7 +18,14 @@ interface IncomesDao {
             SUBSTR(dateString, 7, 4) || '-' || 
             SUBSTR(dateString, 4, 2) || '-' || 
             SUBSTR(dateString, 1, 2) 
-            BETWEEN :startDateString AND :endDateString
+            BETWEEN 
+                SUBSTR(:startDateString, 7, 4) || '-' || 
+                SUBSTR(:startDateString, 4, 2) || '-' || 
+                SUBSTR(:startDateString, 1, 2)
+            AND 
+                SUBSTR(:endDateString, 7, 4) || '-' || 
+                SUBSTR(:endDateString, 4, 2) || '-' || 
+                SUBSTR(:endDateString, 1, 2)
     """
     )
     fun getIncomesByPeriod(
@@ -42,7 +49,14 @@ interface IncomesDao {
             SUBSTR(dateString, 7, 4) || '-' ||
             SUBSTR(dateString, 4, 2) || '-' || 
             SUBSTR(dateString, 1, 2) 
-            BETWEEN :startDateString AND :endDateString
+            BETWEEN 
+                SUBSTR(:startDateString, 7, 4) || '-' || 
+                SUBSTR(:startDateString, 4, 2) || '-' || 
+                SUBSTR(:startDateString, 1, 2)
+            AND 
+                SUBSTR(:endDateString, 7, 4) || '-' || 
+                SUBSTR(:endDateString, 4, 2) || '-' || 
+                SUBSTR(:endDateString, 1, 2)
     """
     )
     fun getFullIncomeByPeriod(

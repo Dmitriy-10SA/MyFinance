@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardBackgroundColor="@color/card_white"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="10dp"
-    app:cardElevation="2dp"
+    app:cardElevation="4dp"
     app:cardUseCompatPadding="true"
     android:layout_marginStart="2dp"
     android:layout_marginEnd="2dp">
@@ -23,7 +23,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            tools:background="@drawable/green_circle"
             android:padding="8dp"
             android:maxWidth="125dp"
             android:maxHeight="45dp"
@@ -31,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/money_receive_svgrepo_com" />
+            tools:srcCompat="@drawable/salesman_salesman_svgrepo_com" />
 
         <TextView
             android:id="@+id/textViewTypeOfExpense"
@@ -40,6 +39,7 @@
             tools:text="Досуг"
             android:textSize="19sp"
             android:layout_margin="8dp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textViewPriceOfExpense"
             app:layout_constraintStart_toEndOf="@+id/imageViewExpenseIcon"
@@ -50,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textSize="19sp"
+            android:textColor="@color/black"
             tools:text="1000"
             android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
