@@ -173,6 +173,7 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
         when (financeMode) {
             INCOME_MODE -> showIncomesFragment()
             EXPENSES_MODE -> showExpensesFragment()
+            FINANCE_FIN_MODE -> showFinanceFragment()
             else -> throw RuntimeException("Unknown financeMode: $this.")
         }
     }
@@ -189,6 +190,11 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
                 noticeExpensesCardView()
                 showExpensesFragment()
             }
+            cardViewFinance.setOnClickListener {
+                financeMode = FINANCE_FIN_MODE
+                noticeFinanceCardView()
+                showFinanceFragment()
+            }
         }
     }
 
@@ -196,6 +202,7 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
         when (financeMode) {
             INCOME_MODE -> noticeIncomesCardView()
             EXPENSES_MODE -> noticeExpensesCardView()
+            FINANCE_FIN_MODE -> noticeFinanceCardView()
             else -> throw RuntimeException("Unknown screenMode: $this.")
         }
     }
@@ -204,6 +211,15 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
         with(binding) {
             textViewIncomes.typeface = Typeface.DEFAULT_BOLD
             textViewExpenses.typeface = Typeface.DEFAULT
+            textViewFinance.typeface = Typeface.DEFAULT
+        }
+    }
+
+    private fun noticeFinanceCardView() {
+        with(binding) {
+            textViewIncomes.typeface = Typeface.DEFAULT
+            textViewExpenses.typeface = Typeface.DEFAULT
+            textViewFinance.typeface = Typeface.DEFAULT_BOLD
         }
     }
 
@@ -211,6 +227,7 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
         with(binding) {
             textViewIncomes.typeface = Typeface.DEFAULT
             textViewExpenses.typeface = Typeface.DEFAULT_BOLD
+            textViewFinance.typeface = Typeface.DEFAULT
         }
     }
 
@@ -260,6 +277,10 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
             .commit()
     }
 
+    private fun showFinanceFragment() {
+
+    }
+
     companion object {
         private const val SCREEN_MODE = "screenMode"
         private const val DAY_MODE = "day"
@@ -272,6 +293,7 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
         private const val FINANCE_MODE = "financeMode"
         private const val INCOME_MODE = "income"
         private const val EXPENSES_MODE = "expenses"
+        private const val FINANCE_FIN_MODE = "financeFinMode"
         private const val INITIAL_FINANCE_MODE = INCOME_MODE
 
         private const val START_DATE = "startDate"
