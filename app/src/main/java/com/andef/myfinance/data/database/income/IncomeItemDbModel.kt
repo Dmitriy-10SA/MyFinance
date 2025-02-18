@@ -9,6 +9,7 @@ data class IncomeItemDbModel(
     val id: Int,
     val iconResId: Int,
     val income: Double,
+    val type: String,
     val comment: String,
     val dateString: String
 )

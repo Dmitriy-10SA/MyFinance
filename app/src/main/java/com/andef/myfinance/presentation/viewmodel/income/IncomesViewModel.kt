@@ -1,4 +1,4 @@
-package com.andef.myfinance.presentation.viewmodel
+package com.andef.myfinance.presentation.viewmodel.income
 
 import androidx.lifecycle.ViewModel
 import com.andef.myfinance.domain.usecases.income.AddIncomeUseCase

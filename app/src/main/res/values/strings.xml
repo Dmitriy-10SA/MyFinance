@@ -15,4 +15,20 @@
     <string name="add_expenses">Добавить расход</string>
     <string name="check_all">Просмотр итого</string>
     <string name="today">Сегодня</string>
+    <string name="add_expense">Добавление расхода</string>
+    <string name="add_new_expense">Добавление траты</string>
+    <string name="add">Добавить</string>
+    <string name="input_price">Введите цену (₽)</string>
+    <string name="category">Категория:</string>
+    <string name="products">Продукты</string>
+    <string name="eat">Еда</string>
+    <string name="home">Дом</string>
+    <string name="gift">Подарки</string>
+    <string name="graduate">Учеба</string>
+    <string name="health">Здоровье</string>
+    <string name="transport">Транспорт</string>
+    <string name="sport">Спорт</string>
+    <string name="comment">Комментарий:</string>
+    <string name="comment_">Комментарий</string>
+    <string name="add_new_income">Добавление дохода</string>
 </resources>

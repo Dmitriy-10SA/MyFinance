@@ -14,6 +14,7 @@ object IncomeItemDbModelToIncomeItem {
         return IncomeItem(
             incomeItemDbModel.id,
             incomeItemDbModel.iconResId,
+            incomeItemDbModel.type,
             incomeItemDbModel.income,
             incomeItemDbModel.comment,
             incomeItemDbModel.dateString

@@ -14,6 +14,7 @@ object ExpenseItemDbModelToExpenseItem {
         return ExpenseItem(
             expenseItemDbModel.id,
             expenseItemDbModel.iconResId,
+            expenseItemDbModel.type,
             expenseItemDbModel.price,
             expenseItemDbModel.comment,
             expenseItemDbModel.dateString

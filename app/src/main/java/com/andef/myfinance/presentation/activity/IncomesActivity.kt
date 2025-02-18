@@ -9,7 +9,7 @@ import com.andef.myfinance.R
 import com.andef.myfinance.databinding.ActivityIncomesBinding
 import com.andef.myfinance.presentation.app.MyFinanceApplication
 import com.andef.myfinance.presentation.factory.ViewModelFactory
-import com.andef.myfinance.presentation.viewmodel.IncomesViewModel
+import com.andef.myfinance.presentation.viewmodel.income.IncomesViewModel
 import javax.inject.Inject
 
 class IncomesActivity : AppCompatActivity() {

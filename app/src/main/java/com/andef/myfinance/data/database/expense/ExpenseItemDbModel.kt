@@ -9,6 +9,7 @@ data class ExpenseItemDbModel(
     val id: Int,
     val iconResId: Int,
     val price: Double,
+    val type: String,
     val comment: String,
     val dateString: String
 )

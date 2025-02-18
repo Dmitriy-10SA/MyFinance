@@ -7,12 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.andef.myfinance.R
 import com.andef.myfinance.databinding.FragmentIncomesBinding
 import com.andef.myfinance.domain.entities.Date
 import com.andef.myfinance.presentation.activity.IncomesActivity
+import com.andef.myfinance.presentation.adapter.income.IncomesAdapter
+import com.andef.myfinance.presentation.app.MyFinanceApplication
+import com.andef.myfinance.presentation.factory.ViewModelFactory
 import com.andef.myfinance.presentation.formatter.DateFormatterWithDos
+import com.andef.myfinance.presentation.viewmodel.income.IncomesFragmentViewModel
 import java.time.LocalDate
+import javax.inject.Inject
 
 class IncomesFragment : Fragment() {
     private var _binding: FragmentIncomesBinding? = null
@@ -22,7 +28,20 @@ class IncomesFragment : Fragment() {
     private lateinit var startDate: Date
     private lateinit var endDate: Date
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[IncomesFragmentViewModel::class.java]
+    }
+
+    private val component by lazy {
+        (requireActivity().application as MyFinanceApplication).component
+    }
+
+    private lateinit var incomesAdapter: IncomesAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
         super.onCreate(savedInstanceState)
         getScreenModeAndDate()
     }
@@ -100,6 +119,7 @@ class IncomesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        initViewModel()
     }
 
     @SuppressLint("SetTextI18n")
@@ -114,6 +134,20 @@ class IncomesFragment : Fragment() {
             }
             floatingActionButtonAddIncome.setOnClickListener {
                 incomesScreen()
+            }
+            incomesAdapter = IncomesAdapter()
+            recyclerViewIncomes.adapter = incomesAdapter
+        }
+    }
+
+    private fun initViewModel() {
+        if (screenMode == DAY_MODE) {
+            viewModel.getIncomesByDay(startDate).observe(viewLifecycleOwner) {
+                incomesAdapter.submitList(it)
+            }
+        } else {
+            viewModel.getIncomesByPeriod(startDate, endDate).observe(viewLifecycleOwner) {
+                incomesAdapter.submitList(it)
             }
         }
     }

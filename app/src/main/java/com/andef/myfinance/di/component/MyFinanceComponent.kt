@@ -9,6 +9,9 @@ import com.andef.myfinance.di.module.income.IncomeRepositoryModule
 import com.andef.myfinance.di.module.viewmodel.ViewModelModule
 import com.andef.myfinance.presentation.activity.ExpensesActivity
 import com.andef.myfinance.presentation.activity.IncomesActivity
+import com.andef.myfinance.presentation.fragment.ExpensesFragment
+import com.andef.myfinance.presentation.fragment.FinanceFragment
+import com.andef.myfinance.presentation.fragment.IncomesFragment
 import dagger.BindsInstance
 import dagger.Component
 
@@ -25,6 +28,9 @@ import dagger.Component
 interface MyFinanceComponent {
     fun inject(expensesActivity: ExpensesActivity)
     fun inject(incomesActivity: IncomesActivity)
+    fun inject(financeFragment: FinanceFragment)
+    fun inject(expensesFragment: ExpensesFragment)
+    fun inject(incomesFragment: IncomesFragment)
 
     @Component.Factory
     interface MyFinanceFactory {

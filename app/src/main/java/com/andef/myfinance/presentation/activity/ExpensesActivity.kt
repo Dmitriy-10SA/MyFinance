@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.andef.myfinance.databinding.ActivityExpensesBinding
 import com.andef.myfinance.presentation.app.MyFinanceApplication
 import com.andef.myfinance.presentation.factory.ViewModelFactory
-import com.andef.myfinance.presentation.viewmodel.ExpensesViewModel
+import com.andef.myfinance.presentation.viewmodel.expense.ExpensesViewModel
 import javax.inject.Inject
 
 class ExpensesActivity : AppCompatActivity() {

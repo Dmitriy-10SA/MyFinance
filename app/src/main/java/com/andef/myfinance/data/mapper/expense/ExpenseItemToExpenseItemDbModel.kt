@@ -9,6 +9,7 @@ object ExpenseItemToExpenseItemDbModel {
             expenseItem.id,
             expenseItem.iconResId,
             expenseItem.price,
+            expenseItem.type,
             expenseItem.comment,
             expenseItem.dateString
         )

@@ -9,6 +9,7 @@ object IncomeItemToIncomeItemDbModel {
             incomeItem.id,
             incomeItem.iconResId,
             incomeItem.income,
+            incomeItem.type,
             incomeItem.comment,
             incomeItem.dateString
         )

@@ -7,12 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.andef.myfinance.R
 import com.andef.myfinance.databinding.FragmentExpensesBinding
 import com.andef.myfinance.domain.entities.Date
 import com.andef.myfinance.presentation.activity.ExpensesActivity
+import com.andef.myfinance.presentation.adapter.expense.ExpenseAdapter
+import com.andef.myfinance.presentation.app.MyFinanceApplication
+import com.andef.myfinance.presentation.factory.ViewModelFactory
 import com.andef.myfinance.presentation.formatter.DateFormatterWithDos
+import com.andef.myfinance.presentation.viewmodel.expense.ExpensesFragmentViewModel
 import java.time.LocalDate
+import javax.inject.Inject
 
 class ExpensesFragment : Fragment() {
     private var _binding: FragmentExpensesBinding? = null
@@ -22,7 +28,20 @@ class ExpensesFragment : Fragment() {
     private lateinit var startDate: Date
     private lateinit var endDate: Date
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[ExpensesFragmentViewModel::class.java]
+    }
+
+    private lateinit var expensesAdapter: ExpenseAdapter
+
+    private val component by lazy {
+        (requireActivity().application as MyFinanceApplication).component
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
         super.onCreate(savedInstanceState)
         getScreenModeAndDate()
     }
@@ -100,6 +119,7 @@ class ExpensesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        initViewModel()
     }
 
     @SuppressLint("SetTextI18n")
@@ -114,6 +134,20 @@ class ExpensesFragment : Fragment() {
             }
             floatingActionButtonAddIncome.setOnClickListener {
                 expensesScreen()
+            }
+            expensesAdapter = ExpenseAdapter()
+            recyclerViewIncomes.adapter = expensesAdapter
+        }
+    }
+
+    private fun initViewModel() {
+        if (screenMode == DAY_MODE) {
+            viewModel.getExpensesByDay(startDate).observe(viewLifecycleOwner) {
+                expensesAdapter.submitList(it)
+            }
+        } else {
+            viewModel.getExpensesByPeriod(startDate, endDate).observe(viewLifecycleOwner) {
+                expensesAdapter.submitList(it)
             }
         }
     }
