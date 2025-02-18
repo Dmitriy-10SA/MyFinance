@@ -9,12 +9,11 @@ import com.andef.myfinance.domain.usecases.income.GetIncomesByPeriodUseCase
 import com.andef.myfinance.domain.usecases.income.RemoveIncomeUseCase
 import javax.inject.Inject
 
-class IncomesViewModel  @Inject constructor(
+class IncomesViewModel @Inject constructor(
     private val addIncomeUseCase: AddIncomeUseCase,
     private val removeIncomeUseCase: RemoveIncomeUseCase,
     private val getIncomesByDayUseCase: GetIncomesByDayUseCase,
     private val getIncomesByPeriodUseCase: GetIncomesByPeriodUseCase,
     private val getFullIncomeByDayUseCase: GetFullIncomeByDayUseCase,
     private val getFullIncomeByPeriodUseCase: GetFullIncomeByPeriodUseCase
-) : ViewModel() {
-}
+) : ViewModel()

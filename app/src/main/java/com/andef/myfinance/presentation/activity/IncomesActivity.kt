@@ -3,10 +3,7 @@ package com.andef.myfinance.presentation.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.andef.myfinance.R
 import com.andef.myfinance.databinding.ActivityIncomesBinding

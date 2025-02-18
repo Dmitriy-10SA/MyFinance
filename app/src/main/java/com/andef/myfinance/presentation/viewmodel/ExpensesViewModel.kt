@@ -9,13 +9,11 @@ import com.andef.myfinance.domain.usecases.expense.GetFullExpenseByPeriodUseCase
 import com.andef.myfinance.domain.usecases.expense.RemoveExpenseUseCase
 import javax.inject.Inject
 
-class ExpensesViewModel  @Inject constructor(
+class ExpensesViewModel @Inject constructor(
     private val addExpenseUseCase: AddExpenseUseCase,
     private val removeExpenseUseCase: RemoveExpenseUseCase,
     private val getExpensesByDayUseCase: GetExpensesByDayUseCase,
     private val getExpensesByPeriodUseCase: GetExpensesByPeriodUseCase,
     private val getFullExpenseByDayUseCase: GetFullExpenseByDayUseCase,
     private val getFullExpenseByPeriodUseCase: GetFullExpenseByPeriodUseCase
-) : ViewModel() {
-
-}
+) : ViewModel()

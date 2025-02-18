@@ -7,17 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.andef.myfinance.R
-import com.andef.myfinance.data.formatter.DateFormatter
 import com.andef.myfinance.databinding.FragmentExpensesBinding
 import com.andef.myfinance.domain.entities.Date
 import com.andef.myfinance.presentation.activity.ExpensesActivity
-import com.andef.myfinance.presentation.app.MyFinanceApplication
-import com.andef.myfinance.presentation.factory.ViewModelFactory
-import com.andef.myfinance.presentation.viewmodel.ExpensesViewModel
+import com.andef.myfinance.presentation.formatter.DateFormatterWithDos
 import java.time.LocalDate
-import javax.inject.Inject
 
 class ExpensesFragment : Fragment() {
     private var _binding: FragmentExpensesBinding? = null
@@ -113,8 +108,8 @@ class ExpensesFragment : Fragment() {
             if (screenMode == DAY_MODE) {
                 textViewDate.setText(R.string.today)
             } else {
-                val formatStartDate = DateFormatter.formatDate(startDate)
-                val formatEndDate = DateFormatter.formatDate(endDate)
+                val formatStartDate = DateFormatterWithDos.formatDate(startDate)
+                val formatEndDate = DateFormatterWithDos.formatDate(endDate)
                 textViewDate.text = "$formatStartDate - $formatEndDate"
             }
             floatingActionButtonAddIncome.setOnClickListener {

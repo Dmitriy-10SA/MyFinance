@@ -1,7 +1,6 @@
 package com.andef.myfinance.domain.usecases.expense
 
 import com.andef.myfinance.domain.entities.Date
-import com.andef.myfinance.domain.entities.ExpenseItem
 import com.andef.myfinance.domain.repository.expense.ExpenseRepository
 import javax.inject.Inject
 

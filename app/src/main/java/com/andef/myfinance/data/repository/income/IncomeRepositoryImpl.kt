@@ -3,7 +3,7 @@ package com.andef.myfinance.data.repository.income
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.andef.myfinance.data.dao.expense.IncomesDao
-import com.andef.myfinance.data.formatter.DateFormatter
+import com.andef.myfinance.data.formatter.DateFormatterWithSlash
 import com.andef.myfinance.data.mapper.income.IncomeItemDbModelToIncomeItem
 import com.andef.myfinance.data.mapper.income.IncomeItemToIncomeItemDbModel
 import com.andef.myfinance.domain.entities.Date
@@ -15,7 +15,7 @@ class IncomeRepositoryImpl @Inject constructor(
     private val incomesDao: IncomesDao
 ) : IncomeRepository {
     override fun getIncomesByDay(date: Date): LiveData<List<IncomeItem>> {
-        val formatDate = DateFormatter.formatDate(date)
+        val formatDate = DateFormatterWithSlash.formatDate(date)
         return MediatorLiveData<List<IncomeItem>>().apply {
             addSource(incomesDao.getIncomesByDay(formatDate)) {
                 value = IncomeItemDbModelToIncomeItem.mapList(it)
@@ -24,8 +24,8 @@ class IncomeRepositoryImpl @Inject constructor(
     }
 
     override fun getIncomesByPeriod(startDate: Date, endDate: Date): LiveData<List<IncomeItem>> {
-        val formatStartDate = DateFormatter.formatDate(startDate)
-        val formatEndDate = DateFormatter.formatDate(endDate)
+        val formatStartDate = DateFormatterWithSlash.formatDate(startDate)
+        val formatEndDate = DateFormatterWithSlash.formatDate(endDate)
         return MediatorLiveData<List<IncomeItem>>().apply {
             addSource(incomesDao.getIncomesByPeriod(formatStartDate, formatEndDate)) {
                 value = IncomeItemDbModelToIncomeItem.mapList(it)
@@ -42,13 +42,13 @@ class IncomeRepositoryImpl @Inject constructor(
     }
 
     override fun getFullIncomeByDay(date: Date): LiveData<Double> {
-        val formatDate = DateFormatter.formatDate(date)
+        val formatDate = DateFormatterWithSlash.formatDate(date)
         return incomesDao.getFullIncomeByDay(formatDate)
     }
 
     override fun getFullIncomeByPeriod(startDate: Date, endDate: Date): LiveData<Double> {
-        val formatStartDate = DateFormatter.formatDate(startDate)
-        val formatEndDate = DateFormatter.formatDate(endDate)
+        val formatStartDate = DateFormatterWithSlash.formatDate(startDate)
+        val formatEndDate = DateFormatterWithSlash.formatDate(endDate)
         return incomesDao.getFullIncomeByPeriod(formatStartDate, formatEndDate)
     }
 }

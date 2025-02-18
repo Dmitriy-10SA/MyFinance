@@ -9,7 +9,7 @@ import com.andef.myfinance.di.annotation.ApplicationScope
 
 @ApplicationScope
 @Database(entities = [ExpenseItemDbModel::class], version = 1, exportSchema = false)
-abstract class ExpensesDataBase: RoomDatabase() {
+abstract class ExpensesDataBase : RoomDatabase() {
     abstract val expenseDao: ExpenseDao
 
     companion object {

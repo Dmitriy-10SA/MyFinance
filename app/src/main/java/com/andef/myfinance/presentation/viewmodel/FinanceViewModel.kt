@@ -12,6 +12,4 @@ class FinanceViewModel @Inject constructor(
     private val getFullIncomeByDayUseCase: GetFullIncomeByDayUseCase,
     private val getFullExpenseByPeriodUseCase: GetFullExpenseByPeriodUseCase,
     private val getFullExpenseByDayUseCase: GetFullExpenseByDayUseCase
-): ViewModel() {
-
-}
+) : ViewModel()

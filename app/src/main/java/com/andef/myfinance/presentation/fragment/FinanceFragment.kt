@@ -3,16 +3,13 @@ package com.andef.myfinance.presentation.fragment
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.andef.myfinance.R
-import com.andef.myfinance.data.formatter.DateFormatter
-import com.andef.myfinance.databinding.FragmentExpensesBinding
+import androidx.fragment.app.Fragment
 import com.andef.myfinance.databinding.FragmentFinanceBinding
 import com.andef.myfinance.domain.entities.Date
-import com.andef.myfinance.presentation.fragment.ExpensesFragment.Companion
+import com.andef.myfinance.presentation.formatter.DateFormatterWithDos
 import java.time.LocalDate
 
 
@@ -106,8 +103,8 @@ class FinanceFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun initViews() {
-        val formatStartDate = DateFormatter.formatDate(startDate)
-        val formatEndDate = DateFormatter.formatDate(endDate)
+        val formatStartDate = DateFormatterWithDos.formatDate(startDate)
+        val formatEndDate = DateFormatterWithDos.formatDate(endDate)
         binding.textViewFinance.text = "$formatStartDate - $formatEndDate"
     }
 

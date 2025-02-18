@@ -4,7 +4,7 @@ import com.andef.myfinance.domain.entities.Date
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-object DateFormatter {
+object DateFormatterWithSlash {
     fun formatDate(date: Date): String {
         val dateString = "${date.day}/${date.month}/${date.year}"
         val inputFormat = SimpleDateFormat("d/M/yyyy", Locale.getDefault())

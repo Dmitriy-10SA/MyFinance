@@ -5,21 +5,22 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.andef.myfinance.data.database.income.IncomeItemDbModel
-import com.andef.myfinance.domain.entities.Date
 
 @Dao
 interface IncomesDao {
     @Query("SELECT * FROM incomes WHERE dateString = :dateString")
     fun getIncomesByDay(dateString: String): LiveData<List<IncomeItemDbModel>>
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM incomes 
         WHERE 
             SUBSTR(dateString, 7, 4) || '-' || 
             SUBSTR(dateString, 4, 2) || '-' || 
             SUBSTR(dateString, 1, 2) 
             BETWEEN :startDateString AND :endDateString
-    """)
+    """
+    )
     fun getIncomesByPeriod(
         startDateString: String,
         endDateString: String
@@ -34,14 +35,16 @@ interface IncomesDao {
     @Query("SELECT SUM(income) FROM incomes WHERE dateString = :dateString")
     fun getFullIncomeByDay(dateString: String): LiveData<Double>
 
-    @Query("""
+    @Query(
+        """
         SELECT SUM(income) FROM incomes
         WHERE 
             SUBSTR(dateString, 7, 4) || '-' ||
             SUBSTR(dateString, 4, 2) || '-' || 
             SUBSTR(dateString, 1, 2) 
             BETWEEN :startDateString AND :endDateString
-    """)
+    """
+    )
     fun getFullIncomeByPeriod(
         startDateString: String,
         endDateString: String
