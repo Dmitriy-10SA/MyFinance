@@ -88,165 +88,13 @@
                 app:layout_constraintTop_toBottomOf="@id/textViewCategory">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardViewGraduate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="10dp"
-                    android:layout_marginTop="10dp"
-                    app:cardUseCompatPadding="true"
-                    app:cardBackgroundColor="@color/white"
-                    app:layout_constraintEnd_toStartOf="@id/cardViewEat"
-                    app:layout_constraintTop_toBottomOf="@id/cardViewProducts"
-                    app:layout_constraintStart_toStartOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="8dp"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:maxWidth="50dp"
-                            android:src="@drawable/graduate_diploma_svgrepo_com"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/graduate"
-                            android:textSize="13sp"
-                            android:textColor="@color/black"/>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardViewHealth"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="10dp"
-                    android:layout_marginTop="10dp"
-                    app:cardUseCompatPadding="true"
-                    app:cardBackgroundColor="@color/white"
-                    app:layout_constraintTop_toBottomOf="@id/cardViewEat"
-                    app:layout_constraintEnd_toStartOf="@id/cardViewTransport"
-                    app:layout_constraintStart_toEndOf="@id/cardViewGraduate">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:maxWidth="50dp"
-                            android:src="@drawable/health_care_love_svgrepo_com"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/health"
-                            android:textSize="13sp"
-                            android:textColor="@color/black"/>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardViewTransport"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardUseCompatPadding="true"
-                    app:cardBackgroundColor="@color/white"
-                    app:layout_constraintTop_toBottomOf="@id/cardViewHome"
-                    app:layout_constraintStart_toEndOf="@id/cardViewHealth"
-                    app:layout_constraintEnd_toStartOf="@id/cardViewGift">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:maxWidth="50dp"
-                            android:src="@drawable/public_transport_taxi_car_cab_svgrepo_com"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/transport"
-                            android:textSize="13sp"
-                            android:textColor="@color/black"/>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardViewSport"
-                    android:layout_width="0dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="10dp"
-                    app:cardUseCompatPadding="true"
-                    app:cardBackgroundColor="@color/white"
-                    app:layout_constraintTop_toBottomOf="@id/cardViewGift"
-                    app:layout_constraintStart_toEndOf="@id/cardViewTransport"
-                    app:layout_constraintEnd_toEndOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:maxWidth="50dp"
-                            android:src="@drawable/sport_trophy_svgrepo_com"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sport"
-                            android:textSize="13sp"
-                            android:textColor="@color/black"/>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardViewProducts"
+                    android:id="@+id/cardViewSalary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="10dp"
                     app:cardUseCompatPadding="true"
                     app:cardBackgroundColor="@color/white"
-                    app:layout_constraintEnd_toStartOf="@id/cardViewEat"
+                    app:layout_constraintEnd_toStartOf="@id/cardViewBank"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
 
@@ -263,12 +111,12 @@
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
                             android:maxWidth="50dp"
-                            android:src="@drawable/basket_svgrepo_com"/>
+                            android:src="@drawable/salesman_salesman_svgrepo_com"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/products"
+                            android:text="@string/salary"
                             android:textSize="13sp"
                             android:textColor="@color/black"/>
 
@@ -277,15 +125,15 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardViewEat"
+                    android:id="@+id/cardViewBank"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="10dp"
                     app:cardUseCompatPadding="true"
                     app:cardBackgroundColor="@color/white"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/cardViewHome"
-                    app:layout_constraintStart_toEndOf="@id/cardViewProducts">
+                    app:layout_constraintEnd_toStartOf="@id/cardViewLucky"
+                    app:layout_constraintStart_toEndOf="@id/cardViewSalary">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -300,12 +148,12 @@
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
                             android:maxWidth="50dp"
-                            android:src="@drawable/eat_svgrepo_com"/>
+                            android:src="@drawable/bank_svgrepo_com"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/eat"
+                            android:text="@string/bank"
                             android:textSize="13sp"
                             android:textColor="@color/black"/>
 
@@ -314,14 +162,14 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardViewHome"
+                    android:id="@+id/cardViewLucky"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="10dp"
                     app:cardUseCompatPadding="true"
                     app:cardBackgroundColor="@color/white"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/cardViewEat"
+                    app:layout_constraintStart_toEndOf="@id/cardViewBank"
                     app:layout_constraintEnd_toStartOf="@id/cardViewGift">
 
                     <LinearLayout
@@ -337,12 +185,12 @@
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
                             android:maxWidth="50dp"
-                            android:src="@drawable/home_button_svgrepo_com"/>
+                            android:src="@drawable/casino_slot_lucky_seven_svgrepo_com"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/home"
+                            android:text="@string/lucky"
                             android:textSize="13sp"
                             android:textColor="@color/black"/>
 
@@ -358,7 +206,7 @@
                     app:cardUseCompatPadding="true"
                     app:cardBackgroundColor="@color/white"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/cardViewHome"
+                    app:layout_constraintStart_toEndOf="@id/cardViewLucky"
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <LinearLayout
@@ -399,7 +247,7 @@
                     android:paddingStart="24sp"
                     android:paddingEnd="24sp"
                     android:textSize="20sp"
-                    app:layout_constraintTop_toBottomOf="@id/cardViewSport"
+                    app:layout_constraintTop_toBottomOf="@id/cardViewSalary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
@@ -419,6 +267,40 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textViewComment" />
+
+                <TextView
+                    android:id="@+id/textViewDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="45dp"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginBottom="6dp"
+                    android:padding="4dp"
+                    android:paddingStart="24sp"
+                    android:paddingEnd="24sp"
+                    android:text="@string/date_chose"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/editTextComment" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/floatingActionButtonCalendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintBottom_toBottomOf="@id/textViewDate"
+                    app:layout_constraintStart_toEndOf="@+id/textViewDate"
+                    app:layout_constraintTop_toTopOf="@id/textViewDate"
+                    app:srcCompat="@drawable/calendar_lines_svgrepo_com"
+                    app:tint="@color/black" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
