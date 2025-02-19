@@ -11,8 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.andef.myfinance.R
 import com.andef.myfinance.databinding.FragmentExpensesBinding
 import com.andef.myfinance.domain.entities.Date
+import com.andef.myfinance.domain.entities.ExpenseItem
 import com.andef.myfinance.presentation.activity.ExpensesActivity
 import com.andef.myfinance.presentation.adapter.expense.ExpenseAdapter
+import com.andef.myfinance.presentation.adapter.expense.OnExpenseItemClickListener
 import com.andef.myfinance.presentation.app.MyFinanceApplication
 import com.andef.myfinance.presentation.factory.ViewModelFactory
 import com.andef.myfinance.presentation.formatter.DateFormatterWithDos
@@ -136,6 +138,9 @@ class ExpensesFragment : Fragment() {
                 expensesScreen()
             }
             expensesAdapter = ExpenseAdapter()
+            expensesAdapter.setOnExpenseItemClickListener { expenseItem ->
+                expensesChangeAndRemoveScreen(expenseItem)
+            }
             recyclerViewIncomes.adapter = expensesAdapter
         }
     }
@@ -150,6 +155,11 @@ class ExpensesFragment : Fragment() {
                 expensesAdapter.submitList(it)
             }
         }
+    }
+
+    private fun expensesChangeAndRemoveScreen(expenseItem: ExpenseItem) {
+        val intent = ExpensesActivity.newIntentChangeAndRemove(requireContext(), expenseItem)
+        startActivity(intent)
     }
 
     private fun expensesScreen() {

@@ -2,7 +2,9 @@ package com.andef.myfinance.presentation.activity
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
@@ -37,6 +39,18 @@ class ExpensesActivity : AppCompatActivity(), OnSelectDateListener {
     private var typeIsChoose = false
     private var iconResId = -1
     private var type = ""
+    private val screenMode by lazy {
+        intent.extras!!.getString(EXTRA_SCREEN_MODE)
+    }
+
+    private val expenseItemFromExtra by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.extras!!.getParcelable(EXTRA_EXPENSE_ITEM, ExpenseItem::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.extras!!.getParcelable(EXTRA_EXPENSE_ITEM)
+        }
+    }
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -50,6 +64,55 @@ class ExpensesActivity : AppCompatActivity(), OnSelectDateListener {
         setContentView(binding.root)
 
         initViews()
+        if (screenMode == EXTRA_CHANGE_AND_REMOVE_MODE) {
+            additionalInitView()
+        }
+    }
+
+    private fun additionalInitView() {
+        if (expenseItemFromExtra != null) {
+            with(binding) {
+                textViewChangeExpense.setText(R.string.change_expense)
+                buttonAdd.setText(R.string.change)
+                floatingActionButtonRemove.visibility = VISIBLE
+                type = expenseItemFromExtra!!.type
+                iconResId = expenseItemFromExtra!!.iconResId
+                val tmpDate = expenseItemFromExtra!!.dateString.split("/").map { it.toInt() }
+                date = Date(
+                    tmpDate[0],
+                    tmpDate[1],
+                    tmpDate[2]
+                )
+                if (iconResId == R.drawable.eat_svgrepo_com) {
+                    colorCardView(isEat = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.health_care_love_svgrepo_com) {
+                    colorCardView(isHealth = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.gift_svgrepo_com) {
+                    colorCardView(isGift = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.home_button_svgrepo_com) {
+                    colorCardView(isHome = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.sport_trophy_svgrepo_com) {
+                    colorCardView(isSport = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.graduate_diploma_svgrepo_com) {
+                    colorCardView(isGraduate = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.basket_svgrepo_com) {
+                    colorCardView(isProducts = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.public_transport_taxi_car_cab_svgrepo_com) {
+                    colorCardView(isTransport = true)
+                    typeIsChoose = true
+                }
+                editTextPrice.setText("${expenseItemFromExtra!!.price}")
+                editTextExpenseEmpty = false
+                editTextComment.setText(expenseItemFromExtra!!.comment)
+            }
+        }
     }
 
     override fun onSelect(calendar: List<Calendar>) {
@@ -161,7 +224,11 @@ class ExpensesActivity : AppCompatActivity(), OnSelectDateListener {
                         editTextComment.text.toString().trim(),
                         ItemDateFormatter.formatDate(date)
                     )
-                    viewModel.addExpense(expenseItem)
+                    if (screenMode == EXTRA_ADD_MODE) {
+                        viewModel.addExpense(expenseItem)
+                    } else if (screenMode == EXTRA_CHANGE_AND_REMOVE_MODE) {
+                        viewModel.changeExpense(expenseItemFromExtra!!.id, expenseItem)
+                    }
                 } else {
                     Toast.makeText(
                         this@ExpensesActivity,
@@ -170,8 +237,13 @@ class ExpensesActivity : AppCompatActivity(), OnSelectDateListener {
                     ).show()
                 }
             }
+            floatingActionButtonRemove.setOnClickListener {
+                if (screenMode == EXTRA_CHANGE_AND_REMOVE_MODE) {
+                    viewModel.removeExpense(expenseItemFromExtra!!.id)
+                }
+            }
         }
-        viewModel.isSuccessAdd.observe(this) {
+        viewModel.isSuccess.observe(this) {
             if (it) {
                 finish()
             } else {
@@ -234,8 +306,22 @@ class ExpensesActivity : AppCompatActivity(), OnSelectDateListener {
     }
 
     companion object {
+        private const val EXTRA_SCREEN_MODE = "screenMode"
+        private const val EXTRA_ADD_MODE = "add"
+        private const val EXTRA_CHANGE_AND_REMOVE_MODE = "change"
+        private const val EXTRA_EXPENSE_ITEM = "expenseItem"
+
         fun newIntent(context: Context): Intent {
-            return Intent(context, ExpensesActivity::class.java)
+            return Intent(context, ExpensesActivity::class.java).apply {
+                putExtra(EXTRA_SCREEN_MODE, EXTRA_ADD_MODE)
+            }
+        }
+
+        fun newIntentChangeAndRemove(context: Context, expenseItem: ExpenseItem): Intent {
+            return Intent(context, ExpensesActivity::class.java).apply {
+                putExtra(EXTRA_SCREEN_MODE, EXTRA_CHANGE_AND_REMOVE_MODE)
+                putExtra(EXTRA_EXPENSE_ITEM, expenseItem)
+            }
         }
     }
 }

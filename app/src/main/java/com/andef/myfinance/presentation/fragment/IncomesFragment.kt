@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.andef.myfinance.R
 import com.andef.myfinance.databinding.FragmentIncomesBinding
 import com.andef.myfinance.domain.entities.Date
+import com.andef.myfinance.domain.entities.IncomeItem
 import com.andef.myfinance.presentation.activity.IncomesActivity
 import com.andef.myfinance.presentation.adapter.income.IncomesAdapter
 import com.andef.myfinance.presentation.app.MyFinanceApplication
@@ -136,6 +137,9 @@ class IncomesFragment : Fragment() {
                 incomesScreen()
             }
             incomesAdapter = IncomesAdapter()
+            incomesAdapter.setOnIncomeItemClickListeners { incomeItem ->
+                incomesAddAndChangeScreen(incomeItem)
+            }
             recyclerViewIncomes.adapter = incomesAdapter
         }
     }
@@ -150,6 +154,11 @@ class IncomesFragment : Fragment() {
                 incomesAdapter.submitList(it)
             }
         }
+    }
+
+    private fun incomesAddAndChangeScreen(incomeItem: IncomeItem) {
+        val intent = IncomesActivity.newIntentChangeAndRemove(requireContext(), incomeItem)
+        startActivity(intent)
     }
 
     private fun incomesScreen() {

@@ -2,11 +2,9 @@ package com.andef.myfinance.presentation.activity
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
@@ -14,7 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.andef.myfinance.R
 import com.andef.myfinance.databinding.ActivityIncomesBinding
 import com.andef.myfinance.domain.entities.Date
+import com.andef.myfinance.domain.entities.ExpenseItem
 import com.andef.myfinance.domain.entities.IncomeItem
+import com.andef.myfinance.presentation.activity.ExpensesActivity.Companion
 import com.andef.myfinance.presentation.app.MyFinanceApplication
 import com.andef.myfinance.presentation.factory.ViewModelFactory
 import com.andef.myfinance.presentation.formatter.ItemDateFormatter
@@ -43,6 +43,18 @@ class IncomesActivity : AppCompatActivity(), OnSelectDateListener {
     private var typeIsChoose = false
     private var iconResId = -1
     private var type = ""
+    private val screenMode by lazy {
+        intent.extras!!.getString(EXTRA_SCREEN_MODE)
+    }
+
+    private val incomeItemFromExtra by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.extras!!.getParcelable(EXTRA_INCOME_ITEM, IncomeItem::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.extras!!.getParcelable(EXTRA_INCOME_ITEM)
+        }
+    }
 
     private val component by lazy {
         (application as MyFinanceApplication).component
@@ -54,6 +66,43 @@ class IncomesActivity : AppCompatActivity(), OnSelectDateListener {
         setContentView(binding.root)
 
         initViews()
+        if (screenMode == EXTRA_CHANGE_AND_REMOVE_MODE) {
+            additionalInitView()
+        }
+    }
+
+    private fun additionalInitView() {
+        if (incomeItemFromExtra != null) {
+            with(binding) {
+                textViewChangeIncome.setText(R.string.change_expense)
+                buttonAdd.setText(R.string.change)
+                floatingActionButtonRemove.visibility = VISIBLE
+                type = incomeItemFromExtra!!.type
+                iconResId = incomeItemFromExtra!!.iconResId
+                val tmpDate = incomeItemFromExtra!!.dateString.split("/").map { it.toInt() }
+                date = Date(
+                    tmpDate[0],
+                    tmpDate[1],
+                    tmpDate[2]
+                )
+                if (iconResId == R.drawable.salesman_salesman_svgrepo_com) {
+                    colorCardView(isSalary = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.bank_svgrepo_com) {
+                    colorCardView(isBank = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.casino_slot_lucky_seven_svgrepo_com) {
+                    colorCardView(isLucky = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.gift_svgrepo_com) {
+                    colorCardView(isGift = true)
+                    typeIsChoose = true
+                }
+                editTextPrice.setText("${incomeItemFromExtra!!.income}")
+                editTextPriceEmpty = false
+                editTextComment.setText(incomeItemFromExtra!!.comment)
+            }
+        }
     }
 
     override fun onSelect(calendar: List<Calendar>) {
@@ -86,7 +135,7 @@ class IncomesActivity : AppCompatActivity(), OnSelectDateListener {
             editTextPrice.addTextChangedListener { text ->
                 if (text.toString().isNotEmpty()
                     && (text.toString()[0] == '.' || text.toString()[0] == '0')
-                    ) {
+                ) {
                     editTextPrice.setText("")
                     editTextPriceEmpty = true
                 } else if (text.toString().isEmpty()) {
@@ -137,13 +186,22 @@ class IncomesActivity : AppCompatActivity(), OnSelectDateListener {
                         editTextComment.text.toString().trim(),
                         ItemDateFormatter.formatDate(date)
                     )
-                    viewModel.addIncome(incomeItem)
+                    if (screenMode == EXTRA_ADD_MODE) {
+                        viewModel.addIncome(incomeItem)
+                    } else if (screenMode == EXTRA_CHANGE_AND_REMOVE_MODE) {
+                        viewModel.changeIncome(incomeItemFromExtra!!.id, incomeItem)
+                    }
                 } else {
                     Toast.makeText(
                         this@IncomesActivity,
-                        R.string.input_empty_incomes,
+                        R.string.input_empty_expense,
                         Toast.LENGTH_SHORT
                     ).show()
+                }
+            }
+            floatingActionButtonRemove.setOnClickListener {
+                if (screenMode == EXTRA_CHANGE_AND_REMOVE_MODE) {
+                    viewModel.removeIncome(incomeItemFromExtra!!.id)
                 }
             }
         }
@@ -194,8 +252,25 @@ class IncomesActivity : AppCompatActivity(), OnSelectDateListener {
     }
 
     companion object {
+        private const val EXTRA_SCREEN_MODE = "screenMode"
+        private const val EXTRA_ADD_MODE = "add"
+        private const val EXTRA_CHANGE_AND_REMOVE_MODE = "change"
+        private const val EXTRA_INCOME_ITEM = "expenseItem"
+
         fun newIntent(context: Context): Intent {
-            return Intent(context, IncomesActivity::class.java)
+            return Intent(context, IncomesActivity::class.java).apply {
+                putExtra(EXTRA_SCREEN_MODE, EXTRA_ADD_MODE)
+            }
+        }
+
+        fun newIntentChangeAndRemove(context: Context, incomeItem: IncomeItem): Intent {
+            return Intent(context, IncomesActivity::class.java).apply {
+                putExtra(
+                    EXTRA_SCREEN_MODE,
+                    EXTRA_CHANGE_AND_REMOVE_MODE
+                )
+                putExtra(EXTRA_INCOME_ITEM, incomeItem)
+            }
         }
     }
 }

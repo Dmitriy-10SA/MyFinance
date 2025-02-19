@@ -6,19 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andef.myfinance.domain.entities.IncomeItem
 import com.andef.myfinance.domain.usecases.income.AddIncomeUseCase
-import com.andef.myfinance.domain.usecases.income.GetFullIncomeByDayUseCase
-import com.andef.myfinance.domain.usecases.income.GetFullIncomeByPeriodUseCase
-import com.andef.myfinance.domain.usecases.income.GetIncomesByDayUseCase
-import com.andef.myfinance.domain.usecases.income.GetIncomesByPeriodUseCase
 import com.andef.myfinance.domain.usecases.income.RemoveIncomeUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class IncomesViewModel @Inject constructor(
-    private val addIncomeUseCase: AddIncomeUseCase
+    private val addIncomeUseCase: AddIncomeUseCase,
+    private val removeIncomeUseCase: RemoveIncomeUseCase
 ) : ViewModel() {
-    private val addExceptionHandler = CoroutineExceptionHandler { _, _ ->
+    private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
         _isSuccessAdd.value = false
     }
 
@@ -26,7 +23,22 @@ class IncomesViewModel @Inject constructor(
     val isSuccessAdd: LiveData<Boolean> = _isSuccessAdd
 
     fun addIncome(incomeItem: IncomeItem) {
-        viewModelScope.launch(addExceptionHandler) {
+        viewModelScope.launch(exceptionHandler) {
+            addIncomeUseCase.execute(incomeItem)
+            _isSuccessAdd.value = true
+        }
+    }
+
+    fun removeIncome(id: Int) {
+        viewModelScope.launch(exceptionHandler) {
+            removeIncomeUseCase.execute(id)
+            _isSuccessAdd.value = true
+        }
+    }
+
+    fun changeIncome(id: Int, incomeItem: IncomeItem) {
+        viewModelScope.launch(exceptionHandler) {
+            removeIncomeUseCase.execute(id)
             addIncomeUseCase.execute(incomeItem)
             _isSuccessAdd.value = true
         }

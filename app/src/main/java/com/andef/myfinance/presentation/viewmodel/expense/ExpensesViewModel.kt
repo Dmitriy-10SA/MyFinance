@@ -5,12 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andef.myfinance.domain.entities.ExpenseItem
-import com.andef.myfinance.domain.entities.IncomeItem
 import com.andef.myfinance.domain.usecases.expense.AddExpenseUseCase
-import com.andef.myfinance.domain.usecases.expense.GetExpensesByDayUseCase
-import com.andef.myfinance.domain.usecases.expense.GetExpensesByPeriodUseCase
-import com.andef.myfinance.domain.usecases.expense.GetFullExpenseByDayUseCase
-import com.andef.myfinance.domain.usecases.expense.GetFullExpenseByPeriodUseCase
 import com.andef.myfinance.domain.usecases.expense.RemoveExpenseUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -18,18 +13,34 @@ import javax.inject.Inject
 
 class ExpensesViewModel @Inject constructor(
     private val addExpenseUseCase: AddExpenseUseCase,
+    private val removeExpenseUseCase: RemoveExpenseUseCase
 ) : ViewModel() {
-    private val addExceptionHandler = CoroutineExceptionHandler { _, _ ->
-        _isSuccessAdd.value = false
+    private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
+        _isSuccess.value = false
     }
 
-    private val _isSuccessAdd = MutableLiveData<Boolean>()
-    val isSuccessAdd: LiveData<Boolean> = _isSuccessAdd
+    private val _isSuccess = MutableLiveData<Boolean>()
+    val isSuccess: LiveData<Boolean> = _isSuccess
 
     fun addExpense(expenseItem: ExpenseItem) {
-        viewModelScope.launch(addExceptionHandler) {
+        viewModelScope.launch(exceptionHandler) {
             addExpenseUseCase.execute(expenseItem)
-            _isSuccessAdd.value = true
+            _isSuccess.value = true
+        }
+    }
+
+    fun removeExpense(id: Int) {
+        viewModelScope.launch(exceptionHandler) {
+            removeExpenseUseCase.execute(id)
+            _isSuccess.value = true
+        }
+    }
+
+    fun changeExpense(id: Int, expenseItem: ExpenseItem) {
+        viewModelScope.launch(exceptionHandler) {
+            removeExpenseUseCase.execute(id)
+            addExpenseUseCase.execute(expenseItem)
+            _isSuccess.value = true
         }
     }
 }

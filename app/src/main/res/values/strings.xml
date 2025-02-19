@@ -17,7 +17,9 @@
     <string name="today">Сегодня</string>
     <string name="add_expense">Добавление расхода</string>
     <string name="add_new_expense">Добавление траты</string>
+    <string name="change_expense">Изменение траты</string>
     <string name="add">Добавить</string>
+    <string name="change">Изменить</string>
     <string name="input_price">Введите цену (₽)</string>
     <string name="input_income">Введите доход (₽)</string>
     <string name="category">Категория:</string>
@@ -39,4 +41,5 @@
     <string name="exception">Ошибка!</string>
     <string name="input_empty_incomes">Введите доход и выберите категорию!</string>
     <string name="input_empty_expense">Введите цену и выберите категорию!</string>
+    <string name="remove">Удалить</string>
 </resources>
