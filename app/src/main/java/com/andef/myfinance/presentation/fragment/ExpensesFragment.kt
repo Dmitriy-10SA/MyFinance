@@ -3,6 +3,7 @@ package com.andef.myfinance.presentation.fragment
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.andef.myfinance.presentation.adapter.expense.ExpenseAdapter
 import com.andef.myfinance.presentation.app.MyFinanceApplication
 import com.andef.myfinance.presentation.factory.ViewModelFactory
 import com.andef.myfinance.presentation.formatter.DateFormatterWithDos
+import com.andef.myfinance.presentation.formatter.PriceAndIncomeFormatter
 import com.andef.myfinance.presentation.viewmodel.expense.ExpensesFragmentViewModel
 import java.time.LocalDate
 import javax.inject.Inject
@@ -144,14 +146,31 @@ class ExpensesFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initViewModel() {
         if (screenMode == DAY_MODE) {
             viewModel.getExpensesByDay(startDate).observe(viewLifecycleOwner) {
                 expensesAdapter.submitList(it)
             }
+            viewModel.getFullExpenseByDay(startDate).observe(viewLifecycleOwner) {
+                if (it != null) {
+                    binding.textViewAllIncomes.text =
+                        "${getString(R.string.total)} ${PriceAndIncomeFormatter.formatPrice(it)}"
+                } else {
+                    binding.textViewAllIncomes.text = "${getString(R.string.total)} 0₽"
+                }
+            }
         } else {
             viewModel.getExpensesByPeriod(startDate, endDate).observe(viewLifecycleOwner) {
                 expensesAdapter.submitList(it)
+            }
+            viewModel.getFullExpenseByPeriod(startDate, endDate).observe(viewLifecycleOwner) {
+                if (it != null) {
+                    binding.textViewAllIncomes.text =
+                        "${getString(R.string.total)} ${PriceAndIncomeFormatter.formatPrice(it)}"
+                } else {
+                    binding.textViewAllIncomes.text = "${getString(R.string.total)} 0₽"
+                }
             }
         }
     }

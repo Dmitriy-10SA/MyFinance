@@ -6,11 +6,15 @@ import com.andef.myfinance.domain.entities.Date
 import com.andef.myfinance.domain.entities.ExpenseItem
 import com.andef.myfinance.domain.usecases.expense.GetExpensesByDayUseCase
 import com.andef.myfinance.domain.usecases.expense.GetExpensesByPeriodUseCase
+import com.andef.myfinance.domain.usecases.expense.GetFullExpenseByDayUseCase
+import com.andef.myfinance.domain.usecases.expense.GetFullExpenseByPeriodUseCase
 import javax.inject.Inject
 
 class ExpensesFragmentViewModel @Inject constructor(
     private val getExpensesByDayUseCase: GetExpensesByDayUseCase,
-    private val getExpensesByPeriodUseCase: GetExpensesByPeriodUseCase
+    private val getExpensesByPeriodUseCase: GetExpensesByPeriodUseCase,
+    private val getFullExpenseByDayUseCase: GetFullExpenseByDayUseCase,
+    private val getFullExpenseByPeriodUseCase: GetFullExpenseByPeriodUseCase
 ) : ViewModel() {
     fun getExpensesByDay(date: Date): LiveData<List<ExpenseItem>> {
         return getExpensesByDayUseCase.execute(date)
@@ -18,5 +22,13 @@ class ExpensesFragmentViewModel @Inject constructor(
 
     fun getExpensesByPeriod(startDate: Date, endDate: Date): LiveData<List<ExpenseItem>> {
         return getExpensesByPeriodUseCase.execute(startDate, endDate)
+    }
+
+    fun getFullExpenseByDay(date: Date): LiveData<Double> {
+        return getFullExpenseByDayUseCase.execute(date)
+    }
+
+    fun getFullExpenseByPeriod(startDate: Date, endDate: Date): LiveData<Double> {
+        return getFullExpenseByPeriodUseCase.execute(startDate, endDate)
     }
 }
