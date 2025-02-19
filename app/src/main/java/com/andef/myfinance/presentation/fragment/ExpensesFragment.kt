@@ -14,7 +14,6 @@ import com.andef.myfinance.domain.entities.Date
 import com.andef.myfinance.domain.entities.ExpenseItem
 import com.andef.myfinance.presentation.activity.ExpensesActivity
 import com.andef.myfinance.presentation.adapter.expense.ExpenseAdapter
-import com.andef.myfinance.presentation.adapter.expense.OnExpenseItemClickListener
 import com.andef.myfinance.presentation.app.MyFinanceApplication
 import com.andef.myfinance.presentation.factory.ViewModelFactory
 import com.andef.myfinance.presentation.formatter.DateFormatterWithDos

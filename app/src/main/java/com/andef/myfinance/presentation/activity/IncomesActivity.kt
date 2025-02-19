@@ -12,9 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.andef.myfinance.R
 import com.andef.myfinance.databinding.ActivityIncomesBinding
 import com.andef.myfinance.domain.entities.Date
-import com.andef.myfinance.domain.entities.ExpenseItem
 import com.andef.myfinance.domain.entities.IncomeItem
-import com.andef.myfinance.presentation.activity.ExpensesActivity.Companion
 import com.andef.myfinance.presentation.app.MyFinanceApplication
 import com.andef.myfinance.presentation.factory.ViewModelFactory
 import com.andef.myfinance.presentation.formatter.ItemDateFormatter
