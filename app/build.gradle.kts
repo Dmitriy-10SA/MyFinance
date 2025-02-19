@@ -46,9 +46,15 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     implementation("androidx.room:room-runtime:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
+
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+
     implementation("com.google.dagger:dagger:2.55")
     kapt("com.google.dagger:dagger-compiler:2.55")
+
+    implementation("com.nineoldandroids:library:2.4.0")
+    implementation("com.github.blackfizz:eazegraph:1.2.2@aar")
+
     implementation(libs.material.calendar.view)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

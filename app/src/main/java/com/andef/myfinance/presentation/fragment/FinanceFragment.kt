@@ -8,12 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.andef.myfinance.R
 import com.andef.myfinance.databinding.FragmentFinanceBinding
 import com.andef.myfinance.domain.entities.Date
 import com.andef.myfinance.presentation.app.MyFinanceApplication
 import com.andef.myfinance.presentation.factory.ViewModelFactory
 import com.andef.myfinance.presentation.formatter.DateFormatterWithDos
+import com.andef.myfinance.presentation.formatter.PriceAndIncomeFormatter
 import com.andef.myfinance.presentation.viewmodel.finance.FinanceViewModel
+import org.eazegraph.lib.models.PieModel
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -25,6 +28,8 @@ class FinanceFragment : Fragment() {
     private lateinit var screenMode: String
     private lateinit var startDate: Date
     private lateinit var endDate: Date
+    private var fullExpense = 0.0
+    private var fullIncome = 0.0
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -114,31 +119,117 @@ class FinanceFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initPie()
         initViews()
         initViewModel()
     }
 
     @SuppressLint("SetTextI18n")
     private fun initViews() {
-        val formatStartDate = DateFormatterWithDos.formatDate(startDate)
-        val formatEndDate = DateFormatterWithDos.formatDate(endDate)
-        binding.textViewFinance.text = "$formatStartDate - $formatEndDate"
+        with(binding) {
+            if (screenMode == DAY_MODE) {
+                textViewDate.setText(R.string.today)
+            } else {
+                val formatStartDate = DateFormatterWithDos.formatDate(startDate)
+                val formatEndDate = DateFormatterWithDos.formatDate(endDate)
+                textViewDate.text = "$formatStartDate - $formatEndDate"
+            }
+        }
     }
 
+    private fun initPie() {
+        with(binding) {
+            pieChart.innerValueString = ""
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
     private fun initViewModel() {
         if (screenMode == DAY_MODE) {
             viewModel.getFullExpenseByDay(startDate).observe(viewLifecycleOwner) {
-                TODO()
+                if (it != null) {
+                    fullExpense = it
+                    binding.pieChart.addPieSlice(
+                        PieModel(
+                            getString(R.string.Expenses),
+                            it.toFloat(),
+                            requireContext().getColor(R.color.Expenses)
+                        )
+                    )
+                    binding.pieChart.startAnimation()
+                }
+                binding.textViewAll.text =
+                    "${getString(R.string.total)} ${PriceAndIncomeFormatter.formatPrice(fullIncome - fullExpense)}"
+                binding.textViewAllExpensesFinance.text =
+                    "${getString(R.string.expenses_finance_screen)} ${
+                        PriceAndIncomeFormatter.formatPrice(
+                            fullExpense
+                        )
+                    }"
             }
             viewModel.getFullIncomeByDay(startDate).observe(viewLifecycleOwner) {
-                TODO()
+                if (it != null) {
+                    fullIncome = it
+                    binding.pieChart.addPieSlice(
+                        PieModel(
+                            getString(R.string.Incomes),
+                            it.toFloat(),
+                            requireContext().getColor(R.color.Incomes)
+                        )
+                    )
+                    binding.pieChart.startAnimation()
+                }
+                binding.textViewAll.text =
+                    "${getString(R.string.total)} ${PriceAndIncomeFormatter.formatPrice(fullIncome - fullExpense)}"
+                binding.textViewAllIncomesFinance.text =
+                    "${getString(R.string.incomes_finance_screen)} ${
+                        PriceAndIncomeFormatter.formatPrice(
+                            fullIncome
+                        )
+                    }"
             }
         } else {
             viewModel.getFullExpenseByPeriod(startDate, endDate).observe(viewLifecycleOwner) {
-                TODO()
+                if (it != null) {
+                    fullExpense = it
+                    binding.pieChart.addPieSlice(
+                        PieModel(
+                            getString(R.string.Expenses),
+                            it.toFloat(),
+                            requireContext().getColor(R.color.Expenses)
+                        )
+                    )
+                    binding.pieChart.startAnimation()
+                }
+                binding.textViewAll.text =
+                    "${getString(R.string.total)} ${PriceAndIncomeFormatter.formatPrice(fullIncome - fullExpense)}"
+                binding.textViewAllExpensesFinance.text =
+                    "${getString(R.string.expenses_finance_screen)} ${
+                        PriceAndIncomeFormatter.formatPrice(
+                            fullExpense
+                        )
+                    }"
             }
             viewModel.getFullIncomeByPeriod(startDate, endDate).observe(viewLifecycleOwner) {
-                TODO()
+                if (it != null) {
+                    fullIncome = it
+                    binding.pieChart.addPieSlice(
+                        PieModel(
+                            getString(R.string.Incomes),
+                            it.toFloat(),
+                            requireContext().getColor(R.color.Incomes)
+                        )
+                    )
+                    binding.pieChart.startAnimation()
+                }
+                binding.textViewAll.text =
+                    "${getString(R.string.total)} ${PriceAndIncomeFormatter.formatPrice(fullIncome - fullExpense)}"
+                binding.textViewAllIncomesFinance.text =
+                    "${getString(R.string.incomes_finance_screen)} ${
+                        PriceAndIncomeFormatter.formatPrice(
+                            fullIncome
+                        )
+                    }"
             }
         }
     }
