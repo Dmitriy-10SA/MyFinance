@@ -361,5 +361,6 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guidelineLow"
         app:srcCompat="@drawable/delete_1487_svgrepo_com" />
 </androidx.constraintlayout.widget.ConstraintLayout>

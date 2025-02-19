@@ -20,6 +20,8 @@
     <string name="change_expense">Изменение траты</string>
     <string name="add">Добавить</string>
     <string name="total">Итого: </string>
+    <string name="Incomes">Доходы больше!</string>
+    <string name="Expenses">Расходы больше!</string>
     <string name="change">Изменить</string>
     <string name="input_price">Введите цену (₽)</string>
     <string name="input_income">Введите доход (₽)</string>
@@ -43,4 +45,7 @@
     <string name="input_empty_incomes">Введите доход и выберите категорию!</string>
     <string name="input_empty_expense">Введите цену и выберите категорию!</string>
     <string name="remove">Удалить</string>
+    <string name="empty_data">Данных нет</string>
+    <string name="expenses_finance_screen">"Расходы: "</string>
+    <string name="incomes_finance_screen">Доходы:</string>
 </resources>
