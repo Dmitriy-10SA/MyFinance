@@ -16,12 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class IncomesViewModel @Inject constructor(
-    private val addIncomeUseCase: AddIncomeUseCase,
-    private val removeIncomeUseCase: RemoveIncomeUseCase,
-    private val getIncomesByDayUseCase: GetIncomesByDayUseCase,
-    private val getIncomesByPeriodUseCase: GetIncomesByPeriodUseCase,
-    private val getFullIncomeByDayUseCase: GetFullIncomeByDayUseCase,
-    private val getFullIncomeByPeriodUseCase: GetFullIncomeByPeriodUseCase
+    private val addIncomeUseCase: AddIncomeUseCase
 ) : ViewModel() {
     private val addExceptionHandler = CoroutineExceptionHandler { _, _ ->
         _isSuccessAdd.value = false

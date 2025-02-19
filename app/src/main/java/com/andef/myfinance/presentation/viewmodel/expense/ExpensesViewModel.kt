@@ -18,11 +18,6 @@ import javax.inject.Inject
 
 class ExpensesViewModel @Inject constructor(
     private val addExpenseUseCase: AddExpenseUseCase,
-    private val removeExpenseUseCase: RemoveExpenseUseCase,
-    private val getExpensesByDayUseCase: GetExpensesByDayUseCase,
-    private val getExpensesByPeriodUseCase: GetExpensesByPeriodUseCase,
-    private val getFullExpenseByDayUseCase: GetFullExpenseByDayUseCase,
-    private val getFullExpenseByPeriodUseCase: GetFullExpenseByPeriodUseCase
 ) : ViewModel() {
     private val addExceptionHandler = CoroutineExceptionHandler { _, _ ->
         _isSuccessAdd.value = false
