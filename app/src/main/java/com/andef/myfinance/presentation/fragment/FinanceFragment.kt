@@ -128,17 +128,17 @@ class FinanceFragment : Fragment() {
     private fun initViewModel() {
         if (screenMode == DAY_MODE) {
             viewModel.getFullExpenseByDay(startDate).observe(viewLifecycleOwner) {
-
+                TODO()
             }
             viewModel.getFullIncomeByDay(startDate).observe(viewLifecycleOwner) {
-
+                TODO()
             }
         } else {
             viewModel.getFullExpenseByPeriod(startDate, endDate).observe(viewLifecycleOwner) {
-
+                TODO()
             }
             viewModel.getFullIncomeByPeriod(startDate, endDate).observe(viewLifecycleOwner) {
-
+                TODO()
             }
         }
     }
