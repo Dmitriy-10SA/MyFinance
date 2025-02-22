@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyFinance</string>
+    <string name="app_name">Мои финансы</string>
     <string name="expenses">Расходы</string>
     <string name="finance">Итоги</string>
     <string name="incomes">Доходы</string>
