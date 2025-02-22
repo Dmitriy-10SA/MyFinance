@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.andef.myfinance.R
 import com.andef.myfinance.databinding.FragmentExpensesBinding
 import com.andef.myfinance.domain.entities.Date
@@ -37,6 +39,8 @@ class ExpensesFragment : Fragment() {
     }
 
     private lateinit var expensesAdapter: ExpenseAdapter
+
+    private lateinit var itemTouchHelper: ItemTouchHelper
 
     private val component by lazy {
         (requireActivity().application as MyFinanceApplication).component
@@ -122,6 +126,26 @@ class ExpensesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initViewModel()
+        initItemTouchHelper()
+    }
+
+    private fun initItemTouchHelper() {
+        itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val expenseItem = expensesAdapter.currentList[viewHolder.adapterPosition]
+                viewModel.removeExpense(expenseItem.id)
+            }
+        })
+        itemTouchHelper.attachToRecyclerView(binding.recyclerViewExpenses)
     }
 
     @SuppressLint("SetTextI18n")
@@ -141,7 +165,7 @@ class ExpensesFragment : Fragment() {
             expensesAdapter.setOnExpenseItemClickListener { expenseItem ->
                 expensesChangeAndRemoveScreen(expenseItem)
             }
-            recyclerViewIncomes.adapter = expensesAdapter
+            recyclerViewExpenses.adapter = expensesAdapter
         }
     }
 
