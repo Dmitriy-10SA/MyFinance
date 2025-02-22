@@ -7,4 +7,5 @@
     <color name="card_white">#F0F0F0</color>
     <color name="Incomes">@android:color/holo_green_dark</color>
     <color name="Expenses">@android:color/holo_red_dark</color>
+    <color name="app_background">#EBEBE9</color>
 </resources>

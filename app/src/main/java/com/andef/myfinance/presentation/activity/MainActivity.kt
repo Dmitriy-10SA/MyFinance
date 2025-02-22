@@ -49,7 +49,8 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
                     }
                 }
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
-                    tab?.view?.animate()?.scaleX(1f)?.scaleY(1f)?.setDuration(500)?.start()
+                    tab?.view?.animate()?.scaleX(1f)?.scaleY(1f)
+                        ?.setDuration(500)?.start()
                 }
                 override fun onTabReselected(tab: TabLayout.Tab?) {
                     when (tab?.position) {
