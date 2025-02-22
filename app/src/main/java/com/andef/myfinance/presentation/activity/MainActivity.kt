@@ -25,6 +25,8 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
     private var startDate: Date? = null
     private var endDate: Date? = null
 
+    private var lastSelectedId = R.id.incomes
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -48,10 +50,12 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
                         4 -> openDatePicker()
                     }
                 }
+
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
                     tab?.view?.animate()?.scaleX(1f)?.scaleY(1f)
                         ?.setDuration(500)?.start()
                 }
+
                 override fun onTabReselected(tab: TabLayout.Tab?) {
                     when (tab?.position) {
                         4 -> openDatePicker()
@@ -140,20 +144,38 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.incomes -> {
-                    financeMode = INCOME_MODE
-                    showIncomesFragment()
-                    true
+                    if (lastSelectedId != R.id.incomes) {
+                        lastSelectedId = R.id.incomes
+                        financeMode = INCOME_MODE
+                        showIncomesFragment()
+                        true
+                    } else {
+                        false
+                    }
                 }
+
                 R.id.expenses -> {
-                    financeMode = EXPENSES_MODE
-                    showExpensesFragment()
-                    true
+                    if (lastSelectedId != R.id.expenses) {
+                        lastSelectedId = R.id.expenses
+                        financeMode = EXPENSES_MODE
+                        showExpensesFragment()
+                        true
+                    } else {
+                        false
+                    }
                 }
+
                 R.id.finance -> {
-                    financeMode = FINANCE_FIN_MODE
-                    showFinanceFragment()
-                    true
+                    if (lastSelectedId != R.id.finance) {
+                        lastSelectedId = R.id.finance
+                        financeMode = FINANCE_FIN_MODE
+                        showFinanceFragment()
+                        true
+                    } else {
+                        false
+                    }
                 }
+
                 else -> {
                     false
                 }
