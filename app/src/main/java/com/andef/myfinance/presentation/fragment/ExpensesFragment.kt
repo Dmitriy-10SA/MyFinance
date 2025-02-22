@@ -158,7 +158,7 @@ class ExpensesFragment : Fragment() {
                 val formatEndDate = DateFormatterWithDos.formatDate(endDate)
                 textViewDate.text = "$formatStartDate - $formatEndDate"
             }
-            floatingActionButtonAddIncome.setOnClickListener {
+            floatingActionButtonAddExpense.setOnClickListener {
                 expensesScreen()
             }
             expensesAdapter = ExpenseAdapter()
