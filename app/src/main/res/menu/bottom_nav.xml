@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/incomes"
+        android:icon="@drawable/money_send_svgrepo_com"
+        android:title="@string/incomes" />
+    <item
+        android:id="@+id/expenses"
+        android:icon="@drawable/money_receive_svgrepo_com"
+        android:title="@string/expenses" />
+    <item
+        android:id="@+id/finance"
+        android:icon="@drawable/money_refund_dollar_svgrepo_com"
+        android:title="@string/finance" />
+</menu>
