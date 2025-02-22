@@ -39,14 +39,14 @@
         android:paddingEnd="36dp"
         android:textColor="@color/black"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerViewIncomes"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerViewExpenses"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewDate"
         tools:text="Всего: 10000"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewIncomes"
+        android:id="@+id/recyclerViewExpenses"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
