@@ -74,7 +74,7 @@ class ExpensesActivity : AppCompatActivity(), OnSelectDateListener {
             with(binding) {
                 textViewChangeExpense.setText(R.string.change_expense)
                 buttonAdd.setText(R.string.change)
-                floatingActionButtonRemove.visibility = VISIBLE
+                buttonRemove.visibility = VISIBLE
                 type = expenseItemFromExtra!!.type
                 iconResId = expenseItemFromExtra!!.iconResId
                 val tmpDate = expenseItemFromExtra!!.dateString.split("/").map { it.toInt() }
@@ -106,6 +106,12 @@ class ExpensesActivity : AppCompatActivity(), OnSelectDateListener {
                     typeIsChoose = true
                 } else if (iconResId == R.drawable.public_transport_taxi_car_cab_svgrepo_com) {
                     colorCardView(isTransport = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.clothes_shirt_ui_svgrepo_com) {
+                    colorCardView(isClothes = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.question_circle_svgrepo_com) {
+                    colorCardView(isUnknown = true)
                     typeIsChoose = true
                 }
                 editTextPrice.setText("${expenseItemFromExtra!!.price}")
@@ -211,6 +217,20 @@ class ExpensesActivity : AppCompatActivity(), OnSelectDateListener {
                 typeIsChoose = true
                 showButtonAdd()
             }
+            cardViewClothes.setOnClickListener {
+                colorCardView(isClothes = true)
+                iconResId = R.drawable.clothes_shirt_ui_svgrepo_com
+                type = getString(R.string.clothes)
+                typeIsChoose = true
+                showButtonAdd()
+            }
+            cardViewUnknown.setOnClickListener {
+                colorCardView(isUnknown = true)
+                iconResId = R.drawable.question_circle_svgrepo_com
+                type = getString(R.string.unknown)
+                typeIsChoose = true
+                showButtonAdd()
+            }
             cardViewDate.setOnClickListener {
                 openDatePicker()
             }
@@ -237,7 +257,7 @@ class ExpensesActivity : AppCompatActivity(), OnSelectDateListener {
                     ).show()
                 }
             }
-            floatingActionButtonRemove.setOnClickListener {
+            buttonRemove.setOnClickListener {
                 if (screenMode == EXTRA_CHANGE_AND_REMOVE_MODE) {
                     viewModel.removeExpense(expenseItemFromExtra!!.id)
                 }
@@ -260,7 +280,9 @@ class ExpensesActivity : AppCompatActivity(), OnSelectDateListener {
         isHome: Boolean = false,
         isHealth: Boolean = false,
         isGift: Boolean = false,
-        isEat: Boolean = false
+        isEat: Boolean = false,
+        isClothes: Boolean = false,
+        isUnknown: Boolean = false
     ) {
         with(binding) {
             cardViewEat.setCardBackgroundColor(getColor(R.color.white))
@@ -271,6 +293,8 @@ class ExpensesActivity : AppCompatActivity(), OnSelectDateListener {
             cardViewGraduate.setCardBackgroundColor(getColor(R.color.white))
             cardViewProducts.setCardBackgroundColor(getColor(R.color.white))
             cardViewTransport.setCardBackgroundColor(getColor(R.color.white))
+            cardViewClothes.setCardBackgroundColor(getColor(R.color.white))
+            cardViewUnknown.setCardBackgroundColor(getColor(R.color.white))
             if (isTransport) {
                 cardViewTransport.setCardBackgroundColor(getColor(R.color.my_blue_light))
             } else if (isProducts) {
@@ -287,6 +311,10 @@ class ExpensesActivity : AppCompatActivity(), OnSelectDateListener {
                 cardViewGift.setCardBackgroundColor(getColor(R.color.my_blue_light))
             } else if (isEat) {
                 cardViewEat.setCardBackgroundColor(getColor(R.color.my_blue_light))
+            } else if (isClothes) {
+                cardViewClothes.setCardBackgroundColor(getColor(R.color.my_blue_light))
+            } else if (isUnknown) {
+                cardViewUnknown.setCardBackgroundColor(getColor(R.color.my_blue_light))
             }
         }
     }

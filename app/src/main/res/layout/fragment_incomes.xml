@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".presentation.fragment.IncomesFragment">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textViewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,11 +25,11 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="21.12.24-22.11.25" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textViewAllIncomes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/frame"

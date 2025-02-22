@@ -1,7 +1,5 @@
 package com.andef.myfinance.presentation.activity
 
-import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.andef.myfinance.R
@@ -13,6 +11,7 @@ import com.andef.myfinance.presentation.fragment.IncomesFragment
 import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.builders.DatePickerBuilder
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener
+import com.google.android.material.tabs.TabLayout
 import java.util.Calendar
 
 class MainActivity : AppCompatActivity(), OnSelectDateListener {
@@ -30,72 +29,40 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        initClickListenerForTextViews()
-        initClickListenersForCardViews()
-        loadData(savedInstanceState)
+        initTabLayout()
+        initNavView()
+        showFragment()
     }
 
-    private fun loadData(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            showIncomesFragment()
-        } else {
-            screenMode = savedInstanceState.getString(SCREEN_MODE)
-                ?: throw RuntimeException("Unknown screenMode: $this.")
-            financeMode = savedInstanceState.getString(FINANCE_MODE)
-                ?: throw RuntimeException("Unknown financeMode: $this.")
-            startDate = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                @Suppress("DEPRECATION")
-                (savedInstanceState.getParcelable(START_DATE))
-            } else {
-                savedInstanceState.getParcelable(START_DATE, Date::class.java)
-            }
-            endDate = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                @Suppress("DEPRECATION")
-                savedInstanceState.getParcelable(END_DATE)
-            } else {
-                savedInstanceState.getParcelable(END_DATE, Date::class.java)
-            }
-            noticeCardView()
-            firstNoticeTextView()
-        }
-    }
-
-    private fun firstNoticeTextView() {
-        when (screenMode) {
-            DAY_MODE -> noticeTextView(isDay = true)
-            WEEK_MODE -> noticeTextView(isWeek = true)
-            MONTH_MODE -> noticeTextView(isMonth = true)
-            YEAR_MODE -> noticeTextView(isYear = true)
-            PERIOD_MODE -> noticeTextView(isPeriod = true)
-            else -> throw RuntimeException("Unknown screenMode: $this.")
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(SCREEN_MODE, screenMode)
-        outState.putString(FINANCE_MODE, financeMode)
-        outState.putParcelable(START_DATE, startDate)
-        outState.putParcelable(END_DATE, endDate)
-        super.onSaveInstanceState(outState)
-    }
-
-    private fun initClickListenerForTextViews() {
+    private fun initTabLayout() {
         with(binding) {
-            textViewDay.setOnClickListener {
-                noticeTextView(isDay = true)
-            }
-            textViewWeek.setOnClickListener {
-                noticeTextView(isWeek = true)
-            }
-            textViewMonth.setOnClickListener {
-                noticeTextView(isMonth = true)
-            }
-            textViewYear.setOnClickListener {
-                noticeTextView(isYear = true)
-            }
-            textViewPeriod.setOnClickListener {
-                openDatePicker()
-            }
+            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    tab?.view?.animate()?.scaleX(1.2f)?.scaleY(1.2f)
+                        ?.setDuration(500)?.start()
+                    when (tab?.position) {
+                        0 -> noticeTabLayout(isDay = true)
+                        1 -> noticeTabLayout(isWeek = true)
+                        2 -> noticeTabLayout(isMonth = true)
+                        3 -> noticeTabLayout(isYear = true)
+                        4 -> openDatePicker()
+                    }
+                }
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                    tab?.view?.animate()?.scaleX(1f)?.scaleY(1f)
+                        ?.setDuration(500)?.start()
+                }
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    when (tab?.position) {
+                        4 -> openDatePicker()
+                    }
+                }
+            })
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.day))
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.week))
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.month))
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.year))
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.period))
         }
     }
 
@@ -112,7 +79,7 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
             selectedEndDate[Calendar.MONTH] + 1,
             selectedEndDate[Calendar.YEAR]
         )
-        noticeTextView(isPeriod = true)
+        noticeTabLayout(isPeriod = true)
     }
 
     private fun openDatePicker() {
@@ -131,7 +98,7 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
             .show()
     }
 
-    private fun noticeTextView(
+    private fun noticeTabLayout(
         isDay: Boolean = false,
         isWeek: Boolean = false,
         isMonth: Boolean = false,
@@ -139,29 +106,19 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
         isPeriod: Boolean = false
     ) {
         with(binding) {
-            textViewDay.typeface = Typeface.DEFAULT
-            textViewWeek.typeface = Typeface.DEFAULT
-            textViewMonth.typeface = Typeface.DEFAULT
-            textViewYear.typeface = Typeface.DEFAULT
-            textViewPeriod.typeface = Typeface.DEFAULT
             if (isDay) {
-                textViewDay.typeface = Typeface.DEFAULT_BOLD
                 screenMode = DAY_MODE
                 showFragment()
             } else if (isWeek) {
-                textViewWeek.typeface = Typeface.DEFAULT_BOLD
                 screenMode = WEEK_MODE
                 showFragment()
             } else if (isMonth) {
-                textViewMonth.typeface = Typeface.DEFAULT_BOLD
                 screenMode = MONTH_MODE
                 showFragment()
             } else if (isYear) {
-                textViewYear.typeface = Typeface.DEFAULT_BOLD
                 screenMode = YEAR_MODE
                 showFragment()
             } else if (isPeriod) {
-                textViewPeriod.typeface = Typeface.DEFAULT_BOLD
                 screenMode = PERIOD_MODE
                 showFragment()
             } else {
@@ -179,56 +136,28 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
         }
     }
 
-    private fun initClickListenersForCardViews() {
-        with(binding) {
-            cardViewIncomes.setOnClickListener {
-                financeMode = INCOME_MODE
-                noticeIncomesCardView()
-                showIncomesFragment()
+    private fun initNavView() {
+        binding.bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.incomes -> {
+                    financeMode = INCOME_MODE
+                    showIncomesFragment()
+                    true
+                }
+                R.id.expenses -> {
+                    financeMode = EXPENSES_MODE
+                    showExpensesFragment()
+                    true
+                }
+                R.id.finance -> {
+                    financeMode = FINANCE_FIN_MODE
+                    showFinanceFragment()
+                    true
+                }
+                else -> {
+                    false
+                }
             }
-            cardViewExpenses.setOnClickListener {
-                financeMode = EXPENSES_MODE
-                noticeExpensesCardView()
-                showExpensesFragment()
-            }
-            cardViewFinance.setOnClickListener {
-                financeMode = FINANCE_FIN_MODE
-                noticeFinanceCardView()
-                showFinanceFragment()
-            }
-        }
-    }
-
-    private fun noticeCardView() {
-        when (financeMode) {
-            INCOME_MODE -> noticeIncomesCardView()
-            EXPENSES_MODE -> noticeExpensesCardView()
-            FINANCE_FIN_MODE -> noticeFinanceCardView()
-            else -> throw RuntimeException("Unknown screenMode: $this.")
-        }
-    }
-
-    private fun noticeIncomesCardView() {
-        with(binding) {
-            textViewIncomes.typeface = Typeface.DEFAULT_BOLD
-            textViewExpenses.typeface = Typeface.DEFAULT
-            textViewFinance.typeface = Typeface.DEFAULT
-        }
-    }
-
-    private fun noticeFinanceCardView() {
-        with(binding) {
-            textViewIncomes.typeface = Typeface.DEFAULT
-            textViewExpenses.typeface = Typeface.DEFAULT
-            textViewFinance.typeface = Typeface.DEFAULT_BOLD
-        }
-    }
-
-    private fun noticeExpensesCardView() {
-        with(binding) {
-            textViewIncomes.typeface = Typeface.DEFAULT
-            textViewExpenses.typeface = Typeface.DEFAULT_BOLD
-            textViewFinance.typeface = Typeface.DEFAULT
         }
     }
 
@@ -251,6 +180,12 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
             throw RuntimeException("Unknown screen mode: $this.")
         }
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_up,
+                R.anim.slide_out_down,
+                R.anim.fade_in,
+                R.anim.fade_out
+            )
             .replace(R.id.fragmentContainerViewMain, incomesFragment)
             .commit()
     }
@@ -274,6 +209,12 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
             throw RuntimeException("Unknown screen mode: $this.")
         }
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_up,
+                R.anim.slide_out_down,
+                R.anim.fade_in,
+                R.anim.fade_out
+            )
             .replace(R.id.fragmentContainerViewMain, expensesFragment)
             .commit()
     }
@@ -297,12 +238,15 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
             throw RuntimeException("Unknown screen mode: $this.")
         }
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.fade_in_long,
+                R.anim.fade_out_long
+            )
             .replace(R.id.fragmentContainerViewMain, financeFragment)
             .commit()
     }
 
     companion object {
-        private const val SCREEN_MODE = "screenMode"
         private const val DAY_MODE = "day"
         private const val WEEK_MODE = "week"
         private const val MONTH_MODE = "month"
@@ -310,13 +254,9 @@ class MainActivity : AppCompatActivity(), OnSelectDateListener {
         private const val PERIOD_MODE = "period"
         private const val INITIAL_SCREEN_MODE = DAY_MODE
 
-        private const val FINANCE_MODE = "financeMode"
         private const val INCOME_MODE = "income"
         private const val EXPENSES_MODE = "expenses"
         private const val FINANCE_FIN_MODE = "financeFinMode"
         private const val INITIAL_FINANCE_MODE = INCOME_MODE
-
-        private const val START_DATE = "startDate"
-        private const val END_DATE = "endDate"
     }
 }

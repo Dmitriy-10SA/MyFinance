@@ -52,6 +52,8 @@ dependencies {
     implementation("com.google.dagger:dagger:2.55")
     kapt("com.google.dagger:dagger-compiler:2.55")
 
+    implementation("com.google.android.material:material:1.12.0")
+
     implementation("com.nineoldandroids:library:2.4.0")
     implementation("com.github.blackfizz:eazegraph:1.2.2@aar")
 

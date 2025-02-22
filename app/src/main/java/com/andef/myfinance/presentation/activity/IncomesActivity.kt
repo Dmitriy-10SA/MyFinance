@@ -74,7 +74,7 @@ class IncomesActivity : AppCompatActivity(), OnSelectDateListener {
             with(binding) {
                 textViewChangeIncome.setText(R.string.change_expense)
                 buttonAdd.setText(R.string.change)
-                floatingActionButtonRemove.visibility = VISIBLE
+                buttonRemove.visibility = VISIBLE
                 type = incomeItemFromExtra!!.type
                 iconResId = incomeItemFromExtra!!.iconResId
                 val tmpDate = incomeItemFromExtra!!.dateString.split("/").map { it.toInt() }
@@ -94,6 +94,9 @@ class IncomesActivity : AppCompatActivity(), OnSelectDateListener {
                     typeIsChoose = true
                 } else if (iconResId == R.drawable.gift_svgrepo_com) {
                     colorCardView(isGift = true)
+                    typeIsChoose = true
+                } else if (iconResId == R.drawable.question_circle_svgrepo_com) {
+                    colorCardView(isUnknown = true)
                     typeIsChoose = true
                 }
                 editTextPrice.setText("${incomeItemFromExtra!!.income}")
@@ -171,6 +174,13 @@ class IncomesActivity : AppCompatActivity(), OnSelectDateListener {
                 typeIsChoose = true
                 showButtonAdd()
             }
+            cardViewUnknown.setOnClickListener {
+                colorCardView(isUnknown = true)
+                iconResId = R.drawable.question_circle_svgrepo_com
+                type = getString(R.string.unknown)
+                typeIsChoose = true
+                showButtonAdd()
+            }
             cardViewDate.setOnClickListener {
                 openDatePicker()
             }
@@ -197,7 +207,7 @@ class IncomesActivity : AppCompatActivity(), OnSelectDateListener {
                     ).show()
                 }
             }
-            floatingActionButtonRemove.setOnClickListener {
+            buttonRemove.setOnClickListener {
                 if (screenMode == EXTRA_CHANGE_AND_REMOVE_MODE) {
                     viewModel.removeIncome(incomeItemFromExtra!!.id)
                 }
@@ -216,13 +226,15 @@ class IncomesActivity : AppCompatActivity(), OnSelectDateListener {
         isSalary: Boolean = false,
         isBank: Boolean = false,
         isGift: Boolean = false,
-        isLucky: Boolean = false
+        isLucky: Boolean = false,
+        isUnknown: Boolean = false
     ) {
         with(binding) {
             cardViewSalary.setCardBackgroundColor(getColor(R.color.white))
             cardViewBank.setCardBackgroundColor(getColor(R.color.white))
             cardViewGift.setCardBackgroundColor(getColor(R.color.white))
             cardViewLucky.setCardBackgroundColor(getColor(R.color.white))
+            cardViewUnknown.setCardBackgroundColor(getColor(R.color.white))
             if (isGift) {
                 cardViewGift.setCardBackgroundColor(getColor(R.color.my_blue_light))
             } else if (isLucky) {
@@ -231,6 +243,8 @@ class IncomesActivity : AppCompatActivity(), OnSelectDateListener {
                 cardViewBank.setCardBackgroundColor(getColor(R.color.my_blue_light))
             } else if (isSalary) {
                 cardViewSalary.setCardBackgroundColor(getColor(R.color.my_blue_light))
+            } else if (isUnknown) {
+                cardViewUnknown.setCardBackgroundColor(getColor(R.color.my_blue_light))
             }
         }
     }

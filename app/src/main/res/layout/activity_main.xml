@@ -3,211 +3,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:background="@drawable/app_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.activity.MainActivity">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewPeriods"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#F0F0F0"
-        app:cardCornerRadius="0dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:tabTextColor="@color/black"
+        app:tabSelectedTextColor="@color/black"
+        app:tabIndicatorColor="@color/black"
+        android:elevation="4dp"
+        app:tabBackground="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/fragmentContainerViewMain"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/fragmentContainerViewMain"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/textViewPeriod"
-                android:layout_width="0dp"
-                android:gravity="center"
-                android:padding="12dp"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:layout_height="wrap_content"
-                android:text="@string/period"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/textViewYear"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textViewYear"
-                android:layout_width="0dp"
-                android:gravity="center"
-                android:padding="12dp"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:layout_height="wrap_content"
-                android:text="@string/year"
-                app:layout_constraintEnd_toStartOf="@id/textViewPeriod"
-                app:layout_constraintStart_toEndOf="@id/textViewMonth"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textViewMonth"
-                android:layout_width="0dp"
-                android:gravity="center"
-                android:padding="12dp"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:layout_height="wrap_content"
-                android:text="@string/month"
-                app:layout_constraintEnd_toStartOf="@id/textViewYear"
-                app:layout_constraintStart_toEndOf="@id/textViewWeek"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textViewWeek"
-                android:layout_width="0dp"
-                android:gravity="center"
-                android:padding="12dp"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:layout_height="wrap_content"
-                android:text="@string/week"
-                app:layout_constraintEnd_toStartOf="@id/textViewMonth"
-                app:layout_constraintStart_toEndOf="@id/textViewDay"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textViewDay"
-                android:layout_width="0dp"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:padding="12dp"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:layout_height="wrap_content"
-                android:text="@string/day"
-                app:layout_constraintEnd_toStartOf="@id/textViewWeek"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerViewMain"
+        android:background="#EBEBE9"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/cardViewPeriods"
-        app:layout_constraintBottom_toTopOf="@id/cardViewIncomes"/>
+        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"/>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewIncomes"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="#F0F0F0"
-        app:cardCornerRadius="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/cardViewExpenses">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="5dp"
-            tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/select_incomes"
-                android:adjustViewBounds="true"
-                android:maxWidth="75dp"
-                android:maxHeight="23dp"
-                android:src="@drawable/money_send_svgrepo_com" />
-
-            <TextView
-                android:id="@+id/textViewIncomes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/incomes"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewExpenses"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="#F0F0F0"
-        app:cardCornerRadius="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/cardViewFinance"
-        app:layout_constraintStart_toEndOf="@id/cardViewIncomes">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="5dp"
-            tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/select_expenses"
-                android:maxWidth="75dp"
-                android:maxHeight="23dp"
-                android:src="@drawable/money_receive_svgrepo_com" />
-
-            <TextView
-                android:id="@+id/textViewExpenses"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/expenses"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewFinance"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="#F0F0F0"
-        app:cardCornerRadius="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/cardViewExpenses">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="5dp"
-            tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/select_expenses"
-                android:maxWidth="75dp"
-                android:maxHeight="23dp"
-                android:src="@drawable/money_refund_dollar_svgrepo_com" />
-
-            <TextView
-                android:id="@+id/textViewFinance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/finance"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:itemTextColor="@color/black"
+        app:itemPaddingTop="8dp"
+        app:itemPaddingBottom="10dp"
+        app:itemBackground="@color/white"
+        app:itemIconTint="@color/black"
+        app:itemIconSize="27dp"
+        app:itemRippleColor="@color/black"
+        app:itemTextAppearanceActive="@style/BottomNavTextActive"
+        app:itemTextAppearanceInactive="@style/BottomNavTextInactive"
+        app:itemActiveIndicatorStyle="@color/white"
+        app:labelVisibilityMode="selected"
+        app:menu="@menu/bottom_nav"
+        app:layout_constraintTop_toBottomOf="@id/fragmentContainerViewMain"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

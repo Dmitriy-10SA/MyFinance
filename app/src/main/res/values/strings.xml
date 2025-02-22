@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyFinance</string>
+    <string name="app_name">Мои финансы</string>
     <string name="expenses">Расходы</string>
     <string name="finance">Итоги</string>
     <string name="incomes">Доходы</string>
@@ -31,6 +31,8 @@
     <string name="home">Дом</string>
     <string name="gift">Подарки</string>
     <string name="graduate">Учеба</string>
+    <string name="clothes">Одежда</string>
+    <string name="unknown">Другое</string>
     <string name="health">Здоровье</string>
     <string name="transport">Транспорт</string>
     <string name="sport">Спорт</string>
