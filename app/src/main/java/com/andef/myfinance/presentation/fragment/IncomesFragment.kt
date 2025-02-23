@@ -92,26 +92,26 @@ class IncomesFragment : Fragment() {
         isYearMode: Boolean = false
     ) {
         var currentDate = LocalDate.now()
-        val startDay = currentDate.dayOfMonth
-        val startMonth = currentDate.monthValue
-        val startYear = currentDate.year
-        startDate = Date(startDay, startMonth, startYear)
-        if (isDayMode) {
-            endDate = startDate
-            return
-        } else if (isWeekMode) {
-            currentDate = currentDate.plusWeeks(1)
-        } else if (isMonthMode) {
-            currentDate = currentDate.plusMonths(1)
-        } else if (isYearMode) {
-            currentDate = currentDate.plusYears(1)
-        } else {
-            throw RuntimeException("Unknown date mode: $this.")
-        }
         val endDay = currentDate.dayOfMonth
         val endMonth = currentDate.monthValue
         val endYear = currentDate.year
         endDate = Date(endDay, endMonth, endYear)
+        if (isDayMode) {
+            startDate = endDate
+            return
+        } else if (isWeekMode) {
+            currentDate = currentDate.minusWeeks(1)
+        } else if (isMonthMode) {
+            currentDate = currentDate.minusMonths(1)
+        } else if (isYearMode) {
+            currentDate = currentDate.minusYears(1)
+        } else {
+            throw RuntimeException("Unknown date mode: $this.")
+        }
+        val startDay = currentDate.dayOfMonth
+        val startMonth = currentDate.monthValue
+        val startYear = currentDate.year
+        startDate = Date(startDay, startMonth, startYear)
     }
 
     override fun onCreateView(
