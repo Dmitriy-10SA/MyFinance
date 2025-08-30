@@ -3,8 +3,8 @@ package com.andef.myfinance.core.data.income.mapper
 import com.andef.myfinance.core.domain.income.entities.IncomeModel
 import com.andef.myfinance.core.domain.income_category.entities.BaseIncomeCategory
 import com.andef.myfinance.core.domain.income_category.entities.IncomeCategoryModel
-import com.andef.myfinance.core.utils.mappers.intToLocalDate
-import com.andef.myfinance.core.utils.mappers.localDateToInt
+import com.andef.myfinance.core.utils.mappers.localdate.intToLocalDate
+import com.andef.myfinance.core.utils.mappers.localdate.localDateToInt
 import com.andef.myfinance.db.Income
 
 class IncomeMapper {

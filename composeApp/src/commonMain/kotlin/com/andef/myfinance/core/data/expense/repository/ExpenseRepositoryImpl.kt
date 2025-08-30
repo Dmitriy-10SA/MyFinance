@@ -5,7 +5,7 @@ import com.andef.myfinance.core.data.expense.mapper.ExpenseMapper
 import com.andef.myfinance.core.domain.expense.entities.ExpenseModel
 import com.andef.myfinance.core.domain.expense.repository.ExpenseRepository
 import com.andef.myfinance.core.domain.expense_category.entities.ExpenseCategoryModel
-import com.andef.myfinance.core.utils.mappers.localDateToInt
+import com.andef.myfinance.core.utils.mappers.localdate.localDateToInt
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate

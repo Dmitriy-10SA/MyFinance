@@ -26,3 +26,6 @@ ORDER BY date DESC, time DESC;
 getRemindersAsList:
 SELECT * FROM reminder
 WHERE date BETWEEN ? AND ?;
+
+lastInsertRowId:
+SELECT last_insert_rowid();

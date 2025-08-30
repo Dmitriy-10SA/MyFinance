@@ -12,11 +12,14 @@ import kotlinx.coroutines.flow.flowOn
 class ReminderDao(private val queries: ReminderQueries) {
     fun getReminderById(id: Long): Reminder = queries.getReminderById(id).executeAsOne()
 
-    fun insert(reminder: Reminder) = queries.insertReminder(
-        reminder.text,
-        reminder.date,
-        reminder.time
-    )
+    fun insert(reminder: Reminder): Long {
+        queries.insertReminder(
+            reminder.text,
+            reminder.date,
+            reminder.time
+        )
+        return queries.lastInsertRowId().executeAsOne()
+    }
 
     fun update(reminder: Reminder) = queries.updateReminder(
         reminder.text,

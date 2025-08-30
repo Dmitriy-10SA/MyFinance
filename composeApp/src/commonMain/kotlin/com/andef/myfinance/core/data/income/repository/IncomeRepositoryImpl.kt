@@ -5,7 +5,7 @@ import com.andef.myfinance.core.data.income.mapper.IncomeMapper
 import com.andef.myfinance.core.domain.income.entities.IncomeModel
 import com.andef.myfinance.core.domain.income.repository.IncomeRepository
 import com.andef.myfinance.core.domain.income_category.entities.IncomeCategoryModel
-import com.andef.myfinance.core.utils.mappers.localDateToInt
+import com.andef.myfinance.core.utils.mappers.localdate.localDateToInt
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate

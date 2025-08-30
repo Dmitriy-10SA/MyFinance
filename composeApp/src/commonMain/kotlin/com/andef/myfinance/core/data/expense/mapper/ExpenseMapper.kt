@@ -3,8 +3,8 @@ package com.andef.myfinance.core.data.expense.mapper
 import com.andef.myfinance.core.domain.expense.entities.ExpenseModel
 import com.andef.myfinance.core.domain.expense_category.entities.BaseExpenseCategory
 import com.andef.myfinance.core.domain.expense_category.entities.ExpenseCategoryModel
-import com.andef.myfinance.core.utils.mappers.intToLocalDate
-import com.andef.myfinance.core.utils.mappers.localDateToInt
+import com.andef.myfinance.core.utils.mappers.localdate.intToLocalDate
+import com.andef.myfinance.core.utils.mappers.localdate.localDateToInt
 import com.andef.myfinance.db.Expense
 
 class ExpenseMapper {
