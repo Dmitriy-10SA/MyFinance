@@ -1,0 +1,28 @@
+CREATE TABLE reminder (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    text TEXT NOT NULL,
+    date INTEGER NOT NULL,
+    time INTEGER NOT NULL
+);
+
+getReminderById:
+SELECT * FROM reminder WHERE id = ?;
+
+insertReminder:
+INSERT OR REPLACE INTO reminder(text, date, time)
+VALUES (?, ?, ?);
+
+updateReminder:
+UPDATE reminder SET text = ?, date = ?, time = ? WHERE id = ?;
+
+deleteReminderById:
+DELETE FROM reminder WHERE id = ?;
+
+getRemindersBetween:
+SELECT * FROM reminder
+WHERE date BETWEEN ? AND ?
+ORDER BY date DESC, time DESC;
+
+getRemindersAsList:
+SELECT * FROM reminder
+WHERE date BETWEEN ? AND ?;

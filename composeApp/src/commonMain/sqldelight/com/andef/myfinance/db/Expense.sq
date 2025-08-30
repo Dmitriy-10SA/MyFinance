@@ -1,0 +1,35 @@
+CREATE TABLE expense (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    amount REAL NOT NULL,
+    category TEXT NOT NULL,
+    date INTEGER NOT NULL,
+    note TEXT
+);
+
+getExpenseById:
+SELECT * FROM expense WHERE id = ?;
+
+insertExpense:
+INSERT OR REPLACE INTO expense(amount, category, date, note)
+VALUES (?, ?, ?, ?);
+
+insertExpenseSync:
+INSERT OR REPLACE INTO expense(id, amount, category, date, note)
+VALUES (?, ?, ?, ?, ?);
+
+updateExpense:
+UPDATE expense SET amount = ?, category = ?, date = ?, note = ? WHERE id = ?;
+
+deleteExpenseById:
+DELETE FROM expense WHERE id = ?;
+
+getExpensesByDateRange:
+SELECT * FROM expense
+WHERE date BETWEEN ? AND ?
+ORDER BY date DESC;
+
+changeAllExpenseCategory:
+UPDATE expense SET category = ? WHERE category = ?;
+
+deleteAllExpensesByCategory:
+DELETE FROM expense WHERE category = ?;
