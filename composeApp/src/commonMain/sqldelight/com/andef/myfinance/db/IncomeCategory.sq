@@ -1,0 +1,17 @@
+CREATE TABLE income_category (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    title TEXT NOT NULL
+);
+
+addIncomeCategory:
+INSERT OR REPLACE INTO income_category(title)
+VALUES (?);
+
+changeIncomeCategory:
+UPDATE income_category SET title = ? WHERE id = ?;
+
+deleteIncomeCategory:
+DELETE FROM income_category WHERE id = ?;
+
+getIncomeCategories:
+SELECT * FROM income_category;

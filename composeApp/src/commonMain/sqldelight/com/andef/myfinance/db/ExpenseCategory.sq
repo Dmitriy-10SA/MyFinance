@@ -1,0 +1,17 @@
+CREATE TABLE expense_category (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    title TEXT NOT NULL
+);
+
+addExpenseCategory:
+INSERT OR REPLACE INTO expense_category(title)
+VALUES (?);
+
+changeExpenseCategory:
+UPDATE expense_category SET title = ? WHERE id = ?;
+
+deleteExpenseCategory:
+DELETE FROM expense_category WHERE id = ?;
+
+getExpenseCategories:
+SELECT * FROM expense_category;

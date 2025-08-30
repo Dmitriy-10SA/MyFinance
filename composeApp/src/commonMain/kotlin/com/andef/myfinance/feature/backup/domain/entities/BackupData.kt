@@ -1,16 +1,16 @@
 package com.andef.myfinance.feature.backup.domain.entities
 
-import com.andef.myfinance.core.domain.expense.entities.Expense
-import com.andef.myfinance.core.domain.expense_category.entities.ExpenseCategory
-import com.andef.myfinance.core.domain.income.entities.Income
-import com.andef.myfinance.core.domain.income_category.entities.IncomeCategory
-import com.andef.myfinance.core.domain.reminder.entities.Reminder
+import com.andef.myfinance.core.domain.expense.entities.ExpenseModel
+import com.andef.myfinance.core.domain.expense_category.entities.ExpenseCategoryModel
+import com.andef.myfinance.core.domain.income.entities.IncomeModel
+import com.andef.myfinance.core.domain.income_category.entities.IncomeCategoryModel
+import com.andef.myfinance.core.domain.reminder.entities.ReminderModel
 
 data class BackupData(
-    val allIncomes: List<Income>,
-    val allExpenses: List<Expense>,
-    val allReminders: List<Reminder>,
-    val incomeCategories: List<IncomeCategory>,
-    val expenseCategories: List<ExpenseCategory>,
+    val allIncomeModels: List<IncomeModel>,
+    val allExpenseModels: List<ExpenseModel>,
+    val allReminderModels: List<ReminderModel>,
+    val incomeCategories: List<IncomeCategoryModel>,
+    val expenseCategories: List<ExpenseCategoryModel>,
     val username: String
 )

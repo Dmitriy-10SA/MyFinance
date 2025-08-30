@@ -1,12 +1,12 @@
 package com.andef.myfinance.core.domain.expense.entities
 
-import com.andef.myfinance.core.domain.expense_category.entities.ExpenseCategory
+import com.andef.myfinance.core.domain.expense_category.entities.ExpenseCategoryModel
 import kotlinx.datetime.LocalDate
 
-data class Expense(
+data class ExpenseModel(
     val id: Long,
     val amount: Double,
-    val category: ExpenseCategory,
+    val category: ExpenseCategoryModel,
     val date: LocalDate,
     val note: String?
 )

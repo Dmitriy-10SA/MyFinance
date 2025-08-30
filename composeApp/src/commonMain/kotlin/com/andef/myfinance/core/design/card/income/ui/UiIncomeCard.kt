@@ -30,14 +30,14 @@ import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.getters.getImageForIncome
 import com.andef.myfinance.core.utils.getters.getTitleForIncome
 import com.andef.myfinance.core.utils.grayColor
-import com.andef.myfinance.core.domain.income.entities.Income
+import com.andef.myfinance.core.domain.income.entities.IncomeModel
 
 @Composable
 fun UiIncomeCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     isLightTheme: Boolean,
-    income: Income
+    incomeModel: IncomeModel
 ) {
     Card(
         modifier = modifier,
@@ -49,7 +49,7 @@ fun UiIncomeCard(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val image = getImageForIncome(income.category.title)
+            val image = getImageForIncome(incomeModel.category.title)
             if (image != null) {
                 Image(
                     modifier = Modifier
@@ -63,15 +63,15 @@ fun UiIncomeCard(
                 Box(
                     modifier = Modifier
                         .size(45.dp)
-                        .background(generateColorFromString(income.category.title), CircleShape)
+                        .background(generateColorFromString(incomeModel.category.title), CircleShape)
                         .clip(CircleShape)
                 )
             }
             Spacer(modifier = Modifier.width(16.dp))
-            TitleAndNote(income = income, isLightTheme = isLightTheme)
+            TitleAndNote(incomeModel = incomeModel, isLightTheme = isLightTheme)
             Spacer(modifier = Modifier.width(3.dp))
             Text(
-                text = "+${formatPriceRuble(income.amount)}",
+                text = "+${formatPriceRuble(incomeModel.amount)}",
                 fontSize = 16.sp,
                 color = blackOrWhiteColor(isLightTheme = isLightTheme)
             )
@@ -80,14 +80,14 @@ fun UiIncomeCard(
 }
 
 @Composable
-private fun RowScope.TitleAndNote(income: Income, isLightTheme: Boolean) {
+private fun RowScope.TitleAndNote(incomeModel: IncomeModel, isLightTheme: Boolean) {
     Column(
         modifier = Modifier.weight(1f),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = getTitleForIncome(income.category.title),
+            text = getTitleForIncome(incomeModel.category.title),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             fontSize = 16.sp,
@@ -95,7 +95,7 @@ private fun RowScope.TitleAndNote(income: Income, isLightTheme: Boolean) {
         )
         Text(
             text = buildString {
-                val note = income.note
+                val note = incomeModel.note
                 if (note.isNullOrBlank()) {
                     append("Примечания нет")
                 } else {

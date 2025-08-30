@@ -57,11 +57,11 @@ import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.feature.currency.domain.entities.CurrencyRub
-import com.andef.myfinance.core.domain.expense.entities.Expense
-import com.andef.myfinance.core.domain.expense_category.entities.ExpenseCategory
-import com.andef.myfinance.core.domain.income.entities.Income
-import com.andef.myfinance.core.domain.income_category.entities.IncomeCategory
-import com.andef.myfinance.core.domain.reminder.entities.Reminder
+import com.andef.myfinance.core.domain.expense.entities.ExpenseModel
+import com.andef.myfinance.core.domain.expense_category.entities.ExpenseCategoryModel
+import com.andef.myfinance.core.domain.income.entities.IncomeModel
+import com.andef.myfinance.core.domain.income_category.entities.IncomeCategoryModel
+import com.andef.myfinance.core.domain.reminder.entities.ReminderModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -383,10 +383,10 @@ private fun ColumnScope.ThirdContent(isLightTheme: Boolean) {
     UiExpenseCard(
         modifier = Modifier.fillMaxWidth(),
         isLightTheme = isLightTheme,
-        expense = Expense(
+        expenseModel = ExpenseModel(
             id = 0,
             amount = 5_000.00,
-            category = ExpenseCategory(id = 0, title = "CAFE"),
+            category = ExpenseCategoryModel(id = 0, title = "CAFE"),
             date = LocalDate.now(),
             note = "Test"
         ),
@@ -402,10 +402,10 @@ private fun ColumnScope.ThirdContent(isLightTheme: Boolean) {
     UiIncomeCard(
         modifier = Modifier.fillMaxWidth(),
         isLightTheme = isLightTheme,
-        income = Income(
+        incomeModel = IncomeModel(
             id = 0,
             amount = 15_000.00,
-            category = IncomeCategory(id = 0, title = "BANK"),
+            category = IncomeCategoryModel(id = 0, title = "BANK"),
             date = LocalDate.now(),
             note = "Test"
         ),
@@ -421,7 +421,7 @@ private fun ColumnScope.ThirdContent(isLightTheme: Boolean) {
     UiReminderCard(
         modifier = Modifier.fillMaxWidth(),
         isLightTheme = isLightTheme,
-        reminder = Reminder(
+        reminderModel = ReminderModel(
             id = 0,
             text = "Test",
             date = LocalDate.now(),

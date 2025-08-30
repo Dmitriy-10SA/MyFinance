@@ -20,19 +20,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.andef.myfinance.core.domain.reminder.entities.ReminderModel
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.cardColors
 import com.andef.myfinance.core.utils.cardShape
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalTime
 import com.andef.myfinance.core.utils.grayColor
-import com.andef.myfinance.core.domain.reminder.entities.Reminder
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_notification_perm
+import network.chaintech.kmp_date_time_picker.utils.now
 import org.jetbrains.compose.resources.painterResource
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -41,7 +41,7 @@ fun UiReminderCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     isLightTheme: Boolean,
-    reminder: Reminder
+    reminderModel: ReminderModel
 ) {
     Card(
         modifier = modifier,
@@ -62,19 +62,19 @@ fun UiReminderCard(
                 contentDescription = "Фото для напоминаний"
             )
             Spacer(modifier = Modifier.width(16.dp))
-            TextAndStatus(reminder = reminder, isLightTheme = isLightTheme)
+            TextAndStatus(reminderModel = reminderModel, isLightTheme = isLightTheme)
             Spacer(modifier = Modifier.width(3.dp))
             Column(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = formatLocalDate(reminder.date),
+                    text = formatLocalDate(reminderModel.date),
                     fontSize = 16.sp,
                     color = blackOrWhiteColor(isLightTheme = isLightTheme)
                 )
                 Text(
-                    text = formatLocalTime(reminder.time),
+                    text = formatLocalTime(reminderModel.time),
                     fontSize = 14.sp,
                     color = grayColor(isLightTheme = isLightTheme)
                 )
@@ -85,25 +85,25 @@ fun UiReminderCard(
 
 @OptIn(ExperimentalTime::class)
 @Composable
-private fun RowScope.TextAndStatus(reminder: Reminder, isLightTheme: Boolean) {
+private fun RowScope.TextAndStatus(reminderModel: ReminderModel, isLightTheme: Boolean) {
     Column(
         modifier = Modifier.weight(1f),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = reminder.text,
+            text = reminderModel.text,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             fontSize = 16.sp,
             color = blackOrWhiteColor(isLightTheme = isLightTheme)
         )
-        val nowDateTime =
-            Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val nowDate = LocalDate.now()
+        val nowTime = LocalTime.now()
         Text(
-            text = if (reminder.date > nowDateTime.date) {
+            text = if (reminderModel.date > nowDate) {
                 "Ожидается"
-            } else if (reminder.date == nowDateTime.date && reminder.time > nowDateTime.time) {
+            } else if (reminderModel.date == nowDate && reminderModel.time > nowTime) {
                 "Ожидается"
             } else {
                 "Завершено"

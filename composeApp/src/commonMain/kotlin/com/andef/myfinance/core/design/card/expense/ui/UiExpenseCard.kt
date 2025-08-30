@@ -30,14 +30,14 @@ import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.getters.getImageForExpense
 import com.andef.myfinance.core.utils.getters.getTitleForExpense
 import com.andef.myfinance.core.utils.grayColor
-import com.andef.myfinance.core.domain.expense.entities.Expense
+import com.andef.myfinance.core.domain.expense.entities.ExpenseModel
 
 @Composable
 fun UiExpenseCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     isLightTheme: Boolean,
-    expense: Expense
+    expenseModel: ExpenseModel
 ) {
     Card(
         modifier = modifier,
@@ -49,7 +49,7 @@ fun UiExpenseCard(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val image = getImageForExpense(expense.category.title)
+            val image = getImageForExpense(expenseModel.category.title)
             if (image != null) {
                 Image(
                     modifier = Modifier
@@ -63,15 +63,15 @@ fun UiExpenseCard(
                 Box(
                     modifier = Modifier
                         .size(45.dp)
-                        .background(generateColorFromString(expense.category.title), CircleShape)
+                        .background(generateColorFromString(expenseModel.category.title), CircleShape)
                         .clip(CircleShape)
                 )
             }
             Spacer(modifier = Modifier.width(16.dp))
-            TitleAndNote(expense = expense, isLightTheme = isLightTheme)
+            TitleAndNote(expenseModel = expenseModel, isLightTheme = isLightTheme)
             Spacer(modifier = Modifier.width(3.dp))
             Text(
-                text = "-${formatPriceRuble(expense.amount)}",
+                text = "-${formatPriceRuble(expenseModel.amount)}",
                 fontSize = 16.sp,
                 color = blackOrWhiteColor(isLightTheme = isLightTheme)
             )
@@ -80,14 +80,14 @@ fun UiExpenseCard(
 }
 
 @Composable
-private fun RowScope.TitleAndNote(expense: Expense, isLightTheme: Boolean) {
+private fun RowScope.TitleAndNote(expenseModel: ExpenseModel, isLightTheme: Boolean) {
     Column(
         modifier = Modifier.weight(1f),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = getTitleForExpense(expense.category.title),
+            text = getTitleForExpense(expenseModel.category.title),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             fontSize = 16.sp,
@@ -95,7 +95,7 @@ private fun RowScope.TitleAndNote(expense: Expense, isLightTheme: Boolean) {
         )
         Text(
             text = buildString {
-                val note = expense.note
+                val note = expenseModel.note
                 if (note.isNullOrBlank()) {
                     append("Примечания нет")
                 } else {
