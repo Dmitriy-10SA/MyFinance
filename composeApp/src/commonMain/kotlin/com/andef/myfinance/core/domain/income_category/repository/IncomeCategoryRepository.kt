@@ -4,7 +4,7 @@ import com.andef.myfinance.core.domain.income_category.entities.IncomeCategoryMo
 import kotlinx.coroutines.flow.Flow
 
 interface IncomeCategoryRepository {
-    suspend fun addIncomeCategory(incomeCategoryModel: IncomeCategoryModel): Long
+    suspend fun addIncomeCategory(incomeCategoryModel: IncomeCategoryModel)
     suspend fun changeIncomeCategory(id: Long, title: String)
     suspend fun deleteIncomeCategory(id: Long)
     suspend fun getIncomeCategories(): List<IncomeCategoryModel>
