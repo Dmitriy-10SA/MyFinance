@@ -6,6 +6,9 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+
+    //local db
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -24,6 +27,10 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+
+            //local db
+            linkerOpts.add("-lsqlite3")
+            freeCompilerArgs += listOf("-Xbinary=bundleId=com.andef.myfinance")
         }
     }
 
@@ -31,6 +38,9 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            //local db
+            implementation(libs.sqldelight.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -53,6 +63,13 @@ kotlin {
 
             //navigation
             implementation(libs.navigation.compose)
+
+            //local db
+            implementation(libs.sqldelight.coroutines)
+        }
+        iosMain.dependencies {
+            //local db
+            implementation(libs.sqldelight.ios)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -91,3 +108,12 @@ dependencies {
     debugImplementation(compose.uiTooling)
 }
 
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("com.andef.myfinance.db")
+            schemaOutputDirectory.set(file("src/commonMain/sqldelight/schema"))
+            migrationOutputDirectory.set(file("src/commonMain/sqldelight/migrations"))
+        }
+    }
+}
