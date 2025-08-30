@@ -66,6 +66,7 @@ kotlin {
 
             //local db
             implementation(libs.sqldelight.coroutines)
+            implementation(libs.multiplatform.settings)
         }
         iosMain.dependencies {
             //local db
