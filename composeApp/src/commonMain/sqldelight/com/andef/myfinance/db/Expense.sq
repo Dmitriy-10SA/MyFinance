@@ -13,10 +13,6 @@ insertExpense:
 INSERT OR REPLACE INTO expense(amount, category, date, note)
 VALUES (?, ?, ?, ?);
 
-insertExpenseSync:
-INSERT OR REPLACE INTO expense(id, amount, category, date, note)
-VALUES (?, ?, ?, ?, ?);
-
 updateExpense:
 UPDATE expense SET amount = ?, category = ?, date = ?, note = ? WHERE id = ?;
 
