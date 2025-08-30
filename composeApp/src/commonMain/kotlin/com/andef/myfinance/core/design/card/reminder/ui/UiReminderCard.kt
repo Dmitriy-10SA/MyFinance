@@ -20,19 +20,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.andef.myfinance.core.domain.reminder.entities.ReminderModel
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.cardColors
 import com.andef.myfinance.core.utils.cardShape
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalTime
 import com.andef.myfinance.core.utils.grayColor
-import com.andef.myfinance.core.domain.reminder.entities.ReminderModel
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_notification_perm
+import network.chaintech.kmp_date_time_picker.utils.now
 import org.jetbrains.compose.resources.painterResource
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
@@ -98,12 +98,12 @@ private fun RowScope.TextAndStatus(reminderModel: ReminderModel, isLightTheme: B
             fontSize = 16.sp,
             color = blackOrWhiteColor(isLightTheme = isLightTheme)
         )
-        val nowDateTime =
-            Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val nowDate = LocalDate.now()
+        val nowTime = LocalTime.now()
         Text(
-            text = if (reminderModel.date > nowDateTime.date) {
+            text = if (reminderModel.date > nowDate) {
                 "Ожидается"
-            } else if (reminderModel.date == nowDateTime.date && reminderModel.time > nowDateTime.time) {
+            } else if (reminderModel.date == nowDate && reminderModel.time > nowTime) {
                 "Ожидается"
             } else {
                 "Завершено"
