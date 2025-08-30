@@ -9,6 +9,9 @@ plugins {
 
     //local db
     alias(libs.plugins.sqldelight)
+
+    //ktor
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -41,6 +44,9 @@ kotlin {
 
             //local db
             implementation(libs.sqldelight.android)
+
+            //ktor
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -67,10 +73,16 @@ kotlin {
             //local db
             implementation(libs.sqldelight.coroutines)
             implementation(libs.multiplatform.settings)
+
+            //ktor
+            implementation(libs.bundles.ktor)
         }
         iosMain.dependencies {
             //local db
             implementation(libs.sqldelight.ios)
+
+            //ktor
+            implementation(libs.ktor.client.darwin)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
