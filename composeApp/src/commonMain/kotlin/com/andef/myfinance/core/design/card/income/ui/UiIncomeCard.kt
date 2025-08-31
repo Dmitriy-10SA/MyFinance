@@ -30,7 +30,7 @@ import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.getters.getImageForIncome
 import com.andef.myfinance.core.utils.getters.getTitleForIncome
 import com.andef.myfinance.core.utils.grayColor
-import com.andef.myfinance.core.domain.income.entities.IncomeModel
+import com.andef.myfinance.core.domain.income_common.income.entities.IncomeModel
 
 @Composable
 fun UiIncomeCard(

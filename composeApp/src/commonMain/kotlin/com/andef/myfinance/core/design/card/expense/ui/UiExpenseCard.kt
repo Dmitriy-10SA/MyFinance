@@ -30,7 +30,7 @@ import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.getters.getImageForExpense
 import com.andef.myfinance.core.utils.getters.getTitleForExpense
 import com.andef.myfinance.core.utils.grayColor
-import com.andef.myfinance.core.domain.expense.entities.ExpenseModel
+import com.andef.myfinance.core.domain.expense_common.expense.entities.ExpenseModel
 
 @Composable
 fun UiExpenseCard(

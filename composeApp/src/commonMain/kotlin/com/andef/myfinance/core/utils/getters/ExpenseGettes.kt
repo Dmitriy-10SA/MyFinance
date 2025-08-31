@@ -2,7 +2,7 @@ package com.andef.myfinance.core.utils.getters
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
-import com.andef.myfinance.core.domain.expense_category.entities.BaseExpenseCategory
+import com.andef.myfinance.core.domain.expense_common.expense_category.entities.BaseExpenseCategory
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_cafe
 import myfinance.composeapp.generated.resources.my_finance_clothes
