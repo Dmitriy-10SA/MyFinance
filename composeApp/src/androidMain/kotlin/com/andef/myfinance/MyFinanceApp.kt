@@ -1,7 +1,7 @@
 package com.andef.myfinance
 
 import android.app.Application
-import com.andef.myfinance.core.di.initKoin
+import com.andef.myfinance.app.initKoin
 import org.koin.android.ext.koin.androidContext
 
 class MyFinanceApp : Application() {

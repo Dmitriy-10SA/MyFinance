@@ -28,8 +28,6 @@ import com.andef.myfinance.core.design.topbar.type.UiTopBarTab
 import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.design.topbar.ui.UiTopBar
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsFirstStartUseCase
-import com.andef.myfinance.core.domain.preferences.usecases.GetIsLightThemeAsFlowUseCase
-import com.andef.myfinance.core.domain.preferences.usecases.GetIsLightThemeUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.GetUsernameAsFlowUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.GetUsernameUseCase
 import com.andef.myfinance.core.navigation.graph.AppNavGraph
@@ -51,20 +49,20 @@ import myfinance.composeapp.generated.resources.my_finance_totals
 import network.chaintech.kmp_date_time_picker.utils.now
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.getKoin
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
-    val isLightTheme = GetIsLightThemeAsFlowUseCase(repository = getKoin().get())
-        .invoke()
+    val viewModel = koinViewModel<AppViewModel>()
+    val isLightTheme = viewModel.getIsLightThemeAsFlowUseCase.invoke()
         .collectAsState(
-            initial = GetIsLightThemeUseCase(repository = getKoin().get())
-                .invoke(isSystemInDarkTheme = isSystemInDarkTheme())
+            viewModel.getIsLightThemeUseCase
+                .invoke(isSystemInDarkTheme())
         )
         .value
-    val username = GetUsernameAsFlowUseCase(repository = getKoin().get())
-        .invoke()
-        .collectAsState(initial = GetUsernameUseCase(repository = getKoin().get()).invoke())
+    val username = viewModel.getUsernameAsFlowUseCase.invoke()
+        .collectAsState(viewModel.getUsernameUseCase.invoke())
         .value
     val navHostController = rememberNavController()
     val navBackStackEntry = navHostController.currentBackStackEntryAsState().value
