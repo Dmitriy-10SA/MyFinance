@@ -47,6 +47,10 @@ kotlin {
 
             //ktor
             implementation(libs.ktor.client.okhttp)
+
+            //di
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -76,6 +80,11 @@ kotlin {
 
             //ktor
             implementation(libs.bundles.ktor)
+
+            //di
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
         }
         iosMain.dependencies {
             //local db

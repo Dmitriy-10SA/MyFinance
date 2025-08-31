@@ -16,7 +16,6 @@ fun AppNavGraph(
     isLightTheme: Boolean,
     navHostController: NavHostController,
     paddingValues: PaddingValues,
-    mainContentIsVisible: Boolean,
     isFirstStart: Boolean,
     startDate: LocalDate,
     endDate: LocalDate
@@ -38,7 +37,6 @@ fun AppNavGraph(
             navHostController = navHostController,
             paddingValues = paddingValues,
             isLightTheme = isLightTheme,
-            mainContentIsVisible = mainContentIsVisible,
             startDate = startDate,
             endDate = endDate
         )

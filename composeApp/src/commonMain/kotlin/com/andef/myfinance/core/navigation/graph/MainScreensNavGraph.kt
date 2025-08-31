@@ -12,7 +12,6 @@ fun NavGraphBuilder.mainScreensNavGraph(
     isLightTheme: Boolean,
     navHostController: NavHostController,
     paddingValues: PaddingValues,
-    mainContentIsVisible: Boolean,
     startDate: LocalDate,
     endDate: LocalDate
 ) {
