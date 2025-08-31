@@ -4,7 +4,7 @@ import com.andef.myfinance.core.data.reminder.dao.ReminderDao
 import com.andef.myfinance.core.data.reminder.mapper.ReminderMapper
 import com.andef.myfinance.core.domain.reminder.entities.ReminderModel
 import com.andef.myfinance.core.domain.reminder.repository.ReminderRepository
-import com.andef.myfinance.core.platform.ReminderScheduler
+import com.andef.myfinance.core.platform.reminder.ReminderScheduler
 import com.andef.myfinance.core.utils.mappers.localdate.localDateToInt
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

@@ -1,8 +1,8 @@
 package com.andef.myfinance.core.di.reminder
 
 import android.content.Context
-import com.andef.myfinance.core.platform.AndroidReminderScheduler
-import com.andef.myfinance.core.platform.ReminderScheduler
+import com.andef.myfinance.core.platform.reminder.AndroidReminderScheduler
+import com.andef.myfinance.core.platform.reminder.ReminderScheduler
 import org.koin.core.module.Module
 import org.koin.dsl.bind
 import org.koin.dsl.module

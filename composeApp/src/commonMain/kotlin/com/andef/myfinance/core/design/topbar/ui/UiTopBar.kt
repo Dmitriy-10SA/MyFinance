@@ -68,6 +68,7 @@ fun UiTopBar(
     isLightTheme: Boolean,
     type: UiTopBarType,
     title: String,
+    navigationIconTint: Color = Color.Unspecified,
     navigationIcon: Painter? = null,
     navigationIconContentDescription: String? = null,
     onNavigationIconClick: () -> Unit = {},
@@ -92,7 +93,8 @@ fun UiTopBar(
                 onNavigationIconClick = onNavigationIconClick,
                 actions = actions,
                 expandedHeight = expandedHeight,
-                windowInsets = windowInsets
+                windowInsets = windowInsets,
+                navigationIconTint = navigationIconTint
             )
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
@@ -109,6 +111,7 @@ private fun MainContent(
     isLightTheme: Boolean,
     type: UiTopBarType,
     title: String,
+    navigationIconTint: Color,
     modifier: Modifier = Modifier,
     navigationIcon: Painter? = null,
     navigationIconContentDescription: String? = null,
@@ -133,6 +136,7 @@ private fun MainContent(
                     navigationIcon?.let {
                         IconButton(onClick = onNavigationIconClick) {
                             Icon(
+                                tint = navigationIconTint,
                                 painter = it,
                                 contentDescription = navigationIconContentDescription
                             )
@@ -160,6 +164,7 @@ private fun MainContent(
                 navigationIcon?.let {
                     IconButton(onClick = onNavigationIconClick) {
                         Icon(
+                            tint = navigationIconTint,
                             painter = it,
                             contentDescription = navigationIconContentDescription
                         )
@@ -188,6 +193,7 @@ private fun MainContent(
                         navigationIcon?.let {
                             IconButton(onClick = onNavigationIconClick) {
                                 Icon(
+                                    tint = navigationIconTint,
                                     painter = it,
                                     contentDescription = navigationIconContentDescription
                                 )
@@ -233,6 +239,7 @@ private fun MainContent(
                         navigationIcon?.let {
                             IconButton(onClick = onNavigationIconClick) {
                                 Icon(
+                                    tint = navigationIconTint,
                                     painter = it,
                                     contentDescription = navigationIconContentDescription
                                 )

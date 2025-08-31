@@ -7,4 +7,5 @@ sealed class AppIntent {
     class DatesChoose(val startDate: LocalDate, val endDate: LocalDate) : AppIntent()
     object DatesDismiss : AppIntent()
     class TabClick(val tab: UiTopBarTab) : AppIntent()
+    class CurrentRouteChange(val route: String?) : AppIntent()
 }
