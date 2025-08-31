@@ -1,6 +1,6 @@
 package com.andef.myfinance.core.domain.income_common.income.entities
 
-import com.andef.myfinance.core.domain.income_category.entities.IncomeCategoryModel
+import com.andef.myfinance.core.domain.income_common.income_category.entities.IncomeCategoryModel
 import kotlinx.datetime.LocalDate
 
 data class IncomeModel(

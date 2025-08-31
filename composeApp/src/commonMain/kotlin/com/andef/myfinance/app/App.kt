@@ -28,8 +28,6 @@ import com.andef.myfinance.core.design.topbar.type.UiTopBarTab
 import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.design.topbar.ui.UiTopBar
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsFirstStartUseCase
-import com.andef.myfinance.core.domain.preferences.usecases.GetUsernameAsFlowUseCase
-import com.andef.myfinance.core.domain.preferences.usecases.GetUsernameUseCase
 import com.andef.myfinance.core.navigation.graph.AppNavGraph
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.navigation.routes.Screen.MainScreens.fabRoutes
