@@ -1,6 +1,5 @@
 package com.andef.myfinance.app
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -8,12 +7,7 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -27,14 +21,11 @@ import com.andef.myfinance.core.design.scaffold.ui.UiScaffold
 import com.andef.myfinance.core.design.topbar.type.UiTopBarTab
 import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.design.topbar.ui.UiTopBar
-import com.andef.myfinance.core.domain.preferences.usecases.GetIsFirstStartUseCase
 import com.andef.myfinance.core.navigation.graph.AppNavGraph
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.navigation.routes.Screen.MainScreens.fabRoutes
 import com.andef.myfinance.core.navigation.routes.Screen.MainScreens.mainRoutes
-import com.kizitonwose.calendar.core.minusDays
-import com.kizitonwose.calendar.core.minusMonths
-import com.kizitonwose.calendar.core.minusYears
+import com.andef.myfinance.core.navigation.utils.navigateWithSaveState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -44,88 +35,39 @@ import myfinance.composeapp.generated.resources.my_finance_expenses
 import myfinance.composeapp.generated.resources.my_finance_incomes
 import myfinance.composeapp.generated.resources.my_finance_menu
 import myfinance.composeapp.generated.resources.my_finance_totals
-import network.chaintech.kmp_date_time_picker.utils.now
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.getKoin
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
     val viewModel = koinViewModel<AppViewModel>()
-    val isLightTheme = viewModel.getIsLightThemeAsFlowUseCase.invoke()
-        .collectAsState(
-            viewModel.getIsLightThemeUseCase
-                .invoke(isSystemInDarkTheme())
-        )
-        .value
-    val username = viewModel.getUsernameAsFlowUseCase.invoke()
-        .collectAsState(viewModel.getUsernameUseCase.invoke())
-        .value
+    val state = viewModel.state.collectAsState().value
+
     val navHostController = rememberNavController()
     val navBackStackEntry = navHostController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    var startDate by remember { mutableStateOf(LocalDate.now()) }
-    var endDate by remember { mutableStateOf(LocalDate.now()) }
-    var datePickerVisible by remember { mutableStateOf(false) }
-    var lastSelectedTabIndex by remember { mutableIntStateOf(0) }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    MyFinanceTheme(darkTheme = !isLightTheme) {
+    MyFinanceTheme(darkTheme = !state.isLightTheme) {
         AppDrawer(
-            isLightTheme = isLightTheme,
+            isLightTheme = state.isLightTheme,
             navHostController = navHostController,
             navBackStackEntry = navBackStackEntry,
-            startDate = startDate,
-            endDate = endDate,
-            datePickerVisible = datePickerVisible,
+            startDate = state.startDate,
+            endDate = state.endDate,
+            datePickerVisible = state.datePickerVisible,
             currentRoute = currentRoute,
             scope = scope,
             drawerState = drawerState,
             onDatesChoose = { s, e ->
-                startDate = s
-                endDate = e
-                datePickerVisible = false
+                viewModel.send(AppIntent.DatesChoose(s, e))
             },
-            selectedTabIndex = selectedTabIndex,
-            onDatesDismiss = {
-                selectedTabIndex = lastSelectedTabIndex
-                datePickerVisible = false
-            },
-            onTabClick = { tab ->
-                if (tab.id != selectedTabIndex || tab.id == 4) {
-                    selectedTabIndex = tab.id
-                    when (tab.id) {
-                        0 -> {
-                            lastSelectedTabIndex = tab.id
-                            startDate = LocalDate.now()
-                            endDate = LocalDate.now()
-                        }
-
-                        1 -> {
-                            lastSelectedTabIndex = tab.id
-                            startDate = LocalDate.now().minusDays(7)
-                            endDate = LocalDate.now()
-                        }
-
-                        2 -> {
-                            lastSelectedTabIndex = tab.id
-                            startDate = LocalDate.now().minusMonths(1)
-                            endDate = LocalDate.now()
-                        }
-
-                        3 -> {
-                            lastSelectedTabIndex = tab.id
-                            startDate = LocalDate.now().minusYears(1)
-                            endDate = LocalDate.now()
-                        }
-
-                        else -> datePickerVisible = true
-                    }
-                }
-            }
+            selectedTabIndex = state.selectedTabIndex,
+            onDatesDismiss = { viewModel.send(AppIntent.DatesDismiss) },
+            onTabClick = { tab -> viewModel.send(AppIntent.TabClick(tab)) },
+            isFirstStart = state.isFirstStart
         )
     }
 }
@@ -133,6 +75,7 @@ fun App() {
 @Composable
 private fun AppDrawer(
     isLightTheme: Boolean,
+    isFirstStart: Boolean,
     navHostController: NavHostController,
     navBackStackEntry: NavBackStackEntry?,
     startDate: LocalDate,
@@ -166,7 +109,8 @@ private fun AppDrawer(
                 onDatesDismiss = onDatesDismiss,
                 selectedTabIndex = selectedTabIndex,
                 onTabClick = onTabClick,
-                currentRoute = currentRoute
+                currentRoute = currentRoute,
+                isFirstStart = isFirstStart
             )
         }
     )
@@ -175,6 +119,7 @@ private fun AppDrawer(
 @Composable
 private fun AppDrawerContent(
     isLightTheme: Boolean,
+    isFirstStart: Boolean,
     navHostController: NavHostController,
     navBackStackEntry: NavBackStackEntry?,
     startDate: LocalDate,
@@ -207,7 +152,7 @@ private fun AppDrawerContent(
             isLightTheme = isLightTheme,
             navHostController = navHostController,
             paddingValues = innerPadding,
-            isFirstStart = GetIsFirstStartUseCase(repository = getKoin().get()).invoke(),
+            isFirstStart = isFirstStart,
             startDate = startDate,
             endDate = endDate
         )
@@ -229,11 +174,17 @@ private fun MainFAB(navHostController: NavHostController, currentRoute: String?)
         onClick = {
             when (currentRoute) {
                 Screen.MainScreens.IncomeMainScreen.route -> {
-                    navHostController.navigate(Screen.IncomeAddScreen.route)
+                    navHostController.navigateWithSaveState(
+                        popUpToRoute = Screen.MainScreens.IncomeMainScreen.route,
+                        whereNavigateRoute = Screen.IncomeAddScreen.route
+                    )
                 }
 
                 Screen.MainScreens.ExpenseMainScreen.route -> {
-                    navHostController.navigate(Screen.ExpenseAddScreen.route)
+                    navHostController.navigateWithSaveState(
+                        popUpToRoute = Screen.MainScreens.ExpenseMainScreen.route,
+                        whereNavigateRoute = Screen.ExpenseAddScreen.route
+                    )
                 }
             }
         }
@@ -251,13 +202,10 @@ private fun MainBottomBar(
         itemSelected = { item -> item.route == currentRoute },
         onItemClick = { item ->
             if (item.route != currentRoute) {
-                navHostController.navigate(item.route) {
-                    popUpTo(Screen.MainScreens.IncomeMainScreen.route) {
-                        saveState = true
-                    }
-                    restoreState = true
-                    launchSingleTop = true
-                }
+                navHostController.navigateWithSaveState(
+                    popUpToRoute = Screen.MainScreens.IncomeMainScreen.route,
+                    whereNavigateRoute = item.route
+                )
             }
         },
         items = mainNavBarItems(),
@@ -284,7 +232,7 @@ private fun mainNavBarItems() = listOf(
         contentDescription = "Иконка итогов",
         route = Screen.MainScreens.TotalMainScreen.route,
         title = "Итоги"
-    ),
+    )
 )
 
 @Composable

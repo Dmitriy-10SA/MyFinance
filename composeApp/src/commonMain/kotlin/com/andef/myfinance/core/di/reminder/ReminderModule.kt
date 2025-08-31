@@ -10,10 +10,13 @@ import com.andef.myfinance.core.domain.reminder.usecases.DeleteReminderUseCase
 import com.andef.myfinance.core.domain.reminder.usecases.GetRemindersAsListUseCase
 import com.andef.myfinance.core.domain.reminder.usecases.GetRemindersUseCase
 import com.andef.myfinance.db.AppDatabase
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+
+expect fun reminderSchedulerModule(): Module
 
 private val reminderRepositoryModule = module {
     singleOf(::ReminderRepositoryImpl).bind<ReminderRepository>()
@@ -34,4 +37,9 @@ private val reminderMapperModule = module {
     singleOf(::ReminderMapper)
 }
 
-val reminderModule = listOf(reminderRepositoryModule, reminderDaoModule, reminderMapperModule)
+val reminderModule = listOf(
+    reminderSchedulerModule(),
+    reminderRepositoryModule,
+    reminderDaoModule,
+    reminderMapperModule
+)
