@@ -2,7 +2,7 @@ package com.andef.myfinance.core.utils.getters
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
-import com.andef.myfinance.core.domain.income_category.entities.BaseIncomeCategory
+import com.andef.myfinance.core.domain.income_common.income_category.entities.BaseIncomeCategory
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_bank
 import myfinance.composeapp.generated.resources.my_finance_gifts
