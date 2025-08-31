@@ -44,7 +44,17 @@ class AppViewModel(
             is AppIntent.DatesDismiss -> datesDismiss()
 
             is AppIntent.TabClick -> tabClick(tab = intent.tab)
+
+            is AppIntent.CurrentRouteChange -> currentRouteChange(route = intent.route)
         }
+    }
+
+    private fun currentRouteChange(route: String?) {
+        val previousCurrentRoute = _state.value.currentRoute
+        _state.value = _state.value.copy(
+            previousRoute = previousCurrentRoute,
+            currentRoute = route
+        )
     }
 
     private fun tabClick(tab: UiTopBarTab) {

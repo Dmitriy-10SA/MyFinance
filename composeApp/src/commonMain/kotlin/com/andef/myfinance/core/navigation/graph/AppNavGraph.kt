@@ -18,7 +18,9 @@ fun AppNavGraph(
     paddingValues: PaddingValues,
     isFirstStart: Boolean,
     startDate: LocalDate,
-    endDate: LocalDate
+    endDate: LocalDate,
+    currentRoute: String?,
+    previousRoute: String?,
 ) {
     NavHost(
         navController = navHostController,

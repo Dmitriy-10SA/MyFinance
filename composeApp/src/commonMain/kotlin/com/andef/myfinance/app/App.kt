@@ -6,11 +6,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.andef.myfinance.core.design.MyFinanceTheme
 import com.andef.myfinance.core.design.date.picker.ui.UiRangeDatePickerDialog
@@ -45,20 +44,24 @@ fun App() {
     val state = viewModel.state.collectAsState().value
 
     val navHostController = rememberNavController()
-    val navBackStackEntry = navHostController.currentBackStackEntryAsState().value
-    val currentRoute = navBackStackEntry?.destination?.route
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(navHostController) {
+        navHostController.addOnDestinationChangedListener { _, destination, _ ->
+            viewModel.send(AppIntent.CurrentRouteChange(route = destination.route))
+        }
+    }
 
     MyFinanceTheme(darkTheme = !state.isLightTheme) {
         AppDrawer(
             isLightTheme = state.isLightTheme,
             navHostController = navHostController,
-            navBackStackEntry = navBackStackEntry,
             startDate = state.startDate,
             endDate = state.endDate,
             datePickerVisible = state.datePickerVisible,
-            currentRoute = currentRoute,
+            currentRoute = state.currentRoute,
+            previousRoute = state.previousRoute,
             scope = scope,
             drawerState = drawerState,
             onDatesChoose = { s, e ->
@@ -77,12 +80,12 @@ private fun AppDrawer(
     isLightTheme: Boolean,
     isFirstStart: Boolean,
     navHostController: NavHostController,
-    navBackStackEntry: NavBackStackEntry?,
     startDate: LocalDate,
     endDate: LocalDate,
     datePickerVisible: Boolean,
     selectedTabIndex: Int,
     currentRoute: String?,
+    previousRoute: String?,
     scope: CoroutineScope,
     drawerState: DrawerState,
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
@@ -99,7 +102,6 @@ private fun AppDrawer(
             AppDrawerContent(
                 isLightTheme = isLightTheme,
                 navHostController = navHostController,
-                navBackStackEntry = navBackStackEntry,
                 startDate = startDate,
                 endDate = endDate,
                 datePickerVisible = datePickerVisible,
@@ -110,6 +112,7 @@ private fun AppDrawer(
                 selectedTabIndex = selectedTabIndex,
                 onTabClick = onTabClick,
                 currentRoute = currentRoute,
+                previousRoute = previousRoute,
                 isFirstStart = isFirstStart
             )
         }
@@ -121,12 +124,12 @@ private fun AppDrawerContent(
     isLightTheme: Boolean,
     isFirstStart: Boolean,
     navHostController: NavHostController,
-    navBackStackEntry: NavBackStackEntry?,
     startDate: LocalDate,
     endDate: LocalDate,
     datePickerVisible: Boolean,
     selectedTabIndex: Int,
     currentRoute: String?,
+    previousRoute: String?,
     scope: CoroutineScope,
     drawerState: DrawerState,
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
@@ -139,11 +142,11 @@ private fun AppDrawerContent(
         topBar = {
             MainTopBar(
                 isLightTheme = isLightTheme,
-                navBackStackEntry = navBackStackEntry,
                 selectedTabIndex = selectedTabIndex,
                 scope = scope,
                 drawerState = drawerState,
-                onTabClick = onTabClick
+                onTabClick = onTabClick,
+                currentRoute = currentRoute
             )
         },
         bottomBar = { MainBottomBar(isLightTheme, navHostController, currentRoute) }
@@ -154,7 +157,9 @@ private fun AppDrawerContent(
             paddingValues = innerPadding,
             isFirstStart = isFirstStart,
             startDate = startDate,
-            endDate = endDate
+            endDate = endDate,
+            currentRoute = currentRoute,
+            previousRoute = previousRoute
         )
         UiRangeDatePickerDialog(
             isVisible = datePickerVisible,
@@ -238,7 +243,7 @@ private fun mainNavBarItems() = listOf(
 @Composable
 private fun MainTopBar(
     isLightTheme: Boolean,
-    navBackStackEntry: NavBackStackEntry?,
+    currentRoute: String?,
     selectedTabIndex: Int,
     scope: CoroutineScope,
     drawerState: DrawerState,
@@ -254,7 +259,7 @@ private fun MainTopBar(
         title = "Мои финансы",
         navigationIcon = painterResource(Res.drawable.my_finance_menu),
         navigationIconContentDescription = "Меню",
-        isVisible = navBackStackEntry?.destination?.route in mainRoutes,
+        isVisible = currentRoute in mainRoutes,
         onNavigationIconClick = { scope.launch { drawerState.open() } }
     )
 }

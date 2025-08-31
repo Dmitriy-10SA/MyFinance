@@ -11,5 +11,7 @@ data class AppState(
     val lastSelectedTabIndex: Int = 0,
     val startDate: LocalDate = LocalDate.now(),
     val endDate: LocalDate = LocalDate.now(),
-    val datePickerVisible: Boolean = false
+    val datePickerVisible: Boolean = false,
+    val currentRoute: String? = null,
+    val previousRoute: String? = null
 )
