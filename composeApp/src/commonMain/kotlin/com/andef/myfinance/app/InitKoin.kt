@@ -5,7 +5,6 @@ import com.andef.myfinance.core.di.expense_common.expenseCommonModule
 import com.andef.myfinance.core.di.income_common.incomeCommonModule
 import com.andef.myfinance.core.di.networkModule
 import com.andef.myfinance.core.di.preferences.preferencesModule
-import com.andef.myfinance.core.di.preferences.settingsModule
 import com.andef.myfinance.core.di.reminder.reminderModule
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModelOf
