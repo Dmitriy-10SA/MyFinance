@@ -1,5 +1,6 @@
 package com.andef.myfinance.core.navigation.graph
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -20,11 +21,14 @@ fun NavGraphBuilder.mainScreensNavGraph(
     startDate: LocalDate,
     endDate: LocalDate,
     currentRoute: String?,
-    previousRoute: String?
+    previousRoute: String?,
+    mainScreenIsVisible: Boolean
 ) {
     navigation(
         route = Screen.MainScreens.route,
-        startDestination = Screen.MainScreens.IncomeMainScreen.route
+        startDestination = Screen.MainScreens.IncomeMainScreen.route,
+        enterTransition = { fadeInAnim() },
+        exitTransition = { fadeOutAnim() }
     ) {
         composable(
             route = Screen.MainScreens.IncomeMainScreen.route,
@@ -49,15 +53,28 @@ fun NavGraphBuilder.mainScreensNavGraph(
                 }
             }
         ) {
-            IncomeMainScreen(
-                isLightTheme = isLightTheme,
-                navHostController = navHostController,
-                paddingValues = paddingValues,
-                startDate = startDate,
-                endDate = endDate
-            )
+            AnimatedVisibility(
+                visible = mainScreenIsVisible,
+                enter = fadeInAnim(),
+                exit = fadeOutAnim()
+            ) {
+                IncomeMainScreen(
+                    isLightTheme = isLightTheme,
+                    navHostController = navHostController,
+                    paddingValues = paddingValues,
+                    startDate = startDate,
+                    endDate = endDate
+                )
+            }
         }
         composable(route = Screen.MainScreens.ExpenseMainScreen.route) {
+            AnimatedVisibility(
+                visible = mainScreenIsVisible,
+                enter = fadeInAnim(),
+                exit = fadeOutAnim()
+            ) {
+
+            }
 //            ExpenseMainScreen(
 //                isLightTheme = isLightTheme,
 //                navHostController = navHostController,
@@ -68,6 +85,13 @@ fun NavGraphBuilder.mainScreensNavGraph(
 //            )
         }
         composable(route = Screen.MainScreens.TotalMainScreen.route) {
+            AnimatedVisibility(
+                visible = mainScreenIsVisible,
+                enter = fadeInAnim(),
+                exit = fadeOutAnim()
+            ) {
+
+            }
 //            TotalMainScreen(
 //                isLightTheme = isLightTheme,
 //                navHostController = navHostController,

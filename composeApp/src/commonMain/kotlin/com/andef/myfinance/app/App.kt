@@ -165,7 +165,8 @@ private fun AppDrawerContent(
             startDate = startDate,
             endDate = endDate,
             currentRoute = currentRoute,
-            previousRoute = previousRoute
+            previousRoute = previousRoute,
+            mainScreenIsVisible = currentRoute in mainRoutes
         )
         UiRangeDatePickerDialog(
             isVisible = datePickerVisible,
