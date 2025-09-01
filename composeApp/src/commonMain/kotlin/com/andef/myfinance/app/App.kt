@@ -25,6 +25,7 @@ import com.andef.myfinance.core.navigation.graph.AppNavGraph
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.navigation.routes.Screen.MainScreens.fabRoutes
 import com.andef.myfinance.core.navigation.routes.Screen.MainScreens.mainRoutes
+import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.navigateWithSaveState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -261,6 +262,7 @@ private fun MainTopBar(
             selectedTabIndex = selectedTabIndex,
             onTabClick = onTabClick
         ),
+        navigationIconTint = blackOrWhiteColor(isLightTheme = isLightTheme),
         title = "Мои финансы",
         navigationIcon = painterResource(Res.drawable.my_finance_menu),
         navigationIconContentDescription = "Меню",

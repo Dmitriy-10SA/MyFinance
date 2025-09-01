@@ -98,8 +98,8 @@ fun BackupStartScreen(
                 )
             },
             helpBottomSheetVisible = state.helpBottomSheetVisible,
-            onMailClick = { linkOpener.openLink("https://t.me/dsemkin") },
-            onTelegramClick = { linkOpener.openLink("mailto:semkin_dmitriy10@vk.com") }
+            onTelegramClick = { linkOpener.openLink("https://t.me/dsemkin") },
+            onMailClick = { linkOpener.openLink("mailto:semkin_dmitriy10@vk.com") }
         )
         if (state.startPicker) {
             backupManager.pickBackupFile { backupData ->
