@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.andef.myfinance.core.navigation.routes.Screen
+import com.andef.myfinance.feature.income_common.income_main.presentation.IncomeMainScreen
 import kotlinx.datetime.LocalDate
 
 fun NavGraphBuilder.mainScreensNavGraph(
@@ -20,14 +21,13 @@ fun NavGraphBuilder.mainScreensNavGraph(
         startDestination = Screen.MainScreens.IncomeMainScreen.route
     ) {
         composable(route = Screen.MainScreens.IncomeMainScreen.route) {
-//            IncomeMainScreen(
-//                isLightTheme = isLightTheme,
-//                navHostController = navHostController,
-//                viewModelFactory = viewModelFactory,
-//                paddingValues = paddingValues,
-//                startDate = startDate,
-//                endDate = endDate
-//            )
+            IncomeMainScreen(
+                isLightTheme = isLightTheme,
+                navHostController = navHostController,
+                paddingValues = paddingValues,
+                startDate = startDate,
+                endDate = endDate
+            )
         }
         composable(route = Screen.MainScreens.ExpenseMainScreen.route) {
 //            ExpenseMainScreen(

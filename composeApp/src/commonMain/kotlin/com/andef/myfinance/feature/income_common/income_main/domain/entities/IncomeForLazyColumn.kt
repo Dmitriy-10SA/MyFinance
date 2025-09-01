@@ -1,4 +1,4 @@
-package com.andef.myfinance.feature.income_common.income.domain.entities
+package com.andef.myfinance.feature.income_common.income_main.domain.entities
 
 import com.andef.myfinance.core.domain.income_common.income.entities.IncomeModel
 import kotlinx.datetime.LocalDate
