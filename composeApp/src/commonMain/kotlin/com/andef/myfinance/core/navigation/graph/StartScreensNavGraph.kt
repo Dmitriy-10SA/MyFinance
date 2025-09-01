@@ -6,12 +6,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.andef.myfinance.core.navigation.routes.Screen
+import com.andef.myfinance.core.platform.BackupManager
 import com.andef.myfinance.feature.auth.presentation.AuthScreen
+import com.andef.myfinance.feature.backup.presentation.start.BackupStartScreen
 
 fun NavGraphBuilder.startScreensNavGraph(
     isLightTheme: Boolean,
     navHostController: NavHostController,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    backupManager: BackupManager
 ) {
     navigation(
         route = Screen.StartScreens.route,
@@ -25,7 +28,12 @@ fun NavGraphBuilder.startScreensNavGraph(
             )
         }
         composable(route = Screen.StartScreens.BackupStartScreen.route) {
-            //BackupStartScreen(isLightTheme, navHostController, viewModelFactory, paddingValues)
+            BackupStartScreen(
+                isLightTheme = isLightTheme,
+                navHostController = navHostController,
+                paddingValues = paddingValues,
+                backupManager = backupManager
+            )
         }
     }
 }

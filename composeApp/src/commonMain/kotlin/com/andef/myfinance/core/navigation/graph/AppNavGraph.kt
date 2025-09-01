@@ -9,7 +9,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.savedstate.read
 import com.andef.myfinance.core.navigation.routes.Screen
+import com.andef.myfinance.core.platform.BackupManager
 import kotlinx.datetime.LocalDate
+import org.koin.compose.getKoin
 
 @Composable
 fun AppNavGraph(
@@ -22,6 +24,7 @@ fun AppNavGraph(
     currentRoute: String?,
     previousRoute: String?,
 ) {
+    val backupManager = getKoin().get<BackupManager>()
     NavHost(
         navController = navHostController,
         startDestination = if (isFirstStart) {
@@ -33,7 +36,8 @@ fun AppNavGraph(
         startScreensNavGraph(
             isLightTheme = isLightTheme,
             navHostController = navHostController,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
+            backupManager = backupManager
         )
         mainScreensNavGraph(
             navHostController = navHostController,
@@ -57,7 +61,8 @@ fun AppNavGraph(
             route = Screen.IncomeScreen.route,
             arguments = listOf(navArgument(Screen.ID_PARAM) { type = NavType.LongType })
         ) {
-            val id = it.arguments?.read { getLong(Screen.ID_PARAM) } ?: throw IllegalArgumentException()
+            val id =
+                it.arguments?.read { getLong(Screen.ID_PARAM) } ?: throw IllegalArgumentException()
 //            IncomeAddScreen(id, isLightTheme, navHostController, viewModelFactory, paddingValues)
         }
         composable(route = Screen.ExpenseAnalysisScreen.route) {
@@ -75,7 +80,8 @@ fun AppNavGraph(
             route = Screen.ExpenseScreen.route,
             arguments = listOf(navArgument(Screen.ID_PARAM) { type = NavType.LongType })
         ) {
-            val id = it.arguments?.read { getLong(Screen.ID_PARAM) } ?: throw IllegalArgumentException()
+            val id =
+                it.arguments?.read { getLong(Screen.ID_PARAM) } ?: throw IllegalArgumentException()
 //            ExpenseAddScreen(id, isLightTheme, navHostController, viewModelFactory, paddingValues)
         }
         composable(route = Screen.CurrencysScreen.route) {
@@ -107,7 +113,8 @@ fun AppNavGraph(
             route = Screen.ReminderScreen.route,
             arguments = listOf(navArgument(Screen.ID_PARAM) { type = NavType.LongType })
         ) {
-            val id = it.arguments?.read { getLong(Screen.ID_PARAM) } ?: throw IllegalArgumentException()
+            val id =
+                it.arguments?.read { getLong(Screen.ID_PARAM) } ?: throw IllegalArgumentException()
 //            ReminderAddScreen(
 //                reminderId = id,
 //                isLightTheme = isLightTheme,
