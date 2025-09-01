@@ -1,4 +1,4 @@
-package com.andef.myfinance.feature.income_common.income_main.presentation
+package com.andef.myfinance.feature.expense_common.expense_main.presentation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,21 +37,19 @@ import androidx.navigation.NavHostController
 import com.andef.myfinance.core.design.alert.dialog.ui.UiAlertDialog
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiModalBottomSheet
 import com.andef.myfinance.core.design.card.date.amount.row.UiDateAndAmountRow
-import com.andef.myfinance.core.design.card.income.ui.UiIncomeCard
+import com.andef.myfinance.core.design.card.expense.ui.UiExpenseCard
 import com.andef.myfinance.core.design.loading.ui.UiLoading
 import com.andef.myfinance.core.design.snackbar.type.UiSnackbarType
 import com.andef.myfinance.core.design.snackbar.ui.UiSnackbar
-import com.andef.myfinance.core.domain.income_common.income.entities.IncomeModel
-import com.andef.myfinance.core.domain.income_common.income_category.entities.IncomeCategoryModel
+import com.andef.myfinance.core.domain.expense_common.expense_category.entities.ExpenseCategoryModel
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
-import com.andef.myfinance.core.utils.getters.getTitleForIncome
+import com.andef.myfinance.core.utils.getters.getTitleForExpense
 import com.andef.myfinance.core.utils.grayColor
-import com.andef.myfinance.feature.income_common.income_main.domain.entities.IncomeForLazyColumn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -63,14 +61,14 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IncomeMainScreen(
+fun ExpenseMainScreen(
     isLightTheme: Boolean,
     navHostController: NavHostController,
     paddingValues: PaddingValues,
     startDate: LocalDate,
     endDate: LocalDate
 ) {
-    val viewModel = koinViewModel<IncomeMainViewModel>()
+    val viewModel = koinViewModel<ExpenseMainViewModel>()
     val state = viewModel.state.collectAsState().value
 
     val sheetState = rememberModalBottomSheetState()
@@ -84,7 +82,7 @@ fun IncomeMainScreen(
     DisposableEffect(Unit) {
         onDispose {
             viewModel.send(
-                IncomeMainIntent.SaveScrollState(
+                ExpenseMainIntent.SaveScrollState(
                     initialFirstVisibleItemIndex = listState.firstVisibleItemIndex,
                     initialFirstVisibleItemScrollOffset = listState.firstVisibleItemScrollOffset
                 )
@@ -93,30 +91,10 @@ fun IncomeMainScreen(
     }
 
     LaunchedEffect(startDate, endDate) {
-        viewModel.send(IncomeMainIntent.SubscribeForIncomes(startDate, endDate))
+        viewModel.send(ExpenseMainIntent.SubscribeForExpenses(startDate, endDate))
     }
 
-    MainContent(
-        paddingValues = paddingValues,
-        totalAmount = state.totalAmount,
-        incomesForLazyColumn = state.incomesForLazyColumn,
-        isLightTheme = isLightTheme,
-        isLoading = state.isLoading,
-        startDate = startDate,
-        endDate = endDate,
-        onIncomeCardClick = { income ->
-            viewModel.send(
-                IncomeMainIntent.BottomSheetVisibleChange(
-                    isVisible = true,
-                    date = income.date,
-                    category = income.category,
-                    amount = income.amount,
-                    id = income.id
-                )
-            )
-        },
-        listState = listState
-    )
+    MainContent(paddingValues, state, isLightTheme, viewModel, startDate, endDate, listState)
     BottomSheetWithDeleteDialog(
         navHostController = navHostController,
         viewModel = viewModel,
@@ -132,14 +110,12 @@ fun IncomeMainScreen(
 @Composable
 private fun MainContent(
     paddingValues: PaddingValues,
-    totalAmount: Double,
-    incomesForLazyColumn: List<IncomeForLazyColumn>,
+    state: ExpenseMainState,
     isLightTheme: Boolean,
-    isLoading: Boolean,
+    viewModel: ExpenseMainViewModel,
     startDate: LocalDate,
     endDate: LocalDate,
-    listState: LazyListState,
-    onIncomeCardClick: (IncomeModel) -> Unit
+    listState: LazyListState
 ) {
     LazyColumn(
         modifier = Modifier
@@ -154,50 +130,60 @@ private fun MainContent(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .padding(top = 12.dp),
-                isIncome = true,
-                totalAmount = totalAmount,
+                isIncome = false,
+                totalAmount = state.totalAmount,
                 isLightTheme = isLightTheme,
                 startDate = startDate,
                 endDate = endDate
             )
         }
         item { Spacer(modifier = Modifier.height(6.dp)) }
-        incomesForLazyColumn.forEach { incomeForLazyColumn ->
-            item(key = "date-${incomeForLazyColumn.date}") {
+        state.expensesForLazyColumn.forEach { expensesForLazyColumn ->
+            item(key = "date-${expensesForLazyColumn.date}") {
                 Spacer(modifier = Modifier.height(18.dp))
                 UiDateAndAmountRow(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp, bottom = 4.dp)
                         .animateItem(),
-                    isIncome = true,
+                    isIncome = false,
                     isLightTheme = isLightTheme,
-                    date = incomeForLazyColumn.date,
-                    amount = incomeForLazyColumn.totalAmount
+                    date = expensesForLazyColumn.date,
+                    amount = expensesForLazyColumn.totalAmount
                 )
             }
-            items(items = incomeForLazyColumn.incomeModels, key = { it.id }) { income ->
-                UiIncomeCard(
+            items(items = expensesForLazyColumn.expenseModels, key = { it.id }) { expense ->
+                UiExpenseCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .animateItem(),
                     isLightTheme = isLightTheme,
-                    incomeModel = income,
-                    onClick = { onIncomeCardClick(income) }
+                    expenseModel = expense,
+                    onClick = {
+                        viewModel.send(
+                            ExpenseMainIntent.BottomSheetVisibleChange(
+                                isVisible = true,
+                                date = expense.date,
+                                category = expense.category,
+                                amount = expense.amount,
+                                id = expense.id
+                            )
+                        )
+                    }
                 )
             }
         }
         item { Spacer(modifier = Modifier.height(12.dp)) }
     }
-    UiLoading(isVisible = isLoading, isLightTheme = isLightTheme)
+    UiLoading(isVisible = state.isLoading, isLightTheme = isLightTheme)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BottomSheetWithDeleteDialog(
     navHostController: NavHostController,
-    viewModel: IncomeMainViewModel,
-    state: IncomeMainState,
+    viewModel: ExpenseMainViewModel,
+    state: ExpenseMainState,
     isLightTheme: Boolean,
     sheetState: SheetState,
     scope: CoroutineScope,
@@ -211,7 +197,7 @@ private fun BottomSheetWithDeleteDialog(
                         isLightTheme = isLightTheme,
                         isVisible = state.showBottomSheet,
                         onDismissRequest = {
-                            viewModel.send(IncomeMainIntent.BottomSheetVisibleChange(false))
+                            viewModel.send(ExpenseMainIntent.BottomSheetVisibleChange(false))
                         },
                         sheetState = sheetState,
                     ) {
@@ -221,11 +207,11 @@ private fun BottomSheetWithDeleteDialog(
                             date = date,
                             amount = amount,
                             onEditClick = {
-                                viewModel.send(IncomeMainIntent.BottomSheetVisibleChange(false))
-                                navHostController.navigate(Screen.IncomeScreen.passId(id))
+                                viewModel.send(ExpenseMainIntent.BottomSheetVisibleChange(false))
+                                navHostController.navigate(Screen.ExpenseScreen.passId(id))
                             },
                             onDeleteClick = {
-                                viewModel.send(IncomeMainIntent.ChangeDeleteDialogVisible(true))
+                                viewModel.send(ExpenseMainIntent.ChangeDeleteDialogVisible(true))
                             }
                         )
                     }
@@ -240,22 +226,22 @@ private fun BottomSheetWithDeleteDialog(
 private fun DeleteDialog(
     id: Long,
     isLightTheme: Boolean,
-    viewModel: IncomeMainViewModel,
-    state: IncomeMainState,
+    viewModel: ExpenseMainViewModel,
+    state: ExpenseMainState,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState
 ) {
     UiAlertDialog(
         isLightTheme = isLightTheme,
-        title = "Удаление дохода",
+        title = "Удаление расхода",
         onDismissRequest = {
-            viewModel.send(IncomeMainIntent.ChangeDeleteDialogVisible(isVisible = false))
+            viewModel.send(ExpenseMainIntent.ChangeDeleteDialogVisible(isVisible = false))
         },
         onYesClick = {
-            viewModel.send(IncomeMainIntent.ChangeDeleteDialogVisible(isVisible = false))
-            viewModel.send(IncomeMainIntent.BottomSheetVisibleChange(isVisible = false))
+            viewModel.send(ExpenseMainIntent.ChangeDeleteDialogVisible(isVisible = false))
+            viewModel.send(ExpenseMainIntent.BottomSheetVisibleChange(isVisible = false))
             viewModel.send(
-                IncomeMainIntent.DeleteIncome(
+                ExpenseMainIntent.DeleteExpense(
                     id = id,
                     onError = { msg ->
                         snackbarHostState.currentSnackbarData?.dismiss()
@@ -269,14 +255,14 @@ private fun DeleteDialog(
                 )
             )
         },
+        onCancelClick = {
+            viewModel.send(ExpenseMainIntent.ChangeDeleteDialogVisible(isVisible = false))
+        },
         cancelTitle = "Отмена",
         yesTitle = "Удалить",
         subtitle = "Вы уверены? Это действие необратимо",
         cancelTitleColor = Blue,
         yesTitleColor = Red,
-        onCancelClick = {
-            viewModel.send(IncomeMainIntent.ChangeDeleteDialogVisible(isVisible = false))
-        },
         isVisible = state.deleteDialogVisible
     )
 }
@@ -284,7 +270,7 @@ private fun DeleteDialog(
 @Composable
 private fun BottomSheetContent(
     isLightTheme: Boolean,
-    category: IncomeCategoryModel,
+    category: ExpenseCategoryModel,
     date: LocalDate,
     amount: Double,
     onEditClick: () -> Unit,
@@ -300,14 +286,14 @@ private fun BottomSheetContent(
     ) {
         Column {
             Text(
-                text = getTitleForIncome(category.title),
+                text = getTitleForExpense(category.title),
                 fontSize = 16.sp,
-                color = blackOrWhiteColor(isLightTheme = isLightTheme)
+                color = blackOrWhiteColor(isLightTheme)
             )
             Text(
-                text = "${formatLocalDate(date)}: +${formatPriceRuble(amount)}",
+                text = "${formatLocalDate(date)}: -${formatPriceRuble(amount)}",
                 fontSize = 14.sp,
-                color = grayColor(isLightTheme = isLightTheme)
+                color = grayColor(isLightTheme)
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -321,7 +307,7 @@ private fun BottomSheetContent(
         ) {
             Icon(
                 painter = painterResource(Res.drawable.my_finance_edit),
-                tint = blackOrWhiteColor(isLightTheme = isLightTheme),
+                tint = blackOrWhiteColor(isLightTheme),
                 contentDescription = "Карандаш (изменить)"
             )
             Spacer(modifier = Modifier.width(10.dp))

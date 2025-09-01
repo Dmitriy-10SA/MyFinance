@@ -9,9 +9,9 @@ import androidx.navigation.compose.navigation
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.utils.anims.fadeInAnim
 import com.andef.myfinance.core.utils.anims.fadeOutAnim
-import com.andef.myfinance.core.utils.anims.slideInRightHorizontalAnim
-import com.andef.myfinance.core.utils.anims.slideOutLeftHorizontalAnim
+import com.andef.myfinance.feature.expense_common.expense_main.presentation.ExpenseMainScreen
 import com.andef.myfinance.feature.income_common.income_main.presentation.IncomeMainScreen
+import com.andef.myfinance.feature.totals.presentation.TotalMainScreen
 import kotlinx.datetime.LocalDate
 
 fun NavGraphBuilder.mainScreensNavGraph(
@@ -20,9 +20,7 @@ fun NavGraphBuilder.mainScreensNavGraph(
     paddingValues: PaddingValues,
     startDate: LocalDate,
     endDate: LocalDate,
-    currentRoute: String?,
-    previousRoute: String?,
-    mainScreenIsVisible: Boolean
+    mainScreenIsVisible: Boolean,
 ) {
     navigation(
         route = Screen.MainScreens.route,
@@ -32,26 +30,8 @@ fun NavGraphBuilder.mainScreensNavGraph(
     ) {
         composable(
             route = Screen.MainScreens.IncomeMainScreen.route,
-            enterTransition = {
-                if (
-                    previousRoute == Screen.MainScreens.ExpenseMainScreen.route ||
-                    previousRoute == Screen.MainScreens.TotalMainScreen.route
-                ) {
-                    slideInRightHorizontalAnim()
-                } else {
-                    fadeInAnim()
-                }
-            },
-            exitTransition = {
-                if (
-                    currentRoute == Screen.MainScreens.ExpenseMainScreen.route ||
-                    currentRoute == Screen.MainScreens.TotalMainScreen.route
-                ) {
-                    slideOutLeftHorizontalAnim()
-                } else {
-                    fadeOutAnim()
-                }
-            }
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
         ) {
             AnimatedVisibility(
                 visible = mainScreenIsVisible,
@@ -67,39 +47,42 @@ fun NavGraphBuilder.mainScreensNavGraph(
                 )
             }
         }
-        composable(route = Screen.MainScreens.ExpenseMainScreen.route) {
+        composable(
+            route = Screen.MainScreens.ExpenseMainScreen.route,
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
+        ) {
             AnimatedVisibility(
                 visible = mainScreenIsVisible,
                 enter = fadeInAnim(),
                 exit = fadeOutAnim()
             ) {
-
+                ExpenseMainScreen(
+                    isLightTheme = isLightTheme,
+                    navHostController = navHostController,
+                    paddingValues = paddingValues,
+                    startDate = startDate,
+                    endDate = endDate
+                )
             }
-//            ExpenseMainScreen(
-//                isLightTheme = isLightTheme,
-//                navHostController = navHostController,
-//                viewModelFactory = viewModelFactory,
-//                paddingValues = paddingValues,
-//                startDate = startDate,
-//                endDate = endDate
-//            )
         }
-        composable(route = Screen.MainScreens.TotalMainScreen.route) {
+        composable(
+            route = Screen.MainScreens.TotalMainScreen.route,
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
+        ) {
             AnimatedVisibility(
                 visible = mainScreenIsVisible,
                 enter = fadeInAnim(),
                 exit = fadeOutAnim()
             ) {
-
+                TotalMainScreen(
+                    isLightTheme = isLightTheme,
+                    paddingValues = paddingValues,
+                    startDate = startDate,
+                    endDate = endDate
+                )
             }
-//            TotalMainScreen(
-//                isLightTheme = isLightTheme,
-//                navHostController = navHostController,
-//                viewModelFactory = viewModelFactory,
-//                paddingValues = paddingValues,
-//                startDate = startDate,
-//                endDate = endDate
-//            )
         }
     }
 }

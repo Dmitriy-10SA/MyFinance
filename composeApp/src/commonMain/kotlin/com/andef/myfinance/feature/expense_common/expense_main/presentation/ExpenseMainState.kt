@@ -1,14 +1,14 @@
-package com.andef.myfinance.feature.income_common.income_main.presentation
+package com.andef.myfinance.feature.expense_common.expense_main.presentation
 
-import com.andef.myfinance.core.domain.income_common.income_category.entities.IncomeCategoryModel
-import com.andef.myfinance.feature.income_common.income_main.domain.entities.IncomeForLazyColumn
+import com.andef.myfinance.core.domain.expense_common.expense_category.entities.ExpenseCategoryModel
+import com.andef.myfinance.feature.expense_common.expense_main.domain.entities.ExpenseForLazyColumn
 import kotlinx.datetime.LocalDate
 
-data class IncomeMainState(
-    val incomesForLazyColumn: List<IncomeForLazyColumn> = emptyList(),
+data class ExpenseMainState(
+    val expensesForLazyColumn: List<ExpenseForLazyColumn> = emptyList(),
     val totalAmount: Double = 0.0,
     val showBottomSheet: Boolean = false,
-    val categoryInBottomSheet: IncomeCategoryModel? = null,
+    val categoryInBottomSheet: ExpenseCategoryModel? = null,
     val dateInBottomSheet: LocalDate? = null,
     val amountInBottomSheet: Double? = null,
     val idInBottomSheet: Long? = null,

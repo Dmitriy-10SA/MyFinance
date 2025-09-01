@@ -28,6 +28,7 @@ fun AppNavGraph(
 ) {
     val backupManager = getKoin().get<BackupManager>()
     val linkOpener = getKoin().get<LinkOpener>()
+
     NavHost(
         navController = navHostController,
         startDestination = if (isFirstStart) {
@@ -50,8 +51,6 @@ fun AppNavGraph(
             isLightTheme = isLightTheme,
             startDate = startDate,
             endDate = endDate,
-            currentRoute = currentRoute,
-            previousRoute = previousRoute,
             mainScreenIsVisible = mainScreenIsVisible
         )
         composable(route = Screen.IncomeAnalysisScreen.route) {

@@ -25,6 +25,7 @@ import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
 import com.andef.myfinance.core.utils.grayColor
 import kotlinx.datetime.LocalDate
+import kotlin.math.abs
 
 @Composable
 fun UiDateAndAmountRow(
@@ -115,7 +116,7 @@ fun UiDateAndAmountRow(
             Spacer(modifier = Modifier.padding(vertical = 1.dp))
             Text(
                 color = blackOrWhiteColor(isLightTheme = isLightTheme),
-                text = "Итого: $sign${formatPriceRuble(totalAmount)}",
+                text = "Итого: $sign${formatPriceRuble(abs(totalAmount))}",
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp
             )

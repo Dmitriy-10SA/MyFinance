@@ -17,6 +17,11 @@ sealed class IncomeMainIntent {
         val id: Long? = null
     ) : IncomeMainIntent()
 
+    data class SaveScrollState(
+        val initialFirstVisibleItemIndex: Int,
+        val initialFirstVisibleItemScrollOffset: Int
+    ) : IncomeMainIntent()
+
     data class DeleteIncome(
         val id: Long,
         val onError: (String) -> Unit
