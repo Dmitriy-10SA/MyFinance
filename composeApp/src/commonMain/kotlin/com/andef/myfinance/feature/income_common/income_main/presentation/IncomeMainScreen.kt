@@ -47,8 +47,8 @@ import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red
 import com.andef.myfinance.core.utils.blackOrWhiteColor
-import com.andef.myfinance.core.utils.formatLocalDate
-import com.andef.myfinance.core.utils.formatPriceRuble
+import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
+import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
 import com.andef.myfinance.core.utils.getters.getTitleForIncome
 import com.andef.myfinance.core.utils.grayColor
 import com.andef.myfinance.core.utils.navigateWithSaveState
