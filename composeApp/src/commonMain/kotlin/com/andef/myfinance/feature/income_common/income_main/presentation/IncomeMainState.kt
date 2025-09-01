@@ -14,5 +14,7 @@ data class IncomeMainState(
     val idInBottomSheet: Long? = null,
     val deleteDialogVisible: Boolean = false,
     val isLoading: Boolean = false,
-    val isError: Boolean = false
+    val isError: Boolean = false,
+    val initialFirstVisibleItemIndex: Int = 0,
+    val initialFirstVisibleItemScrollOffset: Int = 0
 )

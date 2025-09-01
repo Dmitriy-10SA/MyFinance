@@ -11,6 +11,7 @@ import com.andef.myfinance.core.utils.anims.fadeInAnim
 import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.core.utils.anims.slideInRightHorizontalAnim
 import com.andef.myfinance.core.utils.anims.slideOutLeftHorizontalAnim
+import com.andef.myfinance.feature.expense_common.expense_main.presentation.ExpenseMainScreen
 import com.andef.myfinance.feature.income_common.income_main.presentation.IncomeMainScreen
 import kotlinx.datetime.LocalDate
 
@@ -73,16 +74,14 @@ fun NavGraphBuilder.mainScreensNavGraph(
                 enter = fadeInAnim(),
                 exit = fadeOutAnim()
             ) {
-
+                ExpenseMainScreen(
+                    isLightTheme = isLightTheme,
+                    navHostController = navHostController,
+                    paddingValues = paddingValues,
+                    startDate = startDate,
+                    endDate = endDate
+                )
             }
-//            ExpenseMainScreen(
-//                isLightTheme = isLightTheme,
-//                navHostController = navHostController,
-//                viewModelFactory = viewModelFactory,
-//                paddingValues = paddingValues,
-//                startDate = startDate,
-//                endDate = endDate
-//            )
         }
         composable(route = Screen.MainScreens.TotalMainScreen.route) {
             AnimatedVisibility(
