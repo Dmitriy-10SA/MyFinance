@@ -6,6 +6,7 @@ import com.andef.myfinance.core.di.expense_common.expenseCategoryModule
 import com.andef.myfinance.core.di.expense_common.expenseModule
 import com.andef.myfinance.core.di.income_common.incomeCategoryModule
 import com.andef.myfinance.core.di.income_common.incomeModule
+import com.andef.myfinance.core.di.linkOpenerModule
 import com.andef.myfinance.core.di.networkModule
 import com.andef.myfinance.core.di.preferences.preferencesModule
 import com.andef.myfinance.core.di.reminder.reminderModule
