@@ -1,7 +1,7 @@
-package com.andef.myfinance.core.di
+package com.andef.myfinance.core.di.common
 
-import com.andef.myfinance.core.platform.AndroidLinkOpener
-import com.andef.myfinance.core.platform.LinkOpener
+import com.andef.myfinance.core.platform.common.AndroidLinkOpener
+import com.andef.myfinance.core.platform.common.LinkOpener
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

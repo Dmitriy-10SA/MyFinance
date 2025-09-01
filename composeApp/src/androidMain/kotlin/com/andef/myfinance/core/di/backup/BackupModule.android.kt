@@ -1,7 +1,7 @@
 package com.andef.myfinance.core.di.backup
 
-import com.andef.myfinance.core.platform.AndroidBackupManager
-import com.andef.myfinance.core.platform.BackupManager
+import com.andef.myfinance.core.platform.backup.AndroidBackupManager
+import com.andef.myfinance.core.platform.backup.BackupManager
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind

@@ -1,4 +1,4 @@
-package com.andef.myfinance.core.platform
+package com.andef.myfinance.core.platform.common
 
 import platform.Foundation.NSURL
 import platform.UIKit.UIApplication

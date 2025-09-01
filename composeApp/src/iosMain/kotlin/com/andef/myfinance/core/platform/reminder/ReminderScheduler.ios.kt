@@ -1,4 +1,4 @@
-package com.andef.myfinance.core.platform
+package com.andef.myfinance.core.platform.reminder
 
 import platform.Foundation.NSDate
 import platform.Foundation.timeIntervalSince1970

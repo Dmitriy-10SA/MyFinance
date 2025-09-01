@@ -1,4 +1,4 @@
-package com.andef.myfinance.core.platform
+package com.andef.myfinance.core.platform.reminder
 
 import android.app.AlarmManager
 import android.app.NotificationManager

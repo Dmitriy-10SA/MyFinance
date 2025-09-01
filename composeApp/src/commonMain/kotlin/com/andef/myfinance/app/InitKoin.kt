@@ -1,13 +1,13 @@
 package com.andef.myfinance.app
 
 import com.andef.myfinance.core.di.backup.backupModule
-import com.andef.myfinance.core.di.databaseModule
+import com.andef.myfinance.core.di.data.databaseModule
 import com.andef.myfinance.core.di.expense_common.expenseCategoryModule
 import com.andef.myfinance.core.di.expense_common.expenseModule
 import com.andef.myfinance.core.di.income_common.incomeCategoryModule
 import com.andef.myfinance.core.di.income_common.incomeModule
-import com.andef.myfinance.core.di.linkOpenerModule
-import com.andef.myfinance.core.di.networkModule
+import com.andef.myfinance.core.di.common.linkOpenerModule
+import com.andef.myfinance.core.di.data.networkModule
 import com.andef.myfinance.core.di.preferences.preferencesModule
 import com.andef.myfinance.core.di.reminder.reminderModule
 import com.andef.myfinance.feature.auth.di.authViewModelModule

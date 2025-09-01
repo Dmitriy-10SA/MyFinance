@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.andef.myfinance.core.navigation.routes.Screen
-import com.andef.myfinance.core.platform.BackupManager
-import com.andef.myfinance.core.platform.LinkOpener
+import com.andef.myfinance.core.platform.backup.BackupManager
+import com.andef.myfinance.core.platform.common.LinkOpener
 import com.andef.myfinance.feature.auth.presentation.AuthScreen
 import com.andef.myfinance.feature.backup.presentation.start.BackupStartScreen
 

@@ -1,7 +1,7 @@
 package com.andef.myfinance.core.di.reminder
 
-import com.andef.myfinance.core.platform.IosReminderScheduler
-import com.andef.myfinance.core.platform.ReminderScheduler
+import com.andef.myfinance.core.platform.reminder.IosReminderScheduler
+import com.andef.myfinance.core.platform.reminder.ReminderScheduler
 import org.koin.core.module.Module
 import org.koin.dsl.bind
 import org.koin.dsl.module

@@ -1,4 +1,4 @@
-package com.andef.myfinance.core.platform
+package com.andef.myfinance.core.platform.backup
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -10,10 +10,13 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.json.Json
 import platform.Foundation.NSData
 import platform.Foundation.NSString
+import platform.Foundation.NSURL
 import platform.Foundation.NSUTF8StringEncoding
 import platform.Foundation.create
+import platform.UIKit.UIDocumentPickerDelegateProtocol
 import platform.UIKit.UIDocumentPickerMode
 import platform.UIKit.UIDocumentPickerViewController
+import platform.UIKit.UIViewController
 import platform.darwin.NSObject
 import kotlin.coroutines.resume
 
@@ -33,20 +36,20 @@ class IOSBackupManager : BackupManager {
     }
 
     @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
-    private suspend fun pickJsonFile(vc: platform.UIKit.UIViewController): BackupData? =
+    private suspend fun pickJsonFile(vc: UIViewController): BackupData? =
         suspendCancellableCoroutine { continuation ->
             val picker = UIDocumentPickerViewController(
                 documentTypes = listOf("public.json"),
                 inMode = UIDocumentPickerMode.UIDocumentPickerModeImport
             )
 
-            val delegate = object : NSObject(), platform.UIKit.UIDocumentPickerDelegateProtocol {
+            val delegate = object : NSObject(), UIDocumentPickerDelegateProtocol {
                 override fun documentPicker(
                     controller: UIDocumentPickerViewController,
                     didPickDocumentsAtURLs: List<*>
                 ) {
                     val url = didPickDocumentsAtURLs.firstOrNull()
-                            as? platform.Foundation.NSURL ?: return continuation.resume(null)
+                            as? NSURL ?: return continuation.resume(null)
 
                     val nsData: NSData? = NSData.create(contentsOfURL = url)
                     val content: String? = nsData?.let {

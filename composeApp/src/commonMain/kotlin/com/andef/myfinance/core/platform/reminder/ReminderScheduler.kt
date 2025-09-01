@@ -1,4 +1,4 @@
-package com.andef.myfinance.core.platform
+package com.andef.myfinance.core.platform.reminder
 
 interface ReminderScheduler {
     fun schedule(id: Long, text: String, triggerAtMillis: Long)

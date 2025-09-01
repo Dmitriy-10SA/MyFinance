@@ -1,4 +1,4 @@
-package com.andef.myfinance.core.platform
+package com.andef.myfinance.core.platform.common
 
 import android.content.Context
 import android.content.Intent

@@ -1,4 +1,4 @@
-package com.andef.myfinance.core.di
+package com.andef.myfinance.core.di.common
 
 import org.koin.core.module.Module
 

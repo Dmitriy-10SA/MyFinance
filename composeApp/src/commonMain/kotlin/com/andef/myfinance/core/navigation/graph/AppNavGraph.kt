@@ -9,8 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.savedstate.read
 import com.andef.myfinance.core.navigation.routes.Screen
-import com.andef.myfinance.core.platform.BackupManager
-import com.andef.myfinance.core.platform.LinkOpener
+import com.andef.myfinance.core.platform.backup.BackupManager
+import com.andef.myfinance.core.platform.common.LinkOpener
 import kotlinx.datetime.LocalDate
 import org.koin.compose.getKoin
 

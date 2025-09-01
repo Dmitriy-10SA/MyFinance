@@ -1,4 +1,4 @@
-package com.andef.myfinance.core.di
+package com.andef.myfinance.core.di.data
 
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.andef.myfinance.db.AppDatabase
