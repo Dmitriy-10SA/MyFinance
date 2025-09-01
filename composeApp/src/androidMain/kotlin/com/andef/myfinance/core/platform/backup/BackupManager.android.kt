@@ -15,7 +15,7 @@ import java.io.InputStreamReader
 
 class AndroidBackupManager : BackupManager {
     @Composable
-    override fun pickBackupFile(onResult: (BackupData?) -> Unit) {
+    override fun pickBackupFile(onResult: (BackupData?) -> Unit): () -> Unit {
         val context = LocalContext.current
         val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.OpenDocument(),
@@ -23,12 +23,10 @@ class AndroidBackupManager : BackupManager {
                 uri?.let {
                     val data = importDataFromJson(it, context)
                     onResult(data)
-                } ?: onResult(null)
+                }
             }
         )
-        LaunchedEffect(Unit) {
-            launcher.launch(arrayOf("application/json"))
-        }
+        return { launcher.launch(arrayOf("application/json")) }
     }
 
     private fun importDataFromJson(uri: Uri, context: Context): BackupData? {
@@ -38,8 +36,7 @@ class AndroidBackupManager : BackupManager {
                 val json = reader.readText()
                 Json.decodeFromString<BackupData>(json)
             }
-        } catch (e: Exception) {
-            Log.e("AndroidBackupManager", "Error importing data from JSON", e)
+        } catch (_: Exception) {
             null
         }
     }

@@ -66,6 +66,16 @@ fun BackupStartScreen(
     val helpBottomSheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
+    val launcher = backupManager.pickBackupFile { backupData ->
+        onResultForPickBackupFile(
+            viewModel = viewModel,
+            backupData = backupData,
+            navHostController = navHostController,
+            scope = scope,
+            snackbarHostState = snackbarHostState
+        )
+    }
+
     UiScaffold(
         isLightTheme = isLightTheme,
         topBar = {
@@ -83,9 +93,7 @@ fun BackupStartScreen(
         MainContent(
             topBarPadding = topBarPadding,
             isLightTheme = isLightTheme,
-            onBackupClick = {
-                viewModel.send(BackupStartIntent.StartPickerStateChange(true))
-            },
+            onBackupClick = { launcher() },
             helpBottomSheetState = helpBottomSheetState,
             onHelpClick = {
                 viewModel.send(
@@ -131,7 +139,6 @@ private fun onResultForPickBackupFile(
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState
 ) {
-    viewModel.send(BackupStartIntent.StartPickerStateChange(false))
     if (backupData != null) {
         viewModel.send(
             BackupStartIntent.RestoreData(
