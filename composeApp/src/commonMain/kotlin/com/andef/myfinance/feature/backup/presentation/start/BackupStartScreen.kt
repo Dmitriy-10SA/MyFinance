@@ -38,6 +38,7 @@ import com.andef.myfinance.core.design.topbar.ui.UiTopBar
 import com.andef.myfinance.core.domain.backup.entities.BackupData
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.platform.BackupManager
+import com.andef.myfinance.core.platform.LinkOpener
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.grayColor
@@ -55,7 +56,8 @@ fun BackupStartScreen(
     isLightTheme: Boolean,
     navHostController: NavHostController,
     paddingValues: PaddingValues,
-    backupManager: BackupManager
+    backupManager: BackupManager,
+    linkOpener: LinkOpener
 ) {
     val viewModel = koinViewModel<BackupStartViewModel>()
     val state = viewModel.state.collectAsState().value
@@ -96,8 +98,8 @@ fun BackupStartScreen(
                 )
             },
             helpBottomSheetVisible = state.helpBottomSheetVisible,
-            onMailClick = { TODO() },
-            onTelegramClick = { TODO() }
+            onMailClick = { linkOpener.openLink("https://t.me/dsemkin") },
+            onTelegramClick = { linkOpener.openLink("mailto:semkin_dmitriy10@vk.com") }
         )
         if (state.startPicker) {
             backupManager.pickBackupFile { backupData ->

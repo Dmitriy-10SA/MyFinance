@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import androidx.savedstate.read
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.platform.BackupManager
+import com.andef.myfinance.core.platform.LinkOpener
 import kotlinx.datetime.LocalDate
 import org.koin.compose.getKoin
 
@@ -25,6 +26,7 @@ fun AppNavGraph(
     previousRoute: String?,
 ) {
     val backupManager = getKoin().get<BackupManager>()
+    val linkOpener = getKoin().get<LinkOpener>()
     NavHost(
         navController = navHostController,
         startDestination = if (isFirstStart) {
@@ -37,7 +39,8 @@ fun AppNavGraph(
             isLightTheme = isLightTheme,
             navHostController = navHostController,
             paddingValues = paddingValues,
-            backupManager = backupManager
+            backupManager = backupManager,
+            linkOpener = linkOpener
         )
         mainScreensNavGraph(
             navHostController = navHostController,

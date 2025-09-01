@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.platform.BackupManager
+import com.andef.myfinance.core.platform.LinkOpener
 import com.andef.myfinance.feature.auth.presentation.AuthScreen
 import com.andef.myfinance.feature.backup.presentation.start.BackupStartScreen
 
@@ -14,7 +15,8 @@ fun NavGraphBuilder.startScreensNavGraph(
     isLightTheme: Boolean,
     navHostController: NavHostController,
     paddingValues: PaddingValues,
-    backupManager: BackupManager
+    backupManager: BackupManager,
+    linkOpener: LinkOpener
 ) {
     navigation(
         route = Screen.StartScreens.route,
@@ -32,7 +34,8 @@ fun NavGraphBuilder.startScreensNavGraph(
                 isLightTheme = isLightTheme,
                 navHostController = navHostController,
                 paddingValues = paddingValues,
-                backupManager = backupManager
+                backupManager = backupManager,
+                linkOpener = linkOpener
             )
         }
     }
