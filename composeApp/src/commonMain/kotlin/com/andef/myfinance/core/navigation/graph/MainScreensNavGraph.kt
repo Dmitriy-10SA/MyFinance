@@ -6,6 +6,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.andef.myfinance.core.navigation.routes.Screen
+import com.andef.myfinance.core.utils.anims.fadeInAnim
+import com.andef.myfinance.core.utils.anims.fadeOutAnim
+import com.andef.myfinance.core.utils.anims.slideInRightHorizontalAnim
+import com.andef.myfinance.core.utils.anims.slideOutLeftHorizontalAnim
 import com.andef.myfinance.feature.income_common.income_main.presentation.IncomeMainScreen
 import kotlinx.datetime.LocalDate
 
@@ -14,13 +18,37 @@ fun NavGraphBuilder.mainScreensNavGraph(
     navHostController: NavHostController,
     paddingValues: PaddingValues,
     startDate: LocalDate,
-    endDate: LocalDate
+    endDate: LocalDate,
+    currentRoute: String?,
+    previousRoute: String?
 ) {
     navigation(
         route = Screen.MainScreens.route,
         startDestination = Screen.MainScreens.IncomeMainScreen.route
     ) {
-        composable(route = Screen.MainScreens.IncomeMainScreen.route) {
+        composable(
+            route = Screen.MainScreens.IncomeMainScreen.route,
+            enterTransition = {
+                if (
+                    previousRoute == Screen.MainScreens.ExpenseMainScreen.route ||
+                    previousRoute == Screen.MainScreens.TotalMainScreen.route
+                ) {
+                    slideInRightHorizontalAnim()
+                } else {
+                    fadeInAnim()
+                }
+            },
+            exitTransition = {
+                if (
+                    currentRoute == Screen.MainScreens.ExpenseMainScreen.route ||
+                    currentRoute == Screen.MainScreens.TotalMainScreen.route
+                ) {
+                    slideOutLeftHorizontalAnim()
+                } else {
+                    fadeOutAnim()
+                }
+            }
+        ) {
             IncomeMainScreen(
                 isLightTheme = isLightTheme,
                 navHostController = navHostController,

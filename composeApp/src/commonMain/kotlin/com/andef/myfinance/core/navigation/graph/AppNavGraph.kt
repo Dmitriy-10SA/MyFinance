@@ -48,7 +48,9 @@ fun AppNavGraph(
             paddingValues = paddingValues,
             isLightTheme = isLightTheme,
             startDate = startDate,
-            endDate = endDate
+            endDate = endDate,
+            currentRoute = currentRoute,
+            previousRoute = previousRoute
         )
         composable(route = Screen.IncomeAnalysisScreen.route) {
 //            IncomeAnalysisScreen(
