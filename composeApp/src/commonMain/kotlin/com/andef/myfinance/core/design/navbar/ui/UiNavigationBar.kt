@@ -1,10 +1,6 @@
 package com.andef.myfinance.core.design.navbar.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.HorizontalDivider
@@ -19,6 +15,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andef.myfinance.core.design.navbar.item.UiNavigationBarItem
+import com.andef.myfinance.core.utils.anims.fadeInAnim
+import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.darkGrayOrWhiteColor
 import com.andef.myfinance.core.utils.navBarColors
@@ -31,11 +29,7 @@ fun UiNavigationBar(
     items: List<UiNavigationBarItem>,
     isVisible: Boolean = true
 ) {
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = fadeIn(tween(400, easing = FastOutSlowInEasing)),
-        exit = fadeOut(tween(400, easing = FastOutSlowInEasing))
-    ) {
+    AnimatedVisibility(visible = isVisible, enter = fadeInAnim(), exit = fadeOutAnim()) {
         Column {
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
