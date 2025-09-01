@@ -1,7 +1,6 @@
 package com.andef.myfinance.app
 
 import com.andef.myfinance.core.di.backup.backupModule
-import com.andef.myfinance.core.di.common.linkOpenerModule
 import com.andef.myfinance.core.di.databaseModule
 import com.andef.myfinance.core.di.expense_common.expenseCategoryModule
 import com.andef.myfinance.core.di.expense_common.expenseModule
