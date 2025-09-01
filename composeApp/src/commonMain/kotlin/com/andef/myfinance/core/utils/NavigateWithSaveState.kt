@@ -1,4 +1,4 @@
-package com.andef.myfinance.core.navigation.utils
+package com.andef.myfinance.core.utils
 
 import androidx.navigation.NavHostController
 

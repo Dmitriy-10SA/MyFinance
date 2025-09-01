@@ -19,6 +19,7 @@ import kotlinx.datetime.LocalDate
 import network.chaintech.kmp_date_time_picker.utils.now
 
 class AppViewModel(
+    private val isSystemInDarkTheme: Boolean,
     private val getIsLightThemeAsFlowUseCase: GetIsLightThemeAsFlowUseCase,
     private val getIsLightThemeUseCase: GetIsLightThemeUseCase,
     private val getUsernameAsFlowUseCase: GetUsernameAsFlowUseCase,
@@ -27,7 +28,7 @@ class AppViewModel(
 ) : ViewModel() {
     private val _state = MutableStateFlow(
         value = AppState(
-            isLightTheme = getIsLightThemeUseCase.invoke(isSystemInDarkTheme = false),
+            isLightTheme = getIsLightThemeUseCase.invoke(isSystemInDarkTheme = isSystemInDarkTheme),
             username = getUsernameUseCase.invoke(),
             isFirstStart = getIsFirstStartUseCase.invoke()
         )
@@ -67,14 +68,14 @@ class AppViewModel(
                 3 -> tab.id to (LocalDate.now().minusYears(1) to LocalDate.now())
                 else -> null
             }
-            newLastTabIndexAndDates?.let {
+            if (newLastTabIndexAndDates != null) {
                 _state.value = _state.value.copy(
                     selectedTabIndex = tab.id,
-                    lastSelectedTabIndex = it.first,
-                    startDate = it.second.first,
-                    endDate = it.second.second
+                    lastSelectedTabIndex = newLastTabIndexAndDates.first,
+                    startDate = newLastTabIndexAndDates.second.first,
+                    endDate = newLastTabIndexAndDates.second.second
                 )
-            } ?: {
+            } else {
                 _state.value = _state.value.copy(
                     selectedTabIndex = tab.id,
                     datePickerVisible = true

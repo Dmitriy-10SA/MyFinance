@@ -8,6 +8,7 @@ import com.andef.myfinance.core.di.income_common.incomeModule
 import com.andef.myfinance.core.di.networkModule
 import com.andef.myfinance.core.di.preferences.preferencesModule
 import com.andef.myfinance.core.di.reminder.reminderModule
+import com.andef.myfinance.feature.auth.di.authViewModelModule
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
@@ -20,6 +21,7 @@ private val appViewModelModule = module {
 fun initKoin(config: KoinAppDeclaration? = null) {
     val expenseCommonModules = expenseModule + expenseCategoryModule
     val incomeCommonModules = incomeModule + incomeCategoryModule
+    val viewModelModules = authViewModelModule
     startKoin {
         config?.invoke(this)
         modules(
@@ -27,7 +29,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
                 databaseModule(),
                 networkModule(),
                 appViewModelModule
-            ) + expenseCommonModules + incomeCommonModules + reminderModule + preferencesModule
+            ) + expenseCommonModules + incomeCommonModules + reminderModule + preferencesModule + viewModelModules
         )
     }
 }

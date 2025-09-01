@@ -1,5 +1,6 @@
 package com.andef.myfinance.app
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,7 +25,7 @@ import com.andef.myfinance.core.navigation.graph.AppNavGraph
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.navigation.routes.Screen.MainScreens.fabRoutes
 import com.andef.myfinance.core.navigation.routes.Screen.MainScreens.mainRoutes
-import com.andef.myfinance.core.navigation.utils.navigateWithSaveState
+import com.andef.myfinance.core.utils.navigateWithSaveState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -36,11 +37,15 @@ import myfinance.composeapp.generated.resources.my_finance_menu
 import myfinance.composeapp.generated.resources.my_finance_totals
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
-    val viewModel = koinViewModel<AppViewModel>()
+    val isSystemInDarkTheme = isSystemInDarkTheme()
+    val viewModel = koinViewModel<AppViewModel>(parameters = {
+        parametersOf(isSystemInDarkTheme)
+    })
     val state = viewModel.state.collectAsState().value
 
     val navHostController = rememberNavController()

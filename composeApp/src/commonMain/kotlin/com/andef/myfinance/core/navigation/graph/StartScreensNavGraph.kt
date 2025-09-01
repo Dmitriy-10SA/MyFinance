@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.andef.myfinance.core.navigation.routes.Screen
+import com.andef.myfinance.feature.auth.presentation.AuthScreen
 
 fun NavGraphBuilder.startScreensNavGraph(
     isLightTheme: Boolean,
@@ -17,7 +18,11 @@ fun NavGraphBuilder.startScreensNavGraph(
         startDestination = Screen.StartScreens.UsernameScreen.route
     ) {
         composable(route = Screen.StartScreens.UsernameScreen.route) {
-            //UsernameScreen(isLightTheme, navHostController, viewModelFactory, paddingValues)
+            AuthScreen(
+                isLightTheme = isLightTheme,
+                paddingValues = paddingValues,
+                navHostController = navHostController
+            )
         }
         composable(route = Screen.StartScreens.BackupStartScreen.route) {
             //BackupStartScreen(isLightTheme, navHostController, viewModelFactory, paddingValues)
