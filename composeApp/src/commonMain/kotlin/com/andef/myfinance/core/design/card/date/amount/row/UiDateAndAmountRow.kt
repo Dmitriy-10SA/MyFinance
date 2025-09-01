@@ -52,13 +52,12 @@ fun UiDateAndAmountRow(
                 color = blackOrWhiteColor(isLightTheme = isLightTheme),
                 text = formatLocalDate(date),
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
             Text(
                 modifier = Modifier.weight(1f),
-                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.End,
                 color = grayColor(isLightTheme = isLightTheme),
                 text = amountText,

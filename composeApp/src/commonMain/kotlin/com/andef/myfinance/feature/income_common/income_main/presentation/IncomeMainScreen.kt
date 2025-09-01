@@ -41,6 +41,7 @@ import com.andef.myfinance.core.design.snackbar.ui.UiSnackbar
 import com.andef.myfinance.core.domain.income_common.income.entities.IncomeModel
 import com.andef.myfinance.core.domain.income_common.income_category.entities.IncomeCategoryModel
 import com.andef.myfinance.core.navigation.routes.Screen
+import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.formatLocalDate
@@ -229,7 +230,7 @@ private fun DeleteDialog(
 ) {
     UiAlertDialog(
         isLightTheme = isLightTheme,
-        title = "Вы уверены?",
+        title = "Удаление дохода",
         onDismissRequest = {
             viewModel.send(IncomeMainIntent.ChangeDeleteDialogVisible(isVisible = false))
         },
@@ -251,6 +252,9 @@ private fun DeleteDialog(
                 )
             )
         },
+        subtitle = "Вы уверены? Это действие необратимо",
+        cancelTitleColor = Blue,
+        yesTitleColor = Red,
         onCancelClick = {
             viewModel.send(IncomeMainIntent.ChangeDeleteDialogVisible(isVisible = false))
         },
