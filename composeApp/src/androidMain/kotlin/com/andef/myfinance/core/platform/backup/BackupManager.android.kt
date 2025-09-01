@@ -2,11 +2,9 @@ package com.andef.myfinance.core.platform.backup
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import com.andef.myfinance.core.domain.backup.entities.BackupData
 import kotlinx.serialization.json.Json
