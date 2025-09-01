@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
+import androidx.navigation.compose.navigation
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.platform.backup.BackupManager
 import com.andef.myfinance.core.platform.common.LinkOpener
@@ -27,7 +27,9 @@ fun NavGraphBuilder.startScreensNavGraph(
 ) {
     navigation(
         route = Screen.StartScreens.route,
-        startDestination = Screen.StartScreens.UsernameScreen.route
+        startDestination = Screen.StartScreens.UsernameScreen.route,
+        enterTransition = { fadeInAnim() },
+        exitTransition = { fadeOutAnim() }
     ) {
         composable(
             route = Screen.StartScreens.UsernameScreen.route,
