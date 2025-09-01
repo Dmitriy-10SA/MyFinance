@@ -24,6 +24,7 @@ fun AppNavGraph(
     endDate: LocalDate,
     currentRoute: String?,
     previousRoute: String?,
+    mainScreenIsVisible: Boolean
 ) {
     val backupManager = getKoin().get<BackupManager>()
     val linkOpener = getKoin().get<LinkOpener>()
@@ -48,7 +49,10 @@ fun AppNavGraph(
             paddingValues = paddingValues,
             isLightTheme = isLightTheme,
             startDate = startDate,
-            endDate = endDate
+            endDate = endDate,
+            currentRoute = currentRoute,
+            previousRoute = previousRoute,
+            mainScreenIsVisible = mainScreenIsVisible
         )
         composable(route = Screen.IncomeAnalysisScreen.route) {
 //            IncomeAnalysisScreen(
@@ -66,7 +70,8 @@ fun AppNavGraph(
             arguments = listOf(navArgument(Screen.ID_PARAM) { type = NavType.LongType })
         ) {
             val id =
-                it.arguments?.read { getLong(Screen.ID_PARAM) } ?: throw IllegalArgumentException()
+                it.arguments?.read { getLong(Screen.ID_PARAM) }
+                    ?: throw IllegalArgumentException()
 //            IncomeAddScreen(id, isLightTheme, navHostController, viewModelFactory, paddingValues)
         }
         composable(route = Screen.ExpenseAnalysisScreen.route) {
@@ -85,7 +90,8 @@ fun AppNavGraph(
             arguments = listOf(navArgument(Screen.ID_PARAM) { type = NavType.LongType })
         ) {
             val id =
-                it.arguments?.read { getLong(Screen.ID_PARAM) } ?: throw IllegalArgumentException()
+                it.arguments?.read { getLong(Screen.ID_PARAM) }
+                    ?: throw IllegalArgumentException()
 //            ExpenseAddScreen(id, isLightTheme, navHostController, viewModelFactory, paddingValues)
         }
         composable(route = Screen.CurrencysScreen.route) {
@@ -118,7 +124,8 @@ fun AppNavGraph(
             arguments = listOf(navArgument(Screen.ID_PARAM) { type = NavType.LongType })
         ) {
             val id =
-                it.arguments?.read { getLong(Screen.ID_PARAM) } ?: throw IllegalArgumentException()
+                it.arguments?.read { getLong(Screen.ID_PARAM) }
+                    ?: throw IllegalArgumentException()
 //            ReminderAddScreen(
 //                reminderId = id,
 //                isLightTheme = isLightTheme,

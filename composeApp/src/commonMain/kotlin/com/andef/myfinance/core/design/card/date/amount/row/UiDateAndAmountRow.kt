@@ -52,13 +52,12 @@ fun UiDateAndAmountRow(
                 color = blackOrWhiteColor(isLightTheme = isLightTheme),
                 text = formatLocalDate(date),
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
             Text(
                 modifier = Modifier.weight(1f),
-                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.End,
                 color = grayColor(isLightTheme = isLightTheme),
                 text = amountText,
@@ -75,6 +74,7 @@ fun UiDateAndAmountRow(
     modifier: Modifier = Modifier,
     isLightTheme: Boolean,
     startDate: LocalDate,
+    isIncome: Boolean,
     endDate: LocalDate,
     totalAmount: Double
 ) {
@@ -82,6 +82,10 @@ fun UiDateAndAmountRow(
         formatLocalDate(startDate)
     } else {
         "${formatLocalDate(startDate)} - ${formatLocalDate(endDate)}"
+    }
+    val sign = when (totalAmount != 0.0) {
+        true -> if (isIncome) "+" else "-"
+        false -> ""
     }
     Card(
         modifier = modifier.shadow(
@@ -111,7 +115,7 @@ fun UiDateAndAmountRow(
             Spacer(modifier = Modifier.padding(vertical = 1.dp))
             Text(
                 color = blackOrWhiteColor(isLightTheme = isLightTheme),
-                text = "Итого: ${formatPriceRuble(totalAmount)}",
+                text = "Итого: $sign${formatPriceRuble(totalAmount)}",
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp
             )

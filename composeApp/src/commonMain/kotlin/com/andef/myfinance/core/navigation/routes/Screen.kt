@@ -19,7 +19,7 @@ sealed class Screen(val route: String) {
         private const val TOTAL_MAIN_SCREEN = "total-main-screen"
 
         val mainRoutes = listOf(EXPENSE_MAIN_SCREEN, INCOME_MAIN_SCREEN, TOTAL_MAIN_SCREEN)
-        val fabRoutes = listOf(INCOME_ADD_SCREEN, EXPENSE_ADD_SCREEN)
+        val fabRoutes = listOf(EXPENSE_MAIN_SCREEN, INCOME_MAIN_SCREEN)
     }
 
     data object IncomeAnalysisScreen: Screen(route = INCOME_ANALYSIS_SCREEN)

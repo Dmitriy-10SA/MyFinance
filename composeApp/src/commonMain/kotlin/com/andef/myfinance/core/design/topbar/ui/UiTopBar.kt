@@ -1,10 +1,6 @@
 package com.andef.myfinance.core.design.topbar.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -49,6 +45,8 @@ import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.utils.Black
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.White
+import com.andef.myfinance.core.utils.anims.fadeInAnim
+import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.darkGrayOrWhiteColor
 import com.andef.myfinance.core.utils.grayColor
@@ -77,11 +75,7 @@ fun UiTopBar(
     expandedHeight: Dp = TopAppBarDefaults.TopAppBarExpandedHeight,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets
 ) {
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = fadeIn(tween(400, easing = FastOutSlowInEasing)),
-        exit = fadeOut(tween(400, easing = FastOutSlowInEasing))
-    ) {
+    AnimatedVisibility(visible = isVisible, enter = fadeInAnim(), exit = fadeOutAnim()) {
         Column {
             MainContent(
                 modifier = Modifier.fillMaxWidth(),

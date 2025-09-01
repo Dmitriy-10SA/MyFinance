@@ -60,12 +60,14 @@ class AppViewModel(
 
     private fun tabClick(tab: UiTopBarTab) {
         val selectedTabIndex = _state.value.selectedTabIndex
-        if (tab.id != selectedTabIndex || tab.id == 4) {
+        if (tab.id != selectedTabIndex || tab.id == 5) {
+            val now = LocalDate.now()
             val newLastTabIndexAndDates: Pair<Int, Pair<LocalDate, LocalDate>>? = when (tab.id) {
-                0 -> tab.id to (LocalDate.now() to LocalDate.now())
-                1 -> tab.id to (LocalDate.now().minusDays(7) to LocalDate.now())
-                2 -> tab.id to (LocalDate.now().minusMonths(1) to LocalDate.now())
-                3 -> tab.id to (LocalDate.now().minusYears(1) to LocalDate.now())
+                0 -> tab.id to (now to now)
+                1 -> tab.id to (now.minusDays(7) to now)
+                2 -> tab.id to (now.minusMonths(1) to now)
+                3 -> tab.id to (now.minusMonths(6) to now)
+                4 -> tab.id to (now.minusYears(1) to now)
                 else -> null
             }
             if (newLastTabIndexAndDates != null) {
@@ -96,6 +98,7 @@ class AppViewModel(
         _state.value = _state.value.copy(
             startDate = startDate,
             endDate = endDate,
+            lastSelectedTabIndex = 5,
             datePickerVisible = false
         )
     }
