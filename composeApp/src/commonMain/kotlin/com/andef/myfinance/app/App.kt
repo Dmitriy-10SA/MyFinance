@@ -275,6 +275,7 @@ private val dateTabs = listOf(
     UiTopBarTab(id = 0, title = "День"),
     UiTopBarTab(id = 1, title = "Неделя"),
     UiTopBarTab(id = 2, title = "Месяц"),
-    UiTopBarTab(id = 3, title = "Год"),
-    UiTopBarTab(id = 4, title = "Период")
+    UiTopBarTab(id = 3, title = "Полгода"),
+    UiTopBarTab(id = 4, title = "Год"),
+    UiTopBarTab(id = 5, title = "Период")
 )
