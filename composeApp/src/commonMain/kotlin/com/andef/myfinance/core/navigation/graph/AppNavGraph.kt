@@ -40,7 +40,8 @@ fun AppNavGraph(
             navHostController = navHostController,
             paddingValues = paddingValues,
             backupManager = backupManager,
-            linkOpener = linkOpener
+            linkOpener = linkOpener,
+            currentRoute = currentRoute
         )
         mainScreensNavGraph(
             navHostController = navHostController,
