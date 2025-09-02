@@ -51,7 +51,6 @@ import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
 import com.andef.myfinance.core.utils.getters.getTitleForIncome
 import com.andef.myfinance.core.utils.grayColor
-import com.andef.myfinance.core.utils.navigateWithSaveState
 import com.andef.myfinance.feature.income_common.income_main.domain.entities.IncomeForLazyColumn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
