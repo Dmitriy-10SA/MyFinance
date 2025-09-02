@@ -11,6 +11,10 @@ import androidx.savedstate.read
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.platform.backup.BackupManager
 import com.andef.myfinance.core.platform.common.LinkOpener
+import com.andef.myfinance.core.platform.common.MoneyDecimalFormatter
+import com.andef.myfinance.core.utils.anims.fadeInAnim
+import com.andef.myfinance.core.utils.anims.fadeOutAnim
+import com.andef.myfinance.feature.income_common.income_add_and_change.presentation.IncomeAddAndChangeScreen
 import kotlinx.datetime.LocalDate
 import org.koin.compose.getKoin
 
@@ -28,6 +32,7 @@ fun AppNavGraph(
 ) {
     val backupManager = getKoin().get<BackupManager>()
     val linkOpener = getKoin().get<LinkOpener>()
+    val moneyDecimalFormatter = getKoin().get<MoneyDecimalFormatter>()
 
     NavHost(
         navController = navHostController,
@@ -35,7 +40,9 @@ fun AppNavGraph(
             Screen.StartScreens.route
         } else {
             Screen.MainScreens.route
-        }
+        },
+        enterTransition = { fadeInAnim() },
+        exitTransition = { fadeOutAnim() }
     ) {
         startScreensNavGraph(
             isLightTheme = isLightTheme,
@@ -61,17 +68,34 @@ fun AppNavGraph(
 //                paddingValues = paddingValues
 //            )
         }
-        composable(route = Screen.IncomeAddScreen.route) {
-//            IncomeAddScreen(null, isLightTheme, navHostController, viewModelFactory, paddingValues)
+        composable(
+            route = Screen.IncomeAddScreen.route,
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
+        ) {
+            IncomeAddAndChangeScreen(
+                incomeId = null,
+                isLightTheme = isLightTheme,
+                navHostController = navHostController,
+                paddingValues = paddingValues,
+                moneyDecimalFormatter = moneyDecimalFormatter
+            )
         }
         composable(
             route = Screen.IncomeScreen.route,
-            arguments = listOf(navArgument(Screen.ID_PARAM) { type = NavType.LongType })
+            arguments = listOf(navArgument(Screen.ID_PARAM) { type = NavType.LongType }),
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
         ) {
-            val id =
-                it.arguments?.read { getLong(Screen.ID_PARAM) }
-                    ?: throw IllegalArgumentException()
-//            IncomeAddScreen(id, isLightTheme, navHostController, viewModelFactory, paddingValues)
+            val id = it.arguments?.read { getLong(Screen.ID_PARAM) }
+                ?: throw IllegalArgumentException()
+            IncomeAddAndChangeScreen(
+                incomeId = id,
+                isLightTheme = isLightTheme,
+                navHostController = navHostController,
+                paddingValues = paddingValues,
+                moneyDecimalFormatter = moneyDecimalFormatter
+            )
         }
         composable(route = Screen.ExpenseAnalysisScreen.route) {
 //            ExpenseAnalysisScreen(
