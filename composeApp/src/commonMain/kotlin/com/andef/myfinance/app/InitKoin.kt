@@ -2,6 +2,7 @@ package com.andef.myfinance.app
 
 import com.andef.myfinance.core.di.backup.backupModule
 import com.andef.myfinance.core.di.common.linkOpenerModule
+import com.andef.myfinance.core.di.common.loggerModule
 import com.andef.myfinance.core.di.data.databaseModule
 import com.andef.myfinance.core.di.data.networkModule
 import com.andef.myfinance.core.di.expense_common.expenseCategoryModule
@@ -36,6 +37,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
                 networkModule(),
                 backupModule(),
                 linkOpenerModule(),
+                loggerModule(),
                 appViewModelModule
             ) + expenseCommonModules + incomeCommonModules + reminderModule +
                     preferencesModule + viewModelModules

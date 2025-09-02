@@ -155,7 +155,13 @@ private fun AppDrawerContent(
                 currentRoute = currentRoute
             )
         },
-        bottomBar = { MainBottomBar(isLightTheme, navHostController, currentRoute) }
+        bottomBar = {
+            MainBottomBar(
+                isLightTheme = isLightTheme,
+                navHostController = navHostController,
+                currentRoute = currentRoute
+            )
+        }
     ) { innerPadding ->
         AppNavGraph(
             isLightTheme = isLightTheme,
