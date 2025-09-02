@@ -12,6 +12,7 @@ import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.platform.backup.BackupManager
 import com.andef.myfinance.core.platform.common.LinkOpener
 import com.andef.myfinance.core.platform.common.MoneyDecimalFormatter
+import com.andef.myfinance.core.platform.common.PdfPrinter
 import com.andef.myfinance.core.utils.anims.fadeInAnim
 import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.feature.expense_common.expense_add_and_change.presentation.ExpenseAddAndChangeScreen
@@ -35,6 +36,7 @@ fun AppNavGraph(
     val backupManager = getKoin().get<BackupManager>()
     val linkOpener = getKoin().get<LinkOpener>()
     val moneyDecimalFormatter = getKoin().get<MoneyDecimalFormatter>()
+    val pdfPrinter = getKoin().get<PdfPrinter>()
 
     NavHost(
         navController = navHostController,
@@ -70,7 +72,8 @@ fun AppNavGraph(
             IncomeAnalysisScreen(
                 isLightTheme = isLightTheme,
                 navHostController = navHostController,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                pdfPrinter = pdfPrinter
             )
         }
         composable(

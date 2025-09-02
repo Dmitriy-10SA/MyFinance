@@ -4,6 +4,7 @@ import com.andef.myfinance.core.di.backup.backupModule
 import com.andef.myfinance.core.di.common.linkOpenerModule
 import com.andef.myfinance.core.di.common.loggerModule
 import com.andef.myfinance.core.di.common.moneyDecimalFormatterModule
+import com.andef.myfinance.core.di.common.pdfPrinterModule
 import com.andef.myfinance.core.di.data.databaseModule
 import com.andef.myfinance.core.di.data.networkModule
 import com.andef.myfinance.core.di.expense_common.expenseCategoryModule
@@ -45,6 +46,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
                 backupModule(),
                 linkOpenerModule(),
                 loggerModule(),
+                pdfPrinterModule(),
                 moneyDecimalFormatterModule(),
                 appViewModelModule
             ) + expenseCommonModules + incomeCommonModules + reminderModule +
