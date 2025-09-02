@@ -4,7 +4,6 @@ import kotlinx.datetime.LocalDate
 import network.chaintech.kmp_date_time_picker.utils.now
 
 data class AppState(
-    val isLightTheme: Boolean,
     val username: String,
     val isFirstStart: Boolean,
     val selectedTabIndex: Int = 0,

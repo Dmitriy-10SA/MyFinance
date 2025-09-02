@@ -8,6 +8,8 @@ import com.andef.myfinance.core.domain.preferences.usecases.GetIsLightThemeAsFlo
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsLightThemeUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.GetUsernameAsFlowUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.GetUsernameUseCase
+import com.andef.myfinance.core.domain.preferences.usecases.SetIsLightThemeUseCase
+import com.andef.myfinance.core.domain.preferences.usecases.SetUsernameUseCase
 import com.kizitonwose.calendar.core.minusDays
 import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.minusYears
@@ -19,16 +21,16 @@ import kotlinx.datetime.LocalDate
 import network.chaintech.kmp_date_time_picker.utils.now
 
 class AppViewModel(
-    private val isSystemInDarkTheme: Boolean,
-    private val getIsLightThemeAsFlowUseCase: GetIsLightThemeAsFlowUseCase,
-    private val getIsLightThemeUseCase: GetIsLightThemeUseCase,
+    val getIsLightThemeAsFlowUseCase: GetIsLightThemeAsFlowUseCase,
+    val getIsLightThemeUseCase: GetIsLightThemeUseCase,
+    val setIsLightThemeUseCase: SetIsLightThemeUseCase,
+    val setUsernameUseCase: SetUsernameUseCase,
     private val getUsernameAsFlowUseCase: GetUsernameAsFlowUseCase,
     private val getUsernameUseCase: GetUsernameUseCase,
     private val getIsFirstStartUseCase: GetIsFirstStartUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(
         value = AppState(
-            isLightTheme = getIsLightThemeUseCase.invoke(isSystemInDarkTheme = isSystemInDarkTheme),
             username = getUsernameUseCase.invoke(),
             isFirstStart = getIsFirstStartUseCase.invoke()
         )
@@ -103,14 +105,6 @@ class AppViewModel(
         )
     }
 
-    private fun subscribeForIsLightTheme() {
-        viewModelScope.launch {
-            getIsLightThemeAsFlowUseCase().collect { isLightTheme ->
-                _state.value = _state.value.copy(isLightTheme = isLightTheme)
-            }
-        }
-    }
-
     private fun subscribeForUsername() {
         viewModelScope.launch {
             getUsernameAsFlowUseCase().collect { username ->
@@ -120,7 +114,6 @@ class AppViewModel(
     }
 
     init {
-        subscribeForIsLightTheme()
         subscribeForUsername()
     }
 }

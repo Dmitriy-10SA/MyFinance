@@ -38,16 +38,16 @@ import myfinance.composeapp.generated.resources.my_finance_menu
 import myfinance.composeapp.generated.resources.my_finance_totals
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
-    val isSystemInDarkTheme = isSystemInDarkTheme()
-    val viewModel = koinViewModel<AppViewModel>(parameters = {
-        parametersOf(isSystemInDarkTheme)
-    })
+    val viewModel = koinViewModel<AppViewModel>()
     val state = viewModel.state.collectAsState().value
+
+    val isLightTheme = viewModel.getIsLightThemeAsFlowUseCase.invoke().collectAsState(
+        viewModel.getIsLightThemeUseCase.invoke(isSystemInDarkTheme())
+    ).value
 
     val navHostController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -59,9 +59,9 @@ fun App() {
         }
     }
 
-    MyFinanceTheme(darkTheme = !state.isLightTheme) {
+    MyFinanceTheme(darkTheme = !isLightTheme) {
         AppDrawer(
-            isLightTheme = state.isLightTheme,
+            isLightTheme = isLightTheme,
             navHostController = navHostController,
             startDate = state.startDate,
             endDate = state.endDate,
@@ -84,7 +84,9 @@ fun App() {
                         whereNavigateRoute = item.route
                     )
                 }
-            }
+            },
+            viewModel = viewModel,
+            username = state.username
         )
     }
 }
@@ -94,6 +96,8 @@ private fun AppDrawer(
     isLightTheme: Boolean,
     isFirstStart: Boolean,
     navHostController: NavHostController,
+    viewModel: AppViewModel,
+    username: String,
     startDate: LocalDate,
     endDate: LocalDate,
     datePickerVisible: Boolean,
@@ -109,9 +113,16 @@ private fun AppDrawer(
 ) {
     ModalNavigationDrawer(
         drawerState = drawerState,
-        gesturesEnabled = false,
+        gesturesEnabled = drawerState.isOpen,
         drawerContent = {
-            // TODO()
+            MainDrawerSheetContent(
+                navHostController = navHostController,
+                scope = scope,
+                drawerState = drawerState,
+                viewModel = viewModel,
+                username = username,
+                isLightTheme = isLightTheme
+            )
         },
         content = {
             AppDrawerContent(
