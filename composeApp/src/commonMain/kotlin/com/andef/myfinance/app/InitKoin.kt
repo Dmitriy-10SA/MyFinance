@@ -19,6 +19,7 @@ import com.andef.myfinance.feature.expense_common.expense_add_and_change.di.expe
 import com.andef.myfinance.feature.expense_common.expense_main.di.expenseMainViewModelModule
 import com.andef.myfinance.feature.income_common.income_add_and_change.di.incomeAddAndChangeViewModelModule
 import com.andef.myfinance.feature.income_common.income_analysis.di.incomeAnalysisViewModelModule
+import com.andef.myfinance.feature.income_common.income_category.di.incomeCategoryAddViewModelModule
 import com.andef.myfinance.feature.income_common.income_main.di.incomeMainViewModelModule
 import com.andef.myfinance.feature.totals.di.totalsViewModelModule
 import org.koin.core.context.startKoin
@@ -36,7 +37,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
     val viewModelModules = authViewModelModule + backupViewModelModule +
             incomeMainViewModelModule + expenseMainViewModelModule +
             totalsViewModelModule + incomeAddAndChangeViewModelModule +
-            expenseAddAndChangeViewModelModule + incomeAnalysisViewModelModule
+            expenseAddAndChangeViewModelModule + incomeAnalysisViewModelModule +
+            incomeCategoryAddViewModelModule
     startKoin {
         config?.invoke(this)
         modules(

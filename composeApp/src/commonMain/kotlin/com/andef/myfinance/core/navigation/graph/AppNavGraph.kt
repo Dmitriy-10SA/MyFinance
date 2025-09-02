@@ -18,6 +18,7 @@ import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.feature.expense_common.expense_add_and_change.presentation.ExpenseAddAndChangeScreen
 import com.andef.myfinance.feature.income_common.income_add_and_change.presentation.IncomeAddAndChangeScreen
 import com.andef.myfinance.feature.income_common.income_analysis.presentation.IncomeAnalysisScreen
+import com.andef.myfinance.feature.income_common.income_category.presentation.IncomeCategoryAddScreen
 import kotlinx.datetime.LocalDate
 import org.koin.compose.getKoin
 
@@ -212,12 +213,10 @@ fun AppNavGraph(
             enterTransition = { fadeInAnim() },
             exitTransition = { fadeOutAnim() }
         ) {
-//            IncomeCategoryAddScreen(
-//                isLightTheme = isLightTheme,
-//                navHostController = navHostController,
-//                viewModelFactory = viewModelFactory,
-//                paddingValues = paddingValues
-//            )
+            IncomeCategoryAddScreen(
+                isLightTheme = isLightTheme,
+                navHostController = navHostController
+            )
         }
         composable(
             route = Screen.ExpenseCategoryAddScreen.route,
