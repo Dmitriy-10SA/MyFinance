@@ -17,6 +17,11 @@ sealed class ExpenseMainIntent {
         val id: Long? = null
     ) : ExpenseMainIntent()
 
+    data class SaveScrollState(
+        val initialFirstVisibleItemIndex: Int,
+        val initialFirstVisibleItemScrollOffset: Int
+    ) : ExpenseMainIntent()
+
     data class DeleteExpense(
         val id: Long,
         val onError: (String) -> Unit

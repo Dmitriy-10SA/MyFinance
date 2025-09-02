@@ -306,7 +306,7 @@ private fun BottomSheetContent(
                 color = blackOrWhiteColor(isLightTheme = isLightTheme)
             )
             Text(
-                text = "${formatLocalDate(date)} - ${formatPriceRuble(amount)}",
+                text = "${formatLocalDate(date)}: +${formatPriceRuble(amount)}",
                 fontSize = 14.sp,
                 color = grayColor(isLightTheme = isLightTheme)
             )

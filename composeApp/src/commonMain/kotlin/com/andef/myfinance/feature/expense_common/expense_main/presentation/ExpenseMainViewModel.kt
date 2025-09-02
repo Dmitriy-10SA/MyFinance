@@ -8,7 +8,6 @@ import com.andef.myfinance.feature.expense_common.expense_main.domain.entities.E
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -48,6 +47,13 @@ class ExpenseMainViewModel(
 
             is ExpenseMainIntent.SubscribeForExpenses -> {
                 subscribeForExpenses(intent.startDate, intent.endDate)
+            }
+
+            is ExpenseMainIntent.SaveScrollState -> {
+                _state.value = _state.value.copy(
+                    initialFirstVisibleItemIndex = intent.initialFirstVisibleItemIndex,
+                    initialFirstVisibleItemScrollOffset = intent.initialFirstVisibleItemScrollOffset
+                )
             }
         }
     }
@@ -115,8 +121,6 @@ class ExpenseMainViewModel(
         viewModelScope.launch {
             try {
                 _state.value = _state.value.copy(isLoading = true)
-                delay(3000)
-                error("")
                 withContext(Dispatchers.IO) { deleteExpenseUseCase.invoke(id) }
             } catch (_: Exception) {
                 onError("Ошибка! Попробуйте ещё раз!")
