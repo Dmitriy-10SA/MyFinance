@@ -99,7 +99,7 @@ fun MainDrawerSheetContent(
     UiModalDrawerSheet(isLightTheme = isLightTheme, drawerState = drawerState) {
         InnerContent(
             isLightTheme = isLightTheme,
-            username = usernameValue,
+            username = username,
             navHostController = navHostController,
             scope = scope,
             drawerState = drawerState,
