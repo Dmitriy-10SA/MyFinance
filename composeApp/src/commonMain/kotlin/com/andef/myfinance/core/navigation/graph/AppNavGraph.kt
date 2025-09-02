@@ -11,7 +11,6 @@ import androidx.savedstate.read
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.platform.backup.BackupManager
 import com.andef.myfinance.core.platform.common.LinkOpener
-import com.andef.myfinance.core.platform.common.Logger
 import kotlinx.datetime.LocalDate
 import org.koin.compose.getKoin
 
@@ -29,7 +28,6 @@ fun AppNavGraph(
 ) {
     val backupManager = getKoin().get<BackupManager>()
     val linkOpener = getKoin().get<LinkOpener>()
-    val logger = getKoin().get<Logger>()
 
     NavHost(
         navController = navHostController,
@@ -53,10 +51,7 @@ fun AppNavGraph(
             isLightTheme = isLightTheme,
             startDate = startDate,
             endDate = endDate,
-            currentRoute = currentRoute,
-            previousRoute = previousRoute,
-            mainScreenIsVisible = mainScreenIsVisible,
-            logger = logger
+            mainScreenIsVisible = mainScreenIsVisible
         )
         composable(route = Screen.IncomeAnalysisScreen.route) {
 //            IncomeAnalysisScreen(

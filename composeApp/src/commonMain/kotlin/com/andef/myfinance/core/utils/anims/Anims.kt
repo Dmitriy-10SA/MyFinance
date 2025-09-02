@@ -6,7 +6,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 
 fun fadeInAnim(duration: Int = 400, easing: Easing = FastOutSlowInEasing) = fadeIn(
     tween(duration, easing = easing)
@@ -47,3 +49,23 @@ fun slideOutRightHorizontalAnim(
     animationSpec = tween(durationMillis = duration, easing = easing),
     targetOffsetX = { it }
 )
+
+fun slideInBottomVerticalAnim(
+    duration: Int = 400,
+    easing: Easing = FastOutSlowInEasing
+) = slideInVertically(tween(duration, easing = easing), { -it })
+
+fun slideInTopVerticalAnim(
+    duration: Int = 400,
+    easing: Easing = FastOutSlowInEasing
+) = slideInVertically(tween(duration, easing = easing), { -it })
+
+fun slideOutTopVerticalAnim(
+    duration: Int = 400,
+    easing: Easing = FastOutSlowInEasing
+) = slideOutVertically(tween(duration, easing = easing), { -it })
+
+fun slideOutBottomVerticalAnim(
+    duration: Int = 400,
+    easing: Easing = FastOutSlowInEasing
+) = slideOutVertically(tween(duration, easing = easing), { it })

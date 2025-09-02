@@ -223,10 +223,7 @@ private fun BottomSheetWithDeleteDialog(
                             amount = amount,
                             onEditClick = {
                                 viewModel.send(IncomeMainIntent.BottomSheetVisibleChange(false))
-                                navHostController.navigateWithSaveState(
-                                    popUpToRoute = Screen.MainScreens.IncomeMainScreen.route,
-                                    whereNavigateRoute = Screen.IncomeScreen.passId(id)
-                                )
+                                navHostController.navigate(Screen.IncomeScreen.passId(id))
                             },
                             onDeleteClick = {
                                 viewModel.send(IncomeMainIntent.ChangeDeleteDialogVisible(true))

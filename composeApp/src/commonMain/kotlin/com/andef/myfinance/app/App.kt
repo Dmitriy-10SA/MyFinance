@@ -76,7 +76,15 @@ fun App() {
             selectedTabIndex = state.selectedTabIndex,
             onDatesDismiss = { viewModel.send(AppIntent.DatesDismiss) },
             onTabClick = { tab -> viewModel.send(AppIntent.TabClick(tab)) },
-            isFirstStart = state.isFirstStart
+            isFirstStart = state.isFirstStart,
+            onItemClick = { item ->
+                if (item.route != state.currentRoute) {
+                    navHostController.navigateWithSaveState(
+                        popUpToRoute = Screen.MainScreens.IncomeMainScreen.route,
+                        whereNavigateRoute = item.route
+                    )
+                }
+            }
         )
     }
 }
@@ -96,7 +104,8 @@ private fun AppDrawer(
     drawerState: DrawerState,
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
     onDatesDismiss: () -> Unit,
-    onTabClick: (UiTopBarTab) -> Unit
+    onTabClick: (UiTopBarTab) -> Unit,
+    onItemClick: (UiNavigationBarItem) -> Unit
 ) {
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -119,7 +128,8 @@ private fun AppDrawer(
                 onTabClick = onTabClick,
                 currentRoute = currentRoute,
                 previousRoute = previousRoute,
-                isFirstStart = isFirstStart
+                isFirstStart = isFirstStart,
+                onItemClick = onItemClick
             )
         }
     )
@@ -140,7 +150,8 @@ private fun AppDrawerContent(
     drawerState: DrawerState,
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
     onDatesDismiss: () -> Unit,
-    onTabClick: (UiTopBarTab) -> Unit
+    onTabClick: (UiTopBarTab) -> Unit,
+    onItemClick: (UiNavigationBarItem) -> Unit
 ) {
     UiScaffold(
         isLightTheme = isLightTheme,
@@ -158,8 +169,8 @@ private fun AppDrawerContent(
         bottomBar = {
             MainBottomBar(
                 isLightTheme = isLightTheme,
-                navHostController = navHostController,
-                currentRoute = currentRoute
+                currentRoute = currentRoute,
+                onItemClick = onItemClick
             )
         }
     ) { innerPadding ->
@@ -192,17 +203,11 @@ private fun MainFAB(navHostController: NavHostController, currentRoute: String?)
         onClick = {
             when (currentRoute) {
                 Screen.MainScreens.IncomeMainScreen.route -> {
-                    navHostController.navigateWithSaveState(
-                        popUpToRoute = Screen.MainScreens.IncomeMainScreen.route,
-                        whereNavigateRoute = Screen.IncomeAddScreen.route
-                    )
+                    navHostController.navigate(Screen.IncomeAddScreen.route)
                 }
 
                 Screen.MainScreens.ExpenseMainScreen.route -> {
-                    navHostController.navigateWithSaveState(
-                        popUpToRoute = Screen.MainScreens.ExpenseMainScreen.route,
-                        whereNavigateRoute = Screen.ExpenseAddScreen.route
-                    )
+                    navHostController.navigate(Screen.ExpenseAddScreen.route)
                 }
             }
         }
@@ -212,20 +217,13 @@ private fun MainFAB(navHostController: NavHostController, currentRoute: String?)
 @Composable
 private fun MainBottomBar(
     isLightTheme: Boolean,
-    navHostController: NavHostController,
-    currentRoute: String?
+    currentRoute: String?,
+    onItemClick: (UiNavigationBarItem) -> Unit
 ) {
     UiNavigationBar(
         isLightTheme = isLightTheme,
         itemSelected = { item -> item.route == currentRoute },
-        onItemClick = { item ->
-            if (item.route != currentRoute) {
-                navHostController.navigateWithSaveState(
-                    popUpToRoute = Screen.MainScreens.IncomeMainScreen.route,
-                    whereNavigateRoute = item.route
-                )
-            }
-        },
+        onItemClick = onItemClick,
         items = mainNavBarItems(),
         isVisible = currentRoute in mainRoutes
     )
