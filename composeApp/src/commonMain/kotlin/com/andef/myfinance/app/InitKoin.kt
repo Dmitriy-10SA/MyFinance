@@ -4,6 +4,7 @@ import com.andef.myfinance.core.di.backup.backupModule
 import com.andef.myfinance.core.di.common.linkOpenerModule
 import com.andef.myfinance.core.di.common.loggerModule
 import com.andef.myfinance.core.di.common.moneyDecimalFormatterModule
+import com.andef.myfinance.core.di.common.pdfPrinterModule
 import com.andef.myfinance.core.di.data.databaseModule
 import com.andef.myfinance.core.di.data.networkModule
 import com.andef.myfinance.core.di.expense_common.expenseCategoryModule
@@ -17,6 +18,8 @@ import com.andef.myfinance.feature.backup.di.backupViewModelModule
 import com.andef.myfinance.feature.expense_common.expense_add_and_change.di.expenseAddAndChangeViewModelModule
 import com.andef.myfinance.feature.expense_common.expense_main.di.expenseMainViewModelModule
 import com.andef.myfinance.feature.income_common.income_add_and_change.di.incomeAddAndChangeViewModelModule
+import com.andef.myfinance.feature.income_common.income_analysis.di.incomeAnalysisViewModelModule
+import com.andef.myfinance.feature.income_common.income_category.di.incomeCategoryAddViewModelModule
 import com.andef.myfinance.feature.income_common.income_main.di.incomeMainViewModelModule
 import com.andef.myfinance.feature.totals.di.totalsViewModelModule
 import org.koin.core.context.startKoin
@@ -34,7 +37,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
     val viewModelModules = authViewModelModule + backupViewModelModule +
             incomeMainViewModelModule + expenseMainViewModelModule +
             totalsViewModelModule + incomeAddAndChangeViewModelModule +
-            expenseAddAndChangeViewModelModule
+            expenseAddAndChangeViewModelModule + incomeAnalysisViewModelModule +
+            incomeCategoryAddViewModelModule
     startKoin {
         config?.invoke(this)
         modules(
@@ -44,6 +48,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
                 backupModule(),
                 linkOpenerModule(),
                 loggerModule(),
+                pdfPrinterModule(),
                 moneyDecimalFormatterModule(),
                 appViewModelModule
             ) + expenseCommonModules + incomeCommonModules + reminderModule +

@@ -12,10 +12,13 @@ import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.platform.backup.BackupManager
 import com.andef.myfinance.core.platform.common.LinkOpener
 import com.andef.myfinance.core.platform.common.MoneyDecimalFormatter
+import com.andef.myfinance.core.platform.common.PdfPrinter
 import com.andef.myfinance.core.utils.anims.fadeInAnim
 import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.feature.expense_common.expense_add_and_change.presentation.ExpenseAddAndChangeScreen
 import com.andef.myfinance.feature.income_common.income_add_and_change.presentation.IncomeAddAndChangeScreen
+import com.andef.myfinance.feature.income_common.income_analysis.presentation.IncomeAnalysisScreen
+import com.andef.myfinance.feature.income_common.income_category.presentation.IncomeCategoryAddScreen
 import kotlinx.datetime.LocalDate
 import org.koin.compose.getKoin
 
@@ -34,6 +37,7 @@ fun AppNavGraph(
     val backupManager = getKoin().get<BackupManager>()
     val linkOpener = getKoin().get<LinkOpener>()
     val moneyDecimalFormatter = getKoin().get<MoneyDecimalFormatter>()
+    val pdfPrinter = getKoin().get<PdfPrinter>()
 
     NavHost(
         navController = navHostController,
@@ -61,13 +65,17 @@ fun AppNavGraph(
             endDate = endDate,
             mainScreenIsVisible = mainScreenIsVisible
         )
-        composable(route = Screen.IncomeAnalysisScreen.route) {
-//            IncomeAnalysisScreen(
-//                isLightTheme = isLightTheme,
-//                navHostController = navHostController,
-//                viewModelFactory = viewModelFactory,
-//                paddingValues = paddingValues
-//            )
+        composable(
+            route = Screen.IncomeAnalysisScreen.route,
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
+        ) {
+            IncomeAnalysisScreen(
+                isLightTheme = isLightTheme,
+                navHostController = navHostController,
+                paddingValues = paddingValues,
+                pdfPrinter = pdfPrinter
+            )
         }
         composable(
             route = Screen.IncomeAddScreen.route,
@@ -134,7 +142,11 @@ fun AppNavGraph(
                 moneyDecimalFormatter = moneyDecimalFormatter
             )
         }
-        composable(route = Screen.CurrencysScreen.route) {
+        composable(
+            route = Screen.CurrencysScreen.route,
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
+        ) {
 //            CurrencysScreen(
 //                isLightTheme = isLightTheme,
 //                navHostController = navHostController,
@@ -142,7 +154,11 @@ fun AppNavGraph(
 //                paddingValues = paddingValues
 //            )
         }
-        composable(route = Screen.AllRemindersScreen.route) {
+        composable(
+            route = Screen.AllRemindersScreen.route,
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
+        ) {
 //            AllRemindersScreen(
 //                isLightTheme = isLightTheme,
 //                navHostController = navHostController,
@@ -150,7 +166,11 @@ fun AppNavGraph(
 //                paddingValues = paddingValues
 //            )
         }
-        composable(route = Screen.ReminderAddScreen.route) {
+        composable(
+            route = Screen.ReminderAddScreen.route,
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
+        ) {
 //            ReminderAddScreen(
 //                reminderId = null,
 //                isLightTheme = isLightTheme,
@@ -161,7 +181,9 @@ fun AppNavGraph(
         }
         composable(
             route = Screen.ReminderScreen.route,
-            arguments = listOf(navArgument(Screen.ID_PARAM) { type = NavType.LongType })
+            arguments = listOf(navArgument(Screen.ID_PARAM) { type = NavType.LongType }),
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
         ) {
             val id =
                 it.arguments?.read { getLong(Screen.ID_PARAM) }
@@ -174,7 +196,11 @@ fun AppNavGraph(
 //                paddingValues = paddingValues
 //            )
         }
-        composable(route = Screen.BackupMainScreen.route) {
+        composable(
+            route = Screen.BackupMainScreen.route,
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
+        ) {
 //            BackupMainScreen(
 //                isLightTheme = isLightTheme,
 //                navHostController = navHostController,
@@ -182,15 +208,21 @@ fun AppNavGraph(
 //                paddingValues = paddingValues
 //            )
         }
-        composable(route = Screen.IncomeCategoryAddScreen.route) {
-//            IncomeCategoryAddScreen(
-//                isLightTheme = isLightTheme,
-//                navHostController = navHostController,
-//                viewModelFactory = viewModelFactory,
-//                paddingValues = paddingValues
-//            )
+        composable(
+            route = Screen.IncomeCategoryAddScreen.route,
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
+        ) {
+            IncomeCategoryAddScreen(
+                isLightTheme = isLightTheme,
+                navHostController = navHostController
+            )
         }
-        composable(route = Screen.ExpenseCategoryAddScreen.route) {
+        composable(
+            route = Screen.ExpenseCategoryAddScreen.route,
+            enterTransition = { fadeInAnim() },
+            exitTransition = { fadeOutAnim() }
+        ) {
 //            ExpenseCategoryAddScreen(
 //                isLightTheme = isLightTheme,
 //                navHostController = navHostController,
