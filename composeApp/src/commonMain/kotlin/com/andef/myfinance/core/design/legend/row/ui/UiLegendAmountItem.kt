@@ -6,5 +6,6 @@ data class UiLegendAmountItem(
     val color: Color,
     val amount: Double,
     val title: String,
-    val percent: Float
+    val percent: Float,
+    val isIncome: Boolean
 )

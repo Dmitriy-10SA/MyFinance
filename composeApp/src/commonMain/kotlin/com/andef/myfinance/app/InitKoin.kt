@@ -15,6 +15,7 @@ import com.andef.myfinance.feature.auth.di.authViewModelModule
 import com.andef.myfinance.feature.backup.di.backupViewModelModule
 import com.andef.myfinance.feature.expense_common.expense_main.di.expenseMainViewModelModule
 import com.andef.myfinance.feature.income_common.income_main.di.incomeMainViewModelModule
+import com.andef.myfinance.feature.totals.di.totalsViewModelModule
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
@@ -28,7 +29,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
     val expenseCommonModules = expenseModule + expenseCategoryModule
     val incomeCommonModules = incomeModule + incomeCategoryModule
     val viewModelModules = authViewModelModule + backupViewModelModule +
-            incomeMainViewModelModule + expenseMainViewModelModule
+            incomeMainViewModelModule + expenseMainViewModelModule +
+            totalsViewModelModule
     startKoin {
         config?.invoke(this)
         modules(

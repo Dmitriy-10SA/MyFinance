@@ -55,8 +55,15 @@ fun UiLegendRows(isLightTheme: Boolean, items: List<UiLegendAmountItem>) {
                     overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.weight(1f))
+                val sign = if (item.isIncome && item.amount != 0.0) {
+                    "+"
+                } else if (!item.isIncome && item.amount != 0.0) {
+                    "-"
+                } else {
+                    ""
+                }
                 Text(
-                    text = formatPriceRuble(item.amount),
+                    text = "$sign${formatPriceRuble(item.amount)}",
                     color = blackOrWhiteColor(isLightTheme = isLightTheme),
                     fontSize = 16.sp
                 )
