@@ -116,8 +116,7 @@ fun IncomeAnalysisScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = topBarPadding.calculateTopPadding())
-                .navigationBarsPadding(),
+                .padding(top = topBarPadding.calculateTopPadding()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
