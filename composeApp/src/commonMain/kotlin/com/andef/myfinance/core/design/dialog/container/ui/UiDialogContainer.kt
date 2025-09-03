@@ -27,7 +27,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.andef.myfinance.core.utils.darkGrayOrWhiteColor
 import com.andef.myfinance.core.utils.dialogContainerShape
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.withContext
 import network.chaintech.kmp_date_time_picker.utils.noRippleEffect
 
 private enum class DialogState { Ready, Opening, Opened, Closing, Closed }
@@ -62,13 +65,21 @@ fun UiDialogContainer(
     )
 
     LaunchedEffect(dialogState) {
-        if (dialogState == DialogState.Ready) {
-            dialogState = DialogState.Opening
-        } else if (dialogState == DialogState.Closing) {
-            delay(300)
-            dialogState = DialogState.Closed
-        } else if (dialogState == DialogState.Closed) {
-            onDismissRequest?.invoke()
+        withContext(Dispatchers.Main) {
+            if (!this.isActive) return@withContext
+            when (dialogState) {
+                DialogState.Ready -> dialogState = DialogState.Opening
+                DialogState.Closing -> {
+                    delay(300)
+                    dialogState = DialogState.Closed
+                }
+
+                DialogState.Closed -> {
+                    onDismissRequest?.invoke()
+                }
+
+                else -> {}
+            }
         }
     }
 

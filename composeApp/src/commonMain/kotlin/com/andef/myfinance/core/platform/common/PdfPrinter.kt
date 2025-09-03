@@ -8,4 +8,10 @@ interface PdfPrinter {
         maxDate: LocalDate,
         minDate: LocalDate
     )
+
+    fun printExpensePdf(
+        expenses: List<Pair<LocalDate, Double>>,
+        maxDate: LocalDate,
+        minDate: LocalDate
+    )
 }

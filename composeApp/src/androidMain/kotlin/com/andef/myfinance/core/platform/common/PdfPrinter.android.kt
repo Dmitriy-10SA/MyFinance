@@ -26,10 +26,18 @@ class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
         maxDate: LocalDate,
         minDate: LocalDate
     ) {
-        val file = context.generateIncomePdf(incomes, maxDate, minDate)
+        val file = context.generatePdf(true,incomes, maxDate, minDate)
         context.printPdf(file)
     }
 
+    override fun printExpensePdf(
+        expenses: List<Pair<LocalDate, Double>>,
+        maxDate: LocalDate,
+        minDate: LocalDate
+    ) {
+        val file = context.generatePdf(false,expenses, maxDate, minDate)
+        context.printPdf(file)
+    }
 
     private fun Context.printPdf(file: File) {
         val uri = FileProvider.getUriForFile(this, "$packageName.provider", file)
@@ -38,8 +46,9 @@ class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
         printManager.print("Отчет о доходах", printAdapter, null)
     }
 
-    private fun Context.generateIncomePdf(
-        incomes: List<Pair<LocalDate, Double>>,
+    private fun Context.generatePdf(
+        isIncome: Boolean,
+        amounts: List<Pair<LocalDate, Double>>,
         maxDate: LocalDate,
         minDate: LocalDate
     ): File {
@@ -90,7 +99,7 @@ class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
             if (pageNum == 1) {
                 // Заголовок по центру — только на первой странице
                 paintHeader.textSize = 22f
-                val title = "Отчет о доходах"
+                val title = if (isIncome) "Отчет о доходах" else "Отчет о расходах"
                 val titleWidth = paintHeader.measureText(title)
                 canvas.drawText(title, (pageWidth - titleWidth) / 2, margin + 30f, paintHeader)
 
@@ -132,7 +141,7 @@ class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
         var page = startPage(pageNumber)
         var canvas = page.canvas
 
-        incomes.forEachIndexed { index, (date, totalAmount) ->
+        amounts.forEachIndexed { index, (date, totalAmount) ->
             if (currentY + rowHeight > pageHeight - margin - 30f) {
                 // Нижний колонтитул с номером страницы
                 val pageFooter = "Страница $pageNumber"
@@ -162,7 +171,7 @@ class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
         }
 
         // Итого
-        val totalSum = incomes.sumOf { it.second }
+        val totalSum = amounts.sumOf { it.second }
         if (currentY + rowHeight > pageHeight - margin - 30f) {
             val pageFooter = "Страница $pageNumber"
             val footerWidth = paintFooter.measureText(pageFooter)
@@ -199,7 +208,7 @@ class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
 
         pdfDocument.finishPage(page)
 
-        val file = File(cacheDir, "Отчет_о_доходах.pdf")
+        val file = File(cacheDir, if (isIncome) "Отчет_о_доходах.pdf" else "Отчет_о_расходах.pdf")
         file.outputStream().use { pdfDocument.writeTo(it) }
         pdfDocument.close()
         return file

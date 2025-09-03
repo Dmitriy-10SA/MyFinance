@@ -16,6 +16,7 @@ import com.andef.myfinance.core.platform.common.PdfPrinter
 import com.andef.myfinance.core.utils.anims.fadeInAnim
 import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.feature.expense_common.expense_add_and_change.presentation.ExpenseAddAndChangeScreen
+import com.andef.myfinance.feature.expense_common.expense_analysis.presentation.ExpenseAnalysisScreen
 import com.andef.myfinance.feature.income_common.income_add_and_change.presentation.IncomeAddAndChangeScreen
 import com.andef.myfinance.feature.income_common.income_analysis.presentation.IncomeAnalysisScreen
 import com.andef.myfinance.feature.income_common.income_category.presentation.IncomeCategoryAddScreen
@@ -45,9 +46,7 @@ fun AppNavGraph(
             Screen.StartScreens.route
         } else {
             Screen.MainScreens.route
-        },
-        enterTransition = { fadeInAnim() },
-        exitTransition = { fadeOutAnim() }
+        }
     ) {
         startScreensNavGraph(
             isLightTheme = isLightTheme,
@@ -111,7 +110,11 @@ fun AppNavGraph(
             enterTransition = { fadeInAnim() },
             exitTransition = { fadeOutAnim() }
         ) {
-
+            ExpenseAnalysisScreen(
+                isLightTheme = isLightTheme,
+                navHostController = navHostController,
+                pdfPrinter = pdfPrinter
+            )
         }
         composable(
             route = Screen.ExpenseAddScreen.route,
