@@ -46,7 +46,9 @@ fun AppNavGraph(
             Screen.StartScreens.route
         } else {
             Screen.MainScreens.route
-        }
+        },
+        enterTransition = { fadeInAnim() },
+        exitTransition = { fadeOutAnim() }
     ) {
         startScreensNavGraph(
             isLightTheme = isLightTheme,
