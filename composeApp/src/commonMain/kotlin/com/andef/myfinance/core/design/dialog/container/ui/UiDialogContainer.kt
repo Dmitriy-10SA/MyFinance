@@ -27,8 +27,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.andef.myfinance.core.utils.darkGrayOrWhiteColor
 import com.andef.myfinance.core.utils.dialogContainerShape
+import com.andef.myfinance.core.utils.noRippleClickable
 import kotlinx.coroutines.delay
-import network.chaintech.kmp_date_time_picker.utils.noRippleEffect
 
 private enum class DialogState { Ready, Opening, Opened, Closing, Closed }
 
@@ -114,14 +114,14 @@ private fun MainContent(
                         onScaleXEqual1()
                     }
                 }
-                .noRippleEffect { onDismissRequest() }
+                .noRippleClickable { onDismissRequest() }
         ) {
             Surface(
                 modifier = Modifier
                     .padding(horizontal = 26.dp, vertical = 26.dp)
                     .wrapContentSize()
                     .animateContentSize()
-                    .noRippleEffect {},
+                    .noRippleClickable {},
                 shape = dialogContainerShape(),
                 color = darkGrayOrWhiteColor(isLightTheme = isLightTheme),
             ) {

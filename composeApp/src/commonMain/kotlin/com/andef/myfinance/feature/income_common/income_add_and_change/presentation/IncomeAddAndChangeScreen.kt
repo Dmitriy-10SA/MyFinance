@@ -64,7 +64,6 @@ import com.andef.myfinance.core.utils.formatters.numbers.formatAmountForEdit
 import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.grayColor
 import com.andef.myfinance.core.utils.showSnackbar
-import kotlinx.datetime.LocalDate
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_arrow_back
 import myfinance.composeapp.generated.resources.my_finance_bank
@@ -78,11 +77,11 @@ import myfinance.composeapp.generated.resources.my_finance_other
 import myfinance.composeapp.generated.resources.my_finance_ruble
 import myfinance.composeapp.generated.resources.my_finance_salary
 import myfinance.composeapp.generated.resources.my_finance_schedule
-import network.chaintech.kmp_date_time_picker.utils.now
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 fun IncomeAddAndChangeScreen(
     incomeId: Long?,
@@ -168,7 +167,6 @@ fun IncomeAddAndChangeScreen(
     UiDatePickerDialog(
         isVisible = state.datePickerVisible,
         isLightTheme = isLightTheme,
-        startDate = state.date ?: LocalDate.now(),
         onDismissRequest = { viewModel.send(IncomeAddAndChangeIntent.ChangeDatePickerVisible(false)) },
         onOkClick = { date ->
             viewModel.send(IncomeAddAndChangeIntent.ChangeDate(date))

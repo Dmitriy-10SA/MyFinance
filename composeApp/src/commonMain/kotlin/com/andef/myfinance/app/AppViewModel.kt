@@ -13,12 +13,13 @@ import com.andef.myfinance.core.domain.preferences.usecases.SetUsernameUseCase
 import com.kizitonwose.calendar.core.minusDays
 import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.minusYears
+import com.kizitonwose.calendar.core.now
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
-import network.chaintech.kmp_date_time_picker.utils.now
+import kotlin.time.ExperimentalTime
 
 class AppViewModel(
     val getIsLightThemeAsFlowUseCase: GetIsLightThemeAsFlowUseCase,
@@ -60,6 +61,7 @@ class AppViewModel(
         )
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun tabClick(tab: UiTopBarTab) {
         val selectedTabIndex = _state.value.selectedTabIndex
         if (tab.id != selectedTabIndex || tab.id == 5) {

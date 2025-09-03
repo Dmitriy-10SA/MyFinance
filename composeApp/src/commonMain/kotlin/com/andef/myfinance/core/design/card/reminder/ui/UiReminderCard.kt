@@ -26,12 +26,13 @@ import com.andef.myfinance.core.utils.cardColors
 import com.andef.myfinance.core.utils.cardShape
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalTime
+import com.andef.myfinance.core.utils.getters.nowLocalTime
 import com.andef.myfinance.core.utils.grayColor
+import com.kizitonwose.calendar.core.now
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_notification_perm
-import network.chaintech.kmp_date_time_picker.utils.now
 import org.jetbrains.compose.resources.painterResource
 import kotlin.time.ExperimentalTime
 
@@ -99,7 +100,7 @@ private fun RowScope.TextAndStatus(reminderModel: ReminderModel, isLightTheme: B
             color = blackOrWhiteColor(isLightTheme = isLightTheme)
         )
         val nowDate = LocalDate.now()
-        val nowTime = LocalTime.now()
+        val nowTime = nowLocalTime()
         Text(
             text = if (reminderModel.date > nowDate) {
                 "Ожидается"

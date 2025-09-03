@@ -1,9 +1,9 @@
 package com.andef.myfinance.core.utils.formatters.datetime
 
 import com.kizitonwose.calendar.core.minusDays
+import com.kizitonwose.calendar.core.now
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.number
-import network.chaintech.kmp_date_time_picker.utils.now
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)

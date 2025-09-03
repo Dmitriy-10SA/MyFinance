@@ -50,17 +50,18 @@ import com.andef.myfinance.core.utils.getters.getTitleForExpense
 import com.kizitonwose.calendar.core.minusDays
 import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.minusYears
+import com.kizitonwose.calendar.core.now
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_arrow_back
 import myfinance.composeapp.generated.resources.my_finance_print
-import network.chaintech.kmp_date_time_picker.utils.now
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 fun ExpenseAnalysisScreen(
     isLightTheme: Boolean,
@@ -216,6 +217,7 @@ private fun getColorForExpenseCategory(category: String): Color {
     }
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 private fun TopBar(
     isLightTheme: Boolean,

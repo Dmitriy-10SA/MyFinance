@@ -68,9 +68,6 @@ kotlin {
             //kotlin datetime
             implementation(libs.kotlinx.datetime)
 
-            //picker (data, time)
-            implementation(libs.kmp.date.time.picker)
-
             //navigation
             implementation(libs.navigation.compose)
 

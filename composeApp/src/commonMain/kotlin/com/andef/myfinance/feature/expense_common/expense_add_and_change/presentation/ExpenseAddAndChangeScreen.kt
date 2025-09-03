@@ -64,7 +64,6 @@ import com.andef.myfinance.core.utils.formatters.numbers.formatAmountForEdit
 import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.grayColor
 import com.andef.myfinance.core.utils.showSnackbar
-import kotlinx.datetime.LocalDate
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_arrow_back
 import myfinance.composeapp.generated.resources.my_finance_cafe
@@ -83,11 +82,11 @@ import myfinance.composeapp.generated.resources.my_finance_schedule
 import myfinance.composeapp.generated.resources.my_finance_sport
 import myfinance.composeapp.generated.resources.my_finance_study
 import myfinance.composeapp.generated.resources.my_finance_transport
-import network.chaintech.kmp_date_time_picker.utils.now
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 fun ExpenseAddAndChangeScreen(
     expenseId: Long?,
@@ -179,7 +178,6 @@ fun ExpenseAddAndChangeScreen(
                     )
                 )
             },
-            startDate = state.date ?: LocalDate.now(),
             onOkClick = { date ->
                 viewModel.send(ExpenseAddAndChangeIntent.ChangeDate(date))
                 viewModel.send(ExpenseAddAndChangeIntent.ChangeDatePickerVisible(false))
