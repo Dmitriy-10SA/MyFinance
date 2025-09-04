@@ -1,12 +1,10 @@
 package com.andef.myfinance.core.utils.formatters.datetime
 
-import com.kizitonwose.calendar.core.minusDays
-import com.kizitonwose.calendar.core.now
+import com.andef.myfinance.core.utils.getters.minusDays
+import com.andef.myfinance.core.utils.getters.now
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.number
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 fun formatLocalDate(date: LocalDate): String {
     val today = LocalDate.now()
     val yesterday = today.minusDays(1)

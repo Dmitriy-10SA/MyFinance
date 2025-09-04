@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -50,10 +49,10 @@ import com.andef.myfinance.core.utils.Red
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.getters.getTitleForIncome
-import com.kizitonwose.calendar.core.minusDays
-import com.kizitonwose.calendar.core.minusMonths
-import com.kizitonwose.calendar.core.minusYears
-import com.kizitonwose.calendar.core.now
+import com.andef.myfinance.core.utils.getters.minusDays
+import com.andef.myfinance.core.utils.getters.minusMonths
+import com.andef.myfinance.core.utils.getters.minusYears
+import com.andef.myfinance.core.utils.getters.now
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -62,9 +61,7 @@ import myfinance.composeapp.generated.resources.my_finance_arrow_back
 import myfinance.composeapp.generated.resources.my_finance_print
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 fun IncomeAnalysisScreen(
     isLightTheme: Boolean,
@@ -223,7 +220,6 @@ private fun getColorForIncomeCategory(category: String): Color {
     }
 }
 
-@OptIn(ExperimentalTime::class)
 @Composable
 private fun TopBar(
     snackbarHostState: SnackbarHostState,

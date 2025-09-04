@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import kotlinx.datetime.LocalDate
 
 @Composable
-expect fun UiRangeDatePickerDialog(
+fun UiRangeDatePickerDialog(
     isVisible: Boolean,
     isLightTheme: Boolean,
     onDismissRequest: () -> Unit,
     onOkClick: (LocalDate, LocalDate) -> Unit
-)
+) {}

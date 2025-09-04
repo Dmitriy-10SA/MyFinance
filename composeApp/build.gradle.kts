@@ -63,7 +63,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
             //calendar
-            implementation(libs.compose.multiplatform)
+            implementation(libs.custom.calendar)
 
             //kotlin datetime
             implementation(libs.kotlinx.datetime)

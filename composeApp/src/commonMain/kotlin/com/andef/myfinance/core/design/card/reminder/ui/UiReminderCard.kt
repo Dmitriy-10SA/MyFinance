@@ -26,17 +26,14 @@ import com.andef.myfinance.core.utils.cardColors
 import com.andef.myfinance.core.utils.cardShape
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalTime
-import com.andef.myfinance.core.utils.getters.nowLocalTime
+import com.andef.myfinance.core.utils.getters.now
 import com.andef.myfinance.core.utils.grayColor
-import com.kizitonwose.calendar.core.now
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_notification_perm
 import org.jetbrains.compose.resources.painterResource
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 @Composable
 fun UiReminderCard(
     modifier: Modifier = Modifier,
@@ -84,7 +81,6 @@ fun UiReminderCard(
     }
 }
 
-@OptIn(ExperimentalTime::class)
 @Composable
 private fun RowScope.TextAndStatus(reminderModel: ReminderModel, isLightTheme: Boolean) {
     Column(
@@ -100,7 +96,7 @@ private fun RowScope.TextAndStatus(reminderModel: ReminderModel, isLightTheme: B
             color = blackOrWhiteColor(isLightTheme = isLightTheme)
         )
         val nowDate = LocalDate.now()
-        val nowTime = nowLocalTime()
+        val nowTime = LocalTime.now()
         Text(
             text = if (reminderModel.date > nowDate) {
                 "Ожидается"

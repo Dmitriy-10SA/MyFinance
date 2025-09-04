@@ -1,10 +1,9 @@
 package com.andef.myfinance.app
 
-import com.kizitonwose.calendar.core.now
+import com.andef.myfinance.core.utils.getters.now
 import kotlinx.datetime.LocalDate
-import kotlin.time.ExperimentalTime
 
-data class AppState @OptIn(ExperimentalTime::class) constructor(
+data class AppState constructor(
     val username: String,
     val isFirstStart: Boolean,
     val selectedTabIndex: Int = 0,
