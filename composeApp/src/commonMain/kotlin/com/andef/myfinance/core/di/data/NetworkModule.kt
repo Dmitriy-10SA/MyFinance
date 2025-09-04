@@ -51,4 +51,4 @@ fun HttpClientConfig<*>.installBaseConfig() {
     }
 }
 
-private const val BASE_URL = "https://cdn.jsdelivr.net/npm/@fawazahmed0/"
+private const val BASE_URL = "cdn.jsdelivr.net/npm/@fawazahmed0"

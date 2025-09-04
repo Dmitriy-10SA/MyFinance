@@ -14,6 +14,7 @@ import com.andef.myfinance.core.di.preferences.preferencesModule
 import com.andef.myfinance.core.di.reminder.reminderModule
 import com.andef.myfinance.feature.auth.di.authViewModelModule
 import com.andef.myfinance.feature.backup.di.backupViewModelModule
+import com.andef.myfinance.feature.currency.di.currencysModule
 import com.andef.myfinance.feature.expense_common.expense_add_and_change.di.expenseAddAndChangeViewModelModule
 import com.andef.myfinance.feature.expense_common.expense_analysis.di.expenseAnalysisViewModelModule
 import com.andef.myfinance.feature.expense_common.expense_category.di.expenseCategoryAddViewModelModule
@@ -53,7 +54,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
                 moneyDecimalFormatterModule(),
                 appViewModelModule
             ) + expenseCommonModules + incomeCommonModules + reminderModule +
-                    preferencesModule + viewModelModules
+                    preferencesModule + viewModelModules + currencysModule
         )
     }
 }

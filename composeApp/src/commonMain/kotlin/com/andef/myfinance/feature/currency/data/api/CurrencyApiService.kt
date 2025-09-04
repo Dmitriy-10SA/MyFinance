@@ -4,73 +4,62 @@ import com.andef.myfinance.feature.currency.data.dto.CurrencyRubDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.http.Url
+import io.ktor.http.encodeURLPath
 
 class CurrencyApiService(private val client: HttpClient) {
-    suspend fun getAudRub(): CurrencyRubDto.AudRubDto =
-        client.get(AUD).body()
 
-    suspend fun getBtcRub(): CurrencyRubDto.BtcRubDto =
-        client.get(BTC).body()
+    suspend fun getAudRub(): CurrencyRubDto.AudRubDto = client.get(url(AUD)).body()
+    suspend fun getBtcRub(): CurrencyRubDto.BtcRubDto = client.get(url(BTC)).body()
+    suspend fun getCadRub(): CurrencyRubDto.CadRubDto = client.get(url(CAD)).body()
+    suspend fun getChfRub(): CurrencyRubDto.ChfRubDto = client.get(url(CHF)).body()
+    suspend fun getCnyRub(): CurrencyRubDto.CnyRubDto = client.get(url(CNY)).body()
+    suspend fun getEthRub(): CurrencyRubDto.EthRubDto = client.get(url(ETH)).body()
+    suspend fun getEurRub(): CurrencyRubDto.EurRubDto = client.get(url(EUR)).body()
+    suspend fun getGbpRub(): CurrencyRubDto.GbpRubDto = client.get(url(GBP)).body()
+    suspend fun getJpyRub(): CurrencyRubDto.JpyRubDto = client.get(url(JPY)).body()
+    suspend fun getUsdRub(): CurrencyRubDto.UsdRubDto = client.get(url(USD)).body()
+    suspend fun getHkdRub(): CurrencyRubDto.HkdRubDto = client.get(url(HKD)).body()
 
-    suspend fun getCadRub(): CurrencyRubDto.CadRubDto =
-        client.get(CAD).body()
-
-    suspend fun getChfRub(): CurrencyRubDto.ChfRubDto =
-        client.get(CHF).body()
-
-    suspend fun getCnyRub(): CurrencyRubDto.CnyRubDto =
-        client.get(CNY).body()
-
-    suspend fun getEthRub(): CurrencyRubDto.EthRubDto =
-        client.get(ETH).body()
-
-    suspend fun getEurRub(): CurrencyRubDto.EurRubDto =
-        client.get(EUR).body()
-
-    suspend fun getGbpRub(): CurrencyRubDto.GbpRubDto =
-        client.get(GBP).body()
-
-    suspend fun getJpyRub(): CurrencyRubDto.JpyRubDto =
-        client.get(JPY).body()
-
-    suspend fun getUsdRub(): CurrencyRubDto.UsdRubDto =
-        client.get(USD).body()
-
-    suspend fun getHkdRub(): CurrencyRubDto.HkdRubDto =
-        client.get(HKD).body()
-
+    // Методы с датой
     suspend fun getAudRub(date: String): CurrencyRubDto.AudRubDto =
-        client.get("${QUERY_START_FOR_DATE}$date$QUERY_END_FOR_DATE$AUD_SHORT_NAME_FOR_DATE").body()
+        client.get(url("$QUERY_START_FOR_DATE$date$QUERY_END_FOR_DATE$AUD_SHORT_NAME_FOR_DATE")).body()
 
     suspend fun getBtcRub(date: String): CurrencyRubDto.BtcRubDto =
-        client.get("${QUERY_START_FOR_DATE}$date$QUERY_END_FOR_DATE$BTC_SHORT_NAME_FOR_DATE").body()
+        client.get(url("$QUERY_START_FOR_DATE$date$QUERY_END_FOR_DATE$BTC_SHORT_NAME_FOR_DATE")).body()
 
     suspend fun getCadRub(date: String): CurrencyRubDto.CadRubDto =
-        client.get("${QUERY_START_FOR_DATE}$date$QUERY_END_FOR_DATE$CAD_SHORT_NAME_FOR_DATE").body()
+        client.get(url("$QUERY_START_FOR_DATE$date$QUERY_END_FOR_DATE$CAD_SHORT_NAME_FOR_DATE")).body()
 
     suspend fun getChfRub(date: String): CurrencyRubDto.ChfRubDto =
-        client.get("${QUERY_START_FOR_DATE}$date$QUERY_END_FOR_DATE$CHF_SHORT_NAME_FOR_DATE").body()
+        client.get(url("$QUERY_START_FOR_DATE$date$QUERY_END_FOR_DATE$CHF_SHORT_NAME_FOR_DATE")).body()
 
     suspend fun getCnyRub(date: String): CurrencyRubDto.CnyRubDto =
-        client.get("${QUERY_START_FOR_DATE}$date$QUERY_END_FOR_DATE$CNY_SHORT_NAME_FOR_DATE").body()
+        client.get(url("$QUERY_START_FOR_DATE$date$QUERY_END_FOR_DATE$CNY_SHORT_NAME_FOR_DATE")).body()
 
     suspend fun getEthRub(date: String): CurrencyRubDto.EthRubDto =
-        client.get("${QUERY_START_FOR_DATE}$date$QUERY_END_FOR_DATE$ETH_SHORT_NAME_FOR_DATE").body()
+        client.get(url("$QUERY_START_FOR_DATE$date$QUERY_END_FOR_DATE$ETH_SHORT_NAME_FOR_DATE")).body()
 
     suspend fun getEurRub(date: String): CurrencyRubDto.EurRubDto =
-        client.get("${QUERY_START_FOR_DATE}$date$QUERY_END_FOR_DATE$EUR_SHORT_NAME_FOR_DATE").body()
+        client.get(url("$QUERY_START_FOR_DATE$date$QUERY_END_FOR_DATE$EUR_SHORT_NAME_FOR_DATE")).body()
 
     suspend fun getGbpRub(date: String): CurrencyRubDto.GbpRubDto =
-        client.get("${QUERY_START_FOR_DATE}$date$QUERY_END_FOR_DATE$GBP_SHORT_NAME_FOR_DATE").body()
+        client.get(url("$QUERY_START_FOR_DATE$date$QUERY_END_FOR_DATE$GBP_SHORT_NAME_FOR_DATE")).body()
 
     suspend fun getJpyRub(date: String): CurrencyRubDto.JpyRubDto =
-        client.get("${QUERY_START_FOR_DATE}$date$QUERY_END_FOR_DATE$JPY_SHORT_NAME_FOR_DATE").body()
+        client.get(url("$QUERY_START_FOR_DATE$date$QUERY_END_FOR_DATE$JPY_SHORT_NAME_FOR_DATE")).body()
 
     suspend fun getUsdRub(date: String): CurrencyRubDto.UsdRubDto =
-        client.get("${QUERY_START_FOR_DATE}$date$QUERY_END_FOR_DATE$USD_SHORT_NAME_FOR_DATE").body()
+        client.get(url("$QUERY_START_FOR_DATE$date$QUERY_END_FOR_DATE$USD_SHORT_NAME_FOR_DATE")).body()
 
     suspend fun getHkdRub(date: String): CurrencyRubDto.HkdRubDto =
-        client.get("${QUERY_START_FOR_DATE}$date$QUERY_END_FOR_DATE$HKD_SHORT_NAME_FOR_DATE").body()
+        client.get(url("$QUERY_START_FOR_DATE$date$QUERY_END_FOR_DATE$HKD_SHORT_NAME_FOR_DATE")).body()
+
+
+    private fun url(path: String): Url {
+        val encodedPath = path.split("/").joinToString("/") { it.encodeURLPath() }
+        return Url("https://cdn.jsdelivr.net/npm/@fawazahmed0/$encodedPath")
+    }
 
     companion object {
         private const val AUD = "currency-api@latest/v1/currencies/aud.json"
