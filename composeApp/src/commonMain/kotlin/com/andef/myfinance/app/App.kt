@@ -67,7 +67,6 @@ fun App() {
             endDate = state.endDate,
             datePickerVisible = state.datePickerVisible,
             currentRoute = state.currentRoute,
-            previousRoute = state.previousRoute,
             scope = scope,
             drawerState = drawerState,
             onDatesChoose = { s, e ->
@@ -103,7 +102,6 @@ private fun AppDrawer(
     datePickerVisible: Boolean,
     selectedTabIndex: Int,
     currentRoute: String?,
-    previousRoute: String?,
     scope: CoroutineScope,
     drawerState: DrawerState,
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
@@ -113,7 +111,7 @@ private fun AppDrawer(
 ) {
     ModalNavigationDrawer(
         drawerState = drawerState,
-        gesturesEnabled = drawerState.isOpen,
+        gesturesEnabled = currentRoute in mainRoutes,
         drawerContent = {
             MainDrawerSheetContent(
                 navHostController = navHostController,
@@ -138,7 +136,6 @@ private fun AppDrawer(
                 selectedTabIndex = selectedTabIndex,
                 onTabClick = onTabClick,
                 currentRoute = currentRoute,
-                previousRoute = previousRoute,
                 isFirstStart = isFirstStart,
                 onItemClick = onItemClick
             )
@@ -156,7 +153,6 @@ private fun AppDrawerContent(
     datePickerVisible: Boolean,
     selectedTabIndex: Int,
     currentRoute: String?,
-    previousRoute: String?,
     scope: CoroutineScope,
     drawerState: DrawerState,
     onDatesChoose: (LocalDate, LocalDate) -> Unit,

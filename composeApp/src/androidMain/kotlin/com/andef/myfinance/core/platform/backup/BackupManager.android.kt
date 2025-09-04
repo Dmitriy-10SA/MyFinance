@@ -1,20 +1,22 @@
 package com.andef.myfinance.core.platform.backup
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
 import com.andef.myfinance.core.domain.backup.entities.BackupData
 import kotlinx.serialization.json.Json
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
+import java.time.LocalDate
 
-class AndroidBackupManager : BackupManager {
+class AndroidBackupManager(private val context: Context) : BackupManager {
     @Composable
     override fun pickBackupFile(onResult: (BackupData?) -> Unit): () -> Unit {
-        val context = LocalContext.current
         val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.OpenDocument(),
             onResult = { uri: Uri? ->
@@ -25,6 +27,30 @@ class AndroidBackupManager : BackupManager {
             }
         )
         return { launcher.launch(arrayOf("application/json")) }
+    }
+
+    override fun saveBackupFile(backupData: BackupData) {
+        val json = Json.encodeToString(backupData)
+        val fileName = "Мои_финансы_резервная_копия_${LocalDate.now()}.json"
+        val file = File(context.cacheDir, fileName)
+        file.writeText(json)
+
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.provider",
+            file
+        )
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "application/json"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        val chooser = Intent.createChooser(
+            intent, "Поделиться резервной копией"
+        ).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(chooser)
     }
 
     private fun importDataFromJson(uri: Uri, context: Context): BackupData? {

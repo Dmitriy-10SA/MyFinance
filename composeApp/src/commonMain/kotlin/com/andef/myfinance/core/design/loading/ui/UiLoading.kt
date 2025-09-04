@@ -35,7 +35,7 @@ fun UiLoading(
     var visible by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(isVisible) {
         if (isVisible) {
-            delay(500)
+            delay(350)
             visible = isVisible
         } else {
             visible = false

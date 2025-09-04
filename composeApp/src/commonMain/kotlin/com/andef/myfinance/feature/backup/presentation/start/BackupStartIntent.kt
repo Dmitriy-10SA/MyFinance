@@ -10,6 +10,4 @@ sealed class BackupStartIntent {
     ) : BackupStartIntent()
 
     data class HelpBottomSheetVisibleChange(val isVisible: Boolean) : BackupStartIntent()
-
-    data class StartPickerStateChange(val state: Boolean) : BackupStartIntent()
 }

@@ -40,15 +40,7 @@ class BackupStartViewModel(
             is BackupStartIntent.HelpBottomSheetVisibleChange -> helpBottomSheetVisibleChange(
                 isVisible = intent.isVisible
             )
-
-            is BackupStartIntent.StartPickerStateChange -> startPickerStateChange(
-                state = intent.state
-            )
         }
-    }
-
-    private fun startPickerStateChange(state: Boolean) {
-        _state.value = _state.value.copy(startPicker = state)
     }
 
     private fun helpBottomSheetVisibleChange(isVisible: Boolean) {

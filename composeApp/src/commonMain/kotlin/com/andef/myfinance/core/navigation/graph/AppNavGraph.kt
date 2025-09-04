@@ -14,6 +14,7 @@ import com.andef.myfinance.core.platform.common.LinkOpener
 import com.andef.myfinance.core.platform.common.MoneyDecimalFormatter
 import com.andef.myfinance.core.utils.anims.fadeInAnim
 import com.andef.myfinance.core.utils.anims.fadeOutAnim
+import com.andef.myfinance.feature.backup.presentation.main.BackupMainScreen
 import com.andef.myfinance.feature.currency.presentation.CurrencysScreen
 import com.andef.myfinance.feature.expense_common.expense_add_and_change.presentation.ExpenseAddAndChangeScreen
 import com.andef.myfinance.feature.expense_common.expense_analysis.presentation.ExpenseAnalysisScreen
@@ -201,12 +202,13 @@ fun AppNavGraph(
             enterTransition = { fadeInAnim() },
             exitTransition = { fadeOutAnim() }
         ) {
-//            BackupMainScreen(
-//                isLightTheme = isLightTheme,
-//                navHostController = navHostController,
-//                viewModelFactory = viewModelFactory,
-//                paddingValues = paddingValues
-//            )
+            BackupMainScreen(
+                isLightTheme = isLightTheme,
+                navHostController = navHostController,
+                paddingValues = paddingValues,
+                backupManager = backupManager,
+                linkOpener = linkOpener
+            )
         }
         composable(
             route = Screen.IncomeCategoryAddScreen.route,

@@ -10,10 +10,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.json.Json
 import platform.Foundation.NSData
+import platform.Foundation.NSDate
 import platform.Foundation.NSString
+import platform.Foundation.NSTemporaryDirectory
 import platform.Foundation.NSURL
 import platform.Foundation.NSUTF8StringEncoding
 import platform.Foundation.create
+import platform.Foundation.dataUsingEncoding
+import platform.Foundation.now
+import platform.Foundation.writeToURL
+import platform.UIKit.UIActivityViewController
+import platform.UIKit.UIApplication
 import platform.UIKit.UIDocumentPickerDelegateProtocol
 import platform.UIKit.UIDocumentPickerMode
 import platform.UIKit.UIDocumentPickerViewController
@@ -35,6 +42,31 @@ class IOSBackupManager : BackupManager {
                 }
             }
         }
+    }
+
+    @OptIn(ExperimentalForeignApi::class)
+    override fun saveBackupFile(backupData: BackupData) {
+        val json = Json.encodeToString(backupData)
+        val fileName = "Мои_финансы_резервная_копия_${NSDate.now()}.json"
+
+        // Путь к временной директории
+        val tempDir = NSTemporaryDirectory()
+        val filePath = tempDir + fileName
+        val fileUrl = NSURL.fileURLWithPath(filePath)
+
+        // Записываем JSON в файл
+        val data = (json as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+        data?.writeToURL(fileUrl, true)
+
+        // UIActivityViewController для шаринга файла
+        val activityViewController = UIActivityViewController(
+            activityItems = listOf(fileUrl),
+            applicationActivities = null
+        )
+
+        // Получаем rootViewController
+        val rootController = UIApplication.sharedApplication.keyWindow?.rootViewController
+        rootController?.presentViewController(activityViewController, true, null)
     }
 
     @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)

@@ -1,4 +1,4 @@
-package com.andef.myfinance.feature.backup.presentation.start
+package com.andef.myfinance.feature.backup.presentation.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,12 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -36,7 +36,6 @@ import com.andef.myfinance.core.design.snackbar.ui.UiSnackbar
 import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.design.topbar.ui.UiTopBar
 import com.andef.myfinance.core.domain.backup.entities.BackupData
-import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.platform.backup.BackupManager
 import com.andef.myfinance.core.platform.common.LinkOpener
 import com.andef.myfinance.core.utils.Blue
@@ -52,25 +51,25 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackupStartScreen(
+fun BackupMainScreen(
     isLightTheme: Boolean,
     navHostController: NavHostController,
     paddingValues: PaddingValues,
     backupManager: BackupManager,
     linkOpener: LinkOpener
 ) {
-    val viewModel = koinViewModel<BackupStartViewModel>()
-    val state = viewModel.state.collectAsState().value
+    val viewModel = koinViewModel<BackupMainViewModel>()
+    val state = viewModel.state.collectAsState()
 
-    val snackbarHostState = remember { SnackbarHostState() }
     val helpBottomSheetState = rememberModalBottomSheetState()
+    val helpBottomSheetVisible = remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val launcher = backupManager.pickBackupFile { backupData ->
         onResultForPickBackupFile(
             viewModel = viewModel,
             backupData = backupData,
-            navHostController = navHostController,
             scope = scope,
             snackbarHostState = snackbarHostState
         )
@@ -82,64 +81,66 @@ fun BackupStartScreen(
             UiTopBar(
                 isLightTheme = isLightTheme,
                 type = UiTopBarType.Center,
+                title = "Резервное копирование",
                 navigationIconTint = Blue,
-                title = "Восстановление данных",
                 navigationIcon = painterResource(Res.drawable.my_finance_arrow_back),
                 navigationIconContentDescription = "Назад",
                 onNavigationIconClick = navHostController::popBackStack
             )
+        },
+        snackbarHost = {
+            UiSnackbar(
+                paddingValues = paddingValues,
+                snackbarHostState = snackbarHostState,
+                type = if (state.value.isErrorSnackbar) {
+                    UiSnackbarType.Error
+                } else {
+                    UiSnackbarType.Success
+                }
+            )
         }
     ) { topBarPadding ->
-        MainContent(
-            topBarPadding = topBarPadding,
-            isLightTheme = isLightTheme,
-            onBackupClick = { launcher() },
-            helpBottomSheetState = helpBottomSheetState,
-            onHelpClick = {
-                viewModel.send(
-                    BackupStartIntent.HelpBottomSheetVisibleChange(true)
-                )
-            },
-            onHelpDismissRequest = {
-                viewModel.send(
-                    BackupStartIntent.HelpBottomSheetVisibleChange(false)
-                )
-            },
-            helpBottomSheetVisible = state.helpBottomSheetVisible,
-            onTelegramClick = { linkOpener.openLink("https://t.me/dsemkin") },
-            onMailClick = { linkOpener.openLink("mailto:semkin_dmitriy10@vk.com") }
-        )
-        UiSnackbar(
-            paddingValues = PaddingValues(
-                top = topBarPadding.calculateTopPadding(),
-                bottom = paddingValues.calculateBottomPadding()
-            ),
-            snackbarHostState = snackbarHostState,
-            type = if (state.isErrorSnackbar) UiSnackbarType.Error else UiSnackbarType.Success
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = topBarPadding.calculateTopPadding())
+                .navigationBarsPadding()
+                .imePadding()
+        ) {
+            MainContent(
+                isLightTheme = isLightTheme,
+                viewModel = viewModel,
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                backupManager = backupManager,
+                onBackupClick = { launcher() }
+            )
+            BackupHelpDownText(
+                isLightTheme = isLightTheme,
+                onHelpClick = { helpBottomSheetVisible.value = true },
+                connectionBottomSheetVisible = helpBottomSheetVisible.value,
+                connectionBottomSheetState = helpBottomSheetState,
+                onDismissRequest = { helpBottomSheetVisible.value = false },
+                onTelegramClick = { linkOpener.openLink("https://t.me/dsemkin") },
+                onMailClick = { linkOpener.openLink("mailto:semkin_dmitriy10@vk.com") }
+            )
+        }
     }
-    UiLoading(isLightTheme = isLightTheme, isVisible = state.isLoading)
+    UiLoading(isLightTheme = isLightTheme, isVisible = state.value.isLoading)
 }
 
 private fun onResultForPickBackupFile(
-    viewModel: BackupStartViewModel,
+    viewModel: BackupMainViewModel,
     backupData: BackupData?,
-    navHostController: NavHostController,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState
 ) {
     if (backupData != null) {
         viewModel.send(
-            BackupStartIntent.RestoreData(
+            BackupMainIntent.RestoreData(
                 data = backupData,
-                onSuccess = {
-                    navHostController.navigate(Screen.MainScreens.IncomeMainScreen.route) {
-                        popUpTo(0)
-                    }
-                },
-                onError = { msg ->
-                    showSnackbar(scope, snackbarHostState, msg)
-                }
+                onSuccess = { msg -> showSnackbar(scope, snackbarHostState, msg) },
+                onError = { msg -> showSnackbar(scope, snackbarHostState, msg) }
             )
         )
     } else {
@@ -151,41 +152,15 @@ private fun onResultForPickBackupFile(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MainContent(
-    topBarPadding: PaddingValues,
+private fun ColumnScope.MainContent(
     isLightTheme: Boolean,
-    onBackupClick: () -> Unit,
-    onHelpClick: () -> Unit,
-    onHelpDismissRequest: () -> Unit,
-    helpBottomSheetVisible: Boolean,
-    helpBottomSheetState: SheetState,
-    onTelegramClick: () -> Unit,
-    onMailClick: () -> Unit
+    viewModel: BackupMainViewModel,
+    scope: CoroutineScope,
+    snackbarHostState: SnackbarHostState,
+    backupManager: BackupManager,
+    onBackupClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = topBarPadding.calculateTopPadding())
-            .navigationBarsPadding()
-            .imePadding()
-    ) {
-        ColumnContent(isLightTheme = isLightTheme, onBackupClick = onBackupClick)
-        BackupHelpDownText(
-            isLightTheme = isLightTheme,
-            connectionBottomSheetVisible = helpBottomSheetVisible,
-            onHelpClick = onHelpClick,
-            onTelegramClick = onTelegramClick,
-            onMailClick = onMailClick,
-            onDismissRequest = onHelpDismissRequest,
-            connectionBottomSheetState = helpBottomSheetState
-        )
-    }
-}
-
-@Composable
-private fun ColumnScope.ColumnContent(isLightTheme: Boolean, onBackupClick: () -> Unit) {
     Column(
         modifier = Modifier
             .weight(1f)
@@ -196,21 +171,30 @@ private fun ColumnScope.ColumnContent(isLightTheme: Boolean, onBackupClick: () -
     ) {
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = "Уже пользовались приложением?",
+            text = "Не теряйте данные о финансах",
             fontSize = 20.sp,
-            color = blackOrWhiteColor(isLightTheme = isLightTheme),
+            color = blackOrWhiteColor(isLightTheme),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = "Загрузите резервную копию, чтобы восстановить данные с другого устройства",
+            text = "Сохраните резервную копию, чтобы восстановить информацию о финансах при смене " +
+                    "телефона или очистке данных приложения. Восстанавливать данные не нужно, " +
+                    "если вы не меняли телефон и не очищали данные, иначе текущие данные могут " +
+                    "быть удалены",
             fontSize = 14.sp,
-            color = grayColor(isLightTheme = isLightTheme),
+            color = grayColor(isLightTheme),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(24.dp))
+        UiButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = "Сохранить копию",
+            onClick = { onSaveData(viewModel, scope, snackbarHostState, backupManager) }
+        )
+        Spacer(modifier = Modifier.height(12.dp))
         UiButton(
             modifier = Modifier.fillMaxWidth(),
             text = "Восстановить данные",
@@ -218,4 +202,24 @@ private fun ColumnScope.ColumnContent(isLightTheme: Boolean, onBackupClick: () -
         )
         Spacer(modifier = Modifier.height(6.dp))
     }
+}
+
+private fun onSaveData(
+    viewModel: BackupMainViewModel,
+    scope: CoroutineScope,
+    snackbarHostState: SnackbarHostState,
+    backupManager: BackupManager
+) {
+    viewModel.send(
+        BackupMainIntent.SaveData(
+            onSuccess = { backupData ->
+                try {
+                    backupManager.saveBackupFile(backupData)
+                } catch (_: Exception) {
+                    showSnackbar(scope, snackbarHostState, "Ошибка! Попробуйте ещё раз!")
+                }
+            },
+            onError = { msg -> showSnackbar(scope, snackbarHostState, msg) }
+        )
+    )
 }
