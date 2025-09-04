@@ -31,7 +31,6 @@ fun AppNavGraph(
     startDate: LocalDate,
     endDate: LocalDate,
     currentRoute: String?,
-    previousRoute: String?,
     mainScreenIsVisible: Boolean
 ) {
     val backupManager = getKoin().get<BackupManager>()
