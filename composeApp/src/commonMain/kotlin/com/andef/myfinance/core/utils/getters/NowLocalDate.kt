@@ -17,3 +17,7 @@ fun LocalDate.minusMonths(months: Long) = this.plus(
 fun LocalDate.minusYears(years: Long) = this.plus(
     period = DatePeriod(years = -years.toInt())
 )
+
+fun LocalDate.plusDays(days: Long) = this.plus(
+    period = DatePeriod(days = days.toInt())
+)
