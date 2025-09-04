@@ -1,9 +1,9 @@
 package com.andef.myfinance.app
 
+import com.andef.myfinance.core.utils.getters.now
 import kotlinx.datetime.LocalDate
-import network.chaintech.kmp_date_time_picker.utils.now
 
-data class AppState(
+data class AppState constructor(
     val username: String,
     val isFirstStart: Boolean,
     val selectedTabIndex: Int = 0,

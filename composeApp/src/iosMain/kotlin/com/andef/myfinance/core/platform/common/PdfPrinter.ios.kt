@@ -1,5 +1,6 @@
 package com.andef.myfinance.core.platform.common
 
+import androidx.compose.runtime.Composable
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.datetime.LocalDate
 import platform.CoreGraphics.CGContextAddLineToPoint
@@ -28,14 +29,30 @@ import platform.UIKit.UIPrintInteractionController
 import platform.UIKit.drawAtPoint
 
 class IOSPdfPrinter() : PdfPrinter {
-
-    @OptIn(ExperimentalForeignApi::class)
     override fun printIncomePdf(
         incomes: List<Pair<LocalDate, Double>>,
         maxDate: LocalDate,
         minDate: LocalDate
     ) {
-        val fileName = "Отчет_о_доходах.pdf"
+        print(true, incomes, maxDate, minDate)
+    }
+
+    override fun printExpensePdf(
+        expenses: List<Pair<LocalDate, Double>>,
+        maxDate: LocalDate,
+        minDate: LocalDate
+    ) {
+        print(false, expenses, maxDate, minDate)
+    }
+
+    @OptIn(ExperimentalForeignApi::class)
+    private fun print(
+        isIncome: Boolean,
+        amounts: List<Pair<LocalDate, Double>>,
+        maxDate: LocalDate,
+        minDate: LocalDate
+    ) {
+        val fileName = if (isIncome) "Отчет_о_доходах.pdf" else "Отчет_о_расходах.pdf"
         val fileManager = NSFileManager.defaultManager
         val urls = fileManager.URLsForDirectory(NSDocumentDirectory, NSUserDomainMask)
         val docsDir = urls.first() as? NSURL
@@ -71,7 +88,8 @@ class IOSPdfPrinter() : PdfPrinter {
             )
 
             // Заголовок
-            ("Отчет о доходах" as NSString).drawAtPoint(
+            val title = if (isIncome) "Отчет о доходах" else "Отчет о расходах"
+            (title as NSString).drawAtPoint(
                 point = CGPointMake((pageWidth - 200.0) / 2, margin),
                 withAttributes = attrsTitle
             )
@@ -104,7 +122,7 @@ class IOSPdfPrinter() : PdfPrinter {
 
             // Таблица
             var currentY = headerY + rowHeight
-            incomes.forEach { (date, sum) ->
+            amounts.forEach { (date, sum) ->
                 (date.toString() as NSString).drawAtPoint(
                     point = CGPointMake(margin, currentY),
                     withAttributes = attrsText
@@ -117,7 +135,7 @@ class IOSPdfPrinter() : PdfPrinter {
             }
 
             // Итого
-            val total = incomes.sumOf { it.second }
+            val total = amounts.sumOf { it.second }
             ("Итого:" as NSString).drawAtPoint(
                 point = CGPointMake(margin, currentY + 10.0),
                 withAttributes = attrsHeader
@@ -148,4 +166,9 @@ class IOSPdfPrinter() : PdfPrinter {
 
         printController.presentAnimated(true, completionHandler = null)
     }
+}
+
+@Composable
+actual fun getPdfPrinter(): PdfPrinter {
+    return IOSPdfPrinter()
 }

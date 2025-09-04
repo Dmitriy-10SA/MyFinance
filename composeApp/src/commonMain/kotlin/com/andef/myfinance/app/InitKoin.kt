@@ -4,7 +4,6 @@ import com.andef.myfinance.core.di.backup.backupModule
 import com.andef.myfinance.core.di.common.linkOpenerModule
 import com.andef.myfinance.core.di.common.loggerModule
 import com.andef.myfinance.core.di.common.moneyDecimalFormatterModule
-import com.andef.myfinance.core.di.common.pdfPrinterModule
 import com.andef.myfinance.core.di.data.databaseModule
 import com.andef.myfinance.core.di.data.networkModule
 import com.andef.myfinance.core.di.expense_common.expenseCategoryModule
@@ -16,6 +15,8 @@ import com.andef.myfinance.core.di.reminder.reminderModule
 import com.andef.myfinance.feature.auth.di.authViewModelModule
 import com.andef.myfinance.feature.backup.di.backupViewModelModule
 import com.andef.myfinance.feature.expense_common.expense_add_and_change.di.expenseAddAndChangeViewModelModule
+import com.andef.myfinance.feature.expense_common.expense_analysis.di.expenseAnalysisViewModelModule
+import com.andef.myfinance.feature.expense_common.expense_category.di.expenseCategoryAddViewModelModule
 import com.andef.myfinance.feature.expense_common.expense_main.di.expenseMainViewModelModule
 import com.andef.myfinance.feature.income_common.income_add_and_change.di.incomeAddAndChangeViewModelModule
 import com.andef.myfinance.feature.income_common.income_analysis.di.incomeAnalysisViewModelModule
@@ -38,7 +39,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             incomeMainViewModelModule + expenseMainViewModelModule +
             totalsViewModelModule + incomeAddAndChangeViewModelModule +
             expenseAddAndChangeViewModelModule + incomeAnalysisViewModelModule +
-            incomeCategoryAddViewModelModule
+            incomeCategoryAddViewModelModule + expenseAnalysisViewModelModule +
+            expenseCategoryAddViewModelModule
     startKoin {
         config?.invoke(this)
         modules(
@@ -48,7 +50,6 @@ fun initKoin(config: KoinAppDeclaration? = null) {
                 backupModule(),
                 linkOpenerModule(),
                 loggerModule(),
-                pdfPrinterModule(),
                 moneyDecimalFormatterModule(),
                 appViewModelModule
             ) + expenseCommonModules + incomeCommonModules + reminderModule +

@@ -1,4 +1,4 @@
-package com.andef.myfinance.feature.income_common.income_category.presentation
+package com.andef.myfinance.feature.expense_common.expense_category.presentation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +39,7 @@ import androidx.navigation.NavHostController
 import com.andef.myfinance.core.design.alert.dialog.ui.UiAlertDialog
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiModalBottomSheet
 import com.andef.myfinance.core.design.button.ui.UiButton
-import com.andef.myfinance.core.design.card.income.ui.UiIncomeCategoryCard
+import com.andef.myfinance.core.design.card.expense.ui.UiExpenseCategoryCard
 import com.andef.myfinance.core.design.fab.ui.UiFAB
 import com.andef.myfinance.core.design.loading.ui.UiLoading
 import com.andef.myfinance.core.design.scaffold.ui.UiScaffold
@@ -48,14 +48,15 @@ import com.andef.myfinance.core.design.snackbar.ui.UiSnackbar
 import com.andef.myfinance.core.design.textfield.ui.UiTextField
 import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.design.topbar.ui.UiTopBar
-import com.andef.myfinance.core.domain.income_common.income_category.entities.BaseIncomeCategory
+import com.andef.myfinance.core.domain.expense_common.expense_category.entities.BaseExpenseCategory
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red
 import com.andef.myfinance.core.utils.blackOrWhiteColor
-import com.andef.myfinance.core.utils.getters.getTitleForIncome
+import com.andef.myfinance.core.utils.getters.getTitleForExpense
 import com.andef.myfinance.core.utils.grayColor
 import com.andef.myfinance.core.utils.showSnackbar
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_add
 import myfinance.composeapp.generated.resources.my_finance_arrow_back
@@ -67,11 +68,11 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IncomeCategoryAddScreen(
+fun ExpenseCategoryAddScreen(
     isLightTheme: Boolean,
-    navHostController: NavHostController,
+    navHostController: NavHostController
 ) {
-    val viewModel = koinViewModel<IncomeCategoryAddViewModel>()
+    val viewModel = koinViewModel<ExpenseCategoryAddViewModel>()
     val state = viewModel.state.collectAsState()
 
     val scope = rememberCoroutineScope()
@@ -79,9 +80,7 @@ fun IncomeCategoryAddScreen(
     val actionsState = rememberModalBottomSheetState()
     val addOrChangeState = rememberModalBottomSheetState()
 
-    LaunchedEffect(Unit) {
-        viewModel.send(IncomeCategoryAddIntent.SubscribeForIncomeCategories)
-    }
+    LaunchedEffect(Unit) { viewModel.send(ExpenseCategoryAddIntent.SubscribeForExpenseCategories) }
 
     MainContent(
         isLightTheme = isLightTheme,
@@ -102,7 +101,7 @@ fun IncomeCategoryAddScreen(
         cancelTitleColor = Red,
         yesTitleColor = Blue,
         onYesClick = {
-            viewModel.send(IncomeCategoryAddIntent.SubscribeForIncomeCategories)
+            viewModel.send(ExpenseCategoryAddIntent.SubscribeForExpenseCategories)
         },
         onCancelClick = navHostController::popBackStack
     )
@@ -134,16 +133,16 @@ fun IncomeCategoryAddScreen(
 private fun AddOrChangeBottomSheet(
     sheetState: SheetState,
     isLightTheme: Boolean,
-    viewModel: IncomeCategoryAddViewModel,
-    state: State<IncomeCategoryAddState>,
+    viewModel: ExpenseCategoryAddViewModel,
+    state: State<ExpenseCategoryAddState>,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState
 ) {
     UiModalBottomSheet(
-        isVisible = state.value.addOrChangeIncomeCategoryDialogVisible,
+        isVisible = state.value.addOrChangeExpenseCategoryDialogVisible,
         isLightTheme = isLightTheme,
         onDismissRequest = {
-            viewModel.send(IncomeCategoryAddIntent.AddOrChangeIncomeCategoryDialogVisible(false))
+            viewModel.send(ExpenseCategoryAddIntent.AddOrChangeExpenseCategoryDialogVisible(false))
         },
         sheetState = sheetState
     ) {
@@ -157,9 +156,9 @@ private fun AddOrChangeBottomSheet(
         ) {
             UiTextField(
                 isLightTheme = isLightTheme,
-                value = state.value.currentIncomeCategoryTitle,
+                value = state.value.currentExpenseCategoryTitle,
                 onValueChange = {
-                    viewModel.send(IncomeCategoryAddIntent.ChangeCurrentIncomeCategoryTitle(it))
+                    viewModel.send(ExpenseCategoryAddIntent.ChangeCurrentExpenseCategoryTitle(it))
                 },
                 modifier = Modifier.fillMaxWidth(),
                 placeholderText = "Ваша категория",
@@ -173,15 +172,15 @@ private fun AddOrChangeBottomSheet(
             UiButton(
                 text = "Сохранить",
                 onClick = {
-                    val id = state.value.currentIncomeCategoryId
+                    val id = state.value.currentExpenseCategoryId
                     val oldTitle = state.value.oldTitle
-                    val title = state.value.currentIncomeCategoryTitle
+                    val title = state.value.currentExpenseCategoryTitle
                     viewModel.send(
-                        IncomeCategoryAddIntent.AddOrChangeIncomeCategoryDialogVisible(false)
+                        ExpenseCategoryAddIntent.AddOrChangeExpenseCategoryDialogVisible(false)
                     )
                     if (id != null) {
                         viewModel.send(
-                            IncomeCategoryAddIntent.ChangeIncomeCategory(
+                            ExpenseCategoryAddIntent.ChangeExpenseCategory(
                                 id = id,
                                 title = title,
                                 oldTitle = oldTitle,
@@ -190,7 +189,7 @@ private fun AddOrChangeBottomSheet(
                         )
                     } else {
                         viewModel.send(
-                            IncomeCategoryAddIntent.AddIncomeCategory(
+                            ExpenseCategoryAddIntent.AddExpenseCategory(
                                 title = title,
                                 onError = { msg -> showSnackbar(scope, snackbarHostState, msg) }
                             )
@@ -198,7 +197,7 @@ private fun AddOrChangeBottomSheet(
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = state.value.addOrChangeIncomeCategoryButtonEnabled
+                enabled = state.value.addOrChangeExpenseCategoryButtonEnabled
             )
         }
     }
@@ -209,17 +208,17 @@ private fun AddOrChangeBottomSheet(
 private fun ActionsBottomSheet(
     sheetState: SheetState,
     isLightTheme: Boolean,
-    viewModel: IncomeCategoryAddViewModel,
-    state: State<IncomeCategoryAddState>
+    viewModel: ExpenseCategoryAddViewModel,
+    state: State<ExpenseCategoryAddState>
 ) {
     UiModalBottomSheet(
         isVisible = state.value.actionsDialogVisible,
         isLightTheme = isLightTheme,
         onDismissRequest = {
-            viewModel.send(IncomeCategoryAddIntent.ChangeCurrentIncomeCategoryId(null))
-            viewModel.send(IncomeCategoryAddIntent.ChangeCurrentIncomeCategoryTitle(""))
-            viewModel.send(IncomeCategoryAddIntent.ChangeOldTitle(""))
-            viewModel.send(IncomeCategoryAddIntent.ChangeActionsDialogVisible(false))
+            viewModel.send(ExpenseCategoryAddIntent.ChangeCurrentExpenseCategoryId(null))
+            viewModel.send(ExpenseCategoryAddIntent.ChangeCurrentExpenseCategoryTitle(""))
+            viewModel.send(ExpenseCategoryAddIntent.ChangeOldTitle(""))
+            viewModel.send(ExpenseCategoryAddIntent.ChangeActionsDialogVisible(false))
         },
         sheetState = sheetState
     ) {
@@ -232,7 +231,7 @@ private fun ActionsBottomSheet(
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = getTitleForIncome(state.value.currentIncomeCategoryTitle),
+                text = getTitleForExpense(state.value.currentExpenseCategoryTitle),
                 fontSize = 16.sp,
                 color = blackOrWhiteColor(isLightTheme)
             )
@@ -243,10 +242,10 @@ private fun ActionsBottomSheet(
                     .clip(RoundedCornerShape(16.dp))
                     .clickable(onClick = {
                         viewModel.send(
-                            IncomeCategoryAddIntent.ChangeActionsDialogVisible(false)
+                            ExpenseCategoryAddIntent.ChangeActionsDialogVisible(false)
                         )
                         viewModel.send(
-                            IncomeCategoryAddIntent.AddOrChangeIncomeCategoryDialogVisible(true)
+                            ExpenseCategoryAddIntent.AddOrChangeExpenseCategoryDialogVisible(true)
                         )
                     })
                     .padding(vertical = 8.dp),
@@ -270,7 +269,7 @@ private fun ActionsBottomSheet(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
                     .clickable(onClick = {
-                        viewModel.send(IncomeCategoryAddIntent.ChangeDeleteDialogVisible(true))
+                        viewModel.send(ExpenseCategoryAddIntent.ChangeDeleteDialogVisible(true))
                     })
                     .padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -290,39 +289,47 @@ private fun ActionsBottomSheet(
 @Composable
 private fun DeleteDialog(
     isLightTheme: Boolean,
-    viewModel: IncomeCategoryAddViewModel,
-    state: State<IncomeCategoryAddState>,
+    viewModel: ExpenseCategoryAddViewModel,
+    state: State<ExpenseCategoryAddState>,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState
 ) {
     UiAlertDialog(
         isLightTheme = isLightTheme,
         title = "Удаление категории",
-        subtitle = " Вы уверены? Все доходы данной категории будут удалены!",
-        onDismissRequest = {
-            viewModel.send(IncomeCategoryAddIntent.ChangeDeleteDialogVisible(isVisible = false))
-        },
+        subtitle = " Вы уверены? Все расходы данной категории будут удалены!",
         yesTitle = "Удалить",
         cancelTitle = "Отмена",
         yesTitleColor = Red,
         cancelTitleColor = Blue,
+        onDismissRequest = {
+            viewModel.send(ExpenseCategoryAddIntent.ChangeDeleteDialogVisible(isVisible = false))
+        },
         onYesClick = {
             val id =
-                state.value.currentIncomeCategoryId ?: throw IllegalStateException("Id is null")
-            val title = state.value.currentIncomeCategoryTitle
+                state.value.currentExpenseCategoryId ?: throw IllegalStateException("Id is null")
+            val title = state.value.currentExpenseCategoryTitle
             if (title.isEmpty()) throw IllegalStateException("Title is empty")
-            viewModel.send(IncomeCategoryAddIntent.ChangeDeleteDialogVisible(isVisible = false))
-            viewModel.send(IncomeCategoryAddIntent.ChangeActionsDialogVisible(isVisible = false))
+            viewModel.send(ExpenseCategoryAddIntent.ChangeDeleteDialogVisible(isVisible = false))
+            viewModel.send(ExpenseCategoryAddIntent.ChangeActionsDialogVisible(isVisible = false))
             viewModel.send(
-                IncomeCategoryAddIntent.DeleteIncomeCategory(
+                ExpenseCategoryAddIntent.DeleteExpenseCategory(
                     id = id,
-                    onError = { msg -> showSnackbar(scope, snackbarHostState, msg) },
+                    onError = { msg ->
+                        snackbarHostState.currentSnackbarData?.dismiss()
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = msg,
+                                withDismissAction = true
+                            )
+                        }
+                    },
                     title = title
                 )
             )
         },
         onCancelClick = {
-            viewModel.send(IncomeCategoryAddIntent.ChangeDeleteDialogVisible(isVisible = false))
+            viewModel.send(ExpenseCategoryAddIntent.ChangeDeleteDialogVisible(isVisible = false))
         },
         isVisible = state.value.showDeleteDialog
     )
@@ -332,8 +339,8 @@ private fun DeleteDialog(
 private fun MainContent(
     isLightTheme: Boolean,
     navHostController: NavHostController,
-    state: State<IncomeCategoryAddState>,
-    viewModel: IncomeCategoryAddViewModel,
+    state: State<ExpenseCategoryAddState>,
+    viewModel: ExpenseCategoryAddViewModel,
     snackbarHostState: SnackbarHostState
 ) {
     UiScaffold(
@@ -342,7 +349,7 @@ private fun MainContent(
             UiTopBar(
                 isLightTheme = isLightTheme,
                 type = UiTopBarType.Center,
-                title = "Категории доходов",
+                title = "Категории расходов",
                 navigationIconTint = Blue,
                 navigationIcon = painterResource(Res.drawable.my_finance_arrow_back),
                 navigationIconContentDescription = "Назад",
@@ -356,11 +363,11 @@ private fun MainContent(
                 icon = painterResource(Res.drawable.my_finance_add),
                 iconContentDescription = "Добавить категорию",
                 onClick = {
-                    viewModel.send(IncomeCategoryAddIntent.ChangeCurrentIncomeCategoryId(null))
-                    viewModel.send(IncomeCategoryAddIntent.ChangeCurrentIncomeCategoryTitle(""))
-                    viewModel.send(IncomeCategoryAddIntent.ChangeOldTitle(""))
+                    viewModel.send(ExpenseCategoryAddIntent.ChangeCurrentExpenseCategoryId(null))
+                    viewModel.send(ExpenseCategoryAddIntent.ChangeCurrentExpenseCategoryTitle(""))
+                    viewModel.send(ExpenseCategoryAddIntent.ChangeOldTitle(""))
                     viewModel.send(
-                        IncomeCategoryAddIntent.AddOrChangeIncomeCategoryDialogVisible(true)
+                        ExpenseCategoryAddIntent.AddOrChangeExpenseCategoryDialogVisible(true)
                     )
                 }
             )
@@ -380,13 +387,13 @@ private fun MainContent(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     textAlign = TextAlign.Start,
-                    text = "Ваши категории:",
+                    text = "Базовые категории:",
                     fontSize = 14.sp,
                     color = grayColor(isLightTheme)
                 )
             }
-            items(items = BaseIncomeCategory.entries.map { it.title }, key = { it }) {
-                UiIncomeCategoryCard(
+            items(items = BaseExpenseCategory.entries.map { it.title }, key = { it }) {
+                UiExpenseCategoryCard(
                     isLightTheme = isLightTheme,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -396,7 +403,7 @@ private fun MainContent(
                     onClick = {}
                 )
             }
-            if (state.value.incomeCategories.isNotEmpty()) {
+            if (state.value.expenseCategories.isNotEmpty()) {
                 item { Spacer(modifier = Modifier.height(12.dp)) }
                 item {
                     Text(
@@ -404,27 +411,31 @@ private fun MainContent(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
                         textAlign = TextAlign.Start,
-                        text = "Добавленные категории:",
+                        text = "Ваши категории:",
                         fontSize = 14.sp,
                         color = grayColor(isLightTheme)
                     )
                 }
-                items(items = state.value.incomeCategories, key = { it.id }) {
-                    UiIncomeCategoryCard(
+                items(items = state.value.expenseCategories, key = { it.id }) {
+                    UiExpenseCategoryCard(
                         isLightTheme = isLightTheme,
                         modifier = Modifier
                             .fillMaxWidth()
                             .animateItem(),
                         category = it.title,
                         onClick = {
-                            viewModel.send(IncomeCategoryAddIntent.ChangeCurrentIncomeCategoryId(it.id))
                             viewModel.send(
-                                IncomeCategoryAddIntent.ChangeCurrentIncomeCategoryTitle(
+                                ExpenseCategoryAddIntent.ChangeCurrentExpenseCategoryId(
+                                    it.id
+                                )
+                            )
+                            viewModel.send(
+                                ExpenseCategoryAddIntent.ChangeCurrentExpenseCategoryTitle(
                                     it.title
                                 )
                             )
-                            viewModel.send(IncomeCategoryAddIntent.ChangeOldTitle(it.title))
-                            viewModel.send(IncomeCategoryAddIntent.ChangeActionsDialogVisible(true))
+                            viewModel.send(ExpenseCategoryAddIntent.ChangeOldTitle(it.title))
+                            viewModel.send(ExpenseCategoryAddIntent.ChangeActionsDialogVisible(true))
                         }
                     )
                 }

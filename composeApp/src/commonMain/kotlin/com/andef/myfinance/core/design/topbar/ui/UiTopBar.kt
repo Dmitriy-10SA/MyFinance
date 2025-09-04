@@ -49,16 +49,13 @@ import com.andef.myfinance.core.utils.anims.fadeInAnim
 import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.darkGrayOrWhiteColor
+import com.andef.myfinance.core.utils.getters.now
 import com.andef.myfinance.core.utils.grayColor
 import com.andef.myfinance.core.utils.topBarColors
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.core.WeekDay
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -295,7 +292,6 @@ private fun MainContent(
     }
 }
 
-@OptIn(ExperimentalTime::class)
 @Composable
 private fun Day(
     isLightTheme: Boolean,
@@ -306,8 +302,8 @@ private fun Day(
 ) {
     val backgroundColor = if (currentDate == day.date) Blue
     else Color.Transparent
-    val now = Clock.System.now()
-    val borderColor = when (day.date == now.toLocalDateTime(TimeZone.currentSystemDefault()).date) {
+    val nowDate = LocalDate.now()
+    val borderColor = when (day.date == nowDate) {
         true -> {
             if (day.date != currentDate) blackOrWhiteColor(isLightTheme = isLightTheme)
             else Color.Transparent

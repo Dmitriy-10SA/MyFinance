@@ -35,6 +35,8 @@ import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.White
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
+import com.andef.myfinance.core.utils.getters.minusYears
+import com.andef.myfinance.core.utils.getters.now
 import com.andef.myfinance.core.utils.grayColor
 import com.andef.myfinance.core.utils.textButtonColors
 import com.andef.myfinance.core.utils.textButtonShape
@@ -43,16 +45,15 @@ import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.now
+import com.kizitonwose.calendar.core.plusYears
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateRange
 import kotlinx.datetime.Month
 import kotlinx.datetime.YearMonth
-import network.chaintech.kmp_date_time_picker.utils.MAX
-import network.chaintech.kmp_date_time_picker.utils.MIN
+import kotlinx.datetime.number
 import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 @Composable
 fun UiRangeDatePickerDialog(
     isVisible: Boolean,
@@ -167,13 +168,15 @@ private fun Calendar(
     startDate: LocalDate?,
     endDate: LocalDate?
 ) {
+    val startDateForState = LocalDate.now().minusYears(2)
+    val endDateForState = LocalDate.now().plusYears(2)
     VerticalCalendar(
         modifier = Modifier.height(300.dp),
         state = rememberCalendarState(
             firstVisibleMonth = YearMonth.now(),
             firstDayOfWeek = DayOfWeek.MONDAY,
-            startMonth = YearMonth(LocalDate.MIN().year, LocalDate.MIN().month),
-            endMonth = YearMonth(LocalDate.MAX().year, LocalDate.MAX().month),
+            startMonth = YearMonth(startDateForState.year, startDateForState.month.number),
+            endMonth = YearMonth(endDateForState.year, endDateForState.month.number),
             outDateStyle = OutDateStyle.EndOfRow
         ),
         monthHeader = { month ->

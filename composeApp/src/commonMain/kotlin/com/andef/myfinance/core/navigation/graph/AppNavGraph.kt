@@ -12,10 +12,11 @@ import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.platform.backup.BackupManager
 import com.andef.myfinance.core.platform.common.LinkOpener
 import com.andef.myfinance.core.platform.common.MoneyDecimalFormatter
-import com.andef.myfinance.core.platform.common.PdfPrinter
 import com.andef.myfinance.core.utils.anims.fadeInAnim
 import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.feature.expense_common.expense_add_and_change.presentation.ExpenseAddAndChangeScreen
+import com.andef.myfinance.feature.expense_common.expense_analysis.presentation.ExpenseAnalysisScreen
+import com.andef.myfinance.feature.expense_common.expense_category.presentation.ExpenseCategoryAddScreen
 import com.andef.myfinance.feature.income_common.income_add_and_change.presentation.IncomeAddAndChangeScreen
 import com.andef.myfinance.feature.income_common.income_analysis.presentation.IncomeAnalysisScreen
 import com.andef.myfinance.feature.income_common.income_category.presentation.IncomeCategoryAddScreen
@@ -31,13 +32,11 @@ fun AppNavGraph(
     startDate: LocalDate,
     endDate: LocalDate,
     currentRoute: String?,
-    previousRoute: String?,
     mainScreenIsVisible: Boolean
 ) {
     val backupManager = getKoin().get<BackupManager>()
     val linkOpener = getKoin().get<LinkOpener>()
     val moneyDecimalFormatter = getKoin().get<MoneyDecimalFormatter>()
-    val pdfPrinter = getKoin().get<PdfPrinter>()
 
     NavHost(
         navController = navHostController,
@@ -73,8 +72,7 @@ fun AppNavGraph(
             IncomeAnalysisScreen(
                 isLightTheme = isLightTheme,
                 navHostController = navHostController,
-                paddingValues = paddingValues,
-                pdfPrinter = pdfPrinter
+                paddingValues = paddingValues
             )
         }
         composable(
@@ -111,7 +109,10 @@ fun AppNavGraph(
             enterTransition = { fadeInAnim() },
             exitTransition = { fadeOutAnim() }
         ) {
-
+            ExpenseAnalysisScreen(
+                isLightTheme = isLightTheme,
+                navHostController = navHostController
+            )
         }
         composable(
             route = Screen.ExpenseAddScreen.route,
@@ -223,12 +224,10 @@ fun AppNavGraph(
             enterTransition = { fadeInAnim() },
             exitTransition = { fadeOutAnim() }
         ) {
-//            ExpenseCategoryAddScreen(
-//                isLightTheme = isLightTheme,
-//                navHostController = navHostController,
-//                viewModelFactory = viewModelFactory,
-//                paddingValues = paddingValues
-//            )
+            ExpenseCategoryAddScreen(
+                isLightTheme = isLightTheme,
+                navHostController = navHostController
+            )
         }
     }
 }
