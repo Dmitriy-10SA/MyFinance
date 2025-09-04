@@ -149,12 +149,9 @@ fun AllRemindersScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = topBarPadding.calculateTopPadding())
-                .padding(horizontal = 12.dp)
                 .navigationBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { Spacer(modifier = Modifier.height(0.dp)) }
             items(items = state.value.remindersForScreenAsList, key = { it.id }) { reminder ->
                 UiReminderCard(
                     onClick = {
@@ -175,7 +172,7 @@ fun AllRemindersScreen(
                     reminderModel = reminder
                 )
             }
-            item { Spacer(modifier = Modifier.height(0.dp)) }
+            item { Spacer(modifier = Modifier.height(12.dp)) }
         }
     }
     UiLoading(isVisible = state.value.isLoading, isLightTheme = isLightTheme)

@@ -80,7 +80,7 @@ fun UiExpenseCategoryCard(
                     color = blackOrWhiteColor(isLightTheme = isLightTheme)
                 )
                 Text(
-                    text = if (enabled) "Добавленная категория" else "Ваша категория",
+                    text = if (enabled) "Добавленная категория" else "Базовая категория",
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     fontSize = 14.sp,

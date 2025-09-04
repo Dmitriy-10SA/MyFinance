@@ -1,10 +1,8 @@
 package com.andef.myfinance.feature.currency.presentation
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.andef.myfinance.core.design.alert.dialog.ui.UiAlertDialog
 import com.andef.myfinance.core.design.card.currency.ui.UiCurrencyCard
@@ -73,7 +70,6 @@ fun CurrencysScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { Spacer(modifier = Modifier.height(12.dp)) }
             items(items = currencys, key = { getCurrencyId(it.first) }) { currency ->
                 UiCurrencyCard(
                     isLightTheme = isLightTheme,
@@ -84,7 +80,6 @@ fun CurrencysScreen(
                         .animateItem()
                 )
             }
-            item { Spacer(modifier = Modifier.height(12.dp)) }
         }
     }
     UiLoading(isLightTheme = isLightTheme, isVisible = state.value.isLoading)

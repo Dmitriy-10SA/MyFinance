@@ -51,6 +51,12 @@ kotlin {
             //di
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+
+            //splash
+            implementation(libs.androidx.core.splashscreen)
+
+            //ui-controller
+            implementation(libs.accompanist.systemuicontroller)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
