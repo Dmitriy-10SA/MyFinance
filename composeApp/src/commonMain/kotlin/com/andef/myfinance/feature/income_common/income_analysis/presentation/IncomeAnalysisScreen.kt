@@ -240,7 +240,7 @@ private fun TopBar(
             tabs = dateTabs,
             selectedTabIndex = selectedTabIndex.value,
             onTabClick = { tab ->
-                if (tab.id != selectedTabIndex.value || tab.id == 4) {
+                if (tab.id != selectedTabIndex.value || tab.id == 5) {
                     selectedTabIndex.value = tab.id
                     when (tab.id) {
                         0 -> {
@@ -262,6 +262,12 @@ private fun TopBar(
                         }
 
                         3 -> {
+                            lastSelectedTabIndex.value = tab.id
+                            startDate.value = LocalDate.now().minusMonths(6)
+                            endDate.value = LocalDate.now()
+                        }
+
+                        4 -> {
                             lastSelectedTabIndex.value = tab.id
                             startDate.value = LocalDate.now().minusYears(1)
                             endDate.value = LocalDate.now()
@@ -337,6 +343,7 @@ private val dateTabs = listOf(
     UiTopBarTab(id = 0, title = "День"),
     UiTopBarTab(id = 1, title = "Неделя"),
     UiTopBarTab(id = 2, title = "Месяц"),
-    UiTopBarTab(id = 3, title = "Год"),
-    UiTopBarTab(id = 4, title = "Период")
+    UiTopBarTab(id = 3, title = "Полгода"),
+    UiTopBarTab(id = 4, title = "Год"),
+    UiTopBarTab(id = 5, title = "Период")
 )
