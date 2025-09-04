@@ -1,5 +1,6 @@
 package com.andef.myfinance.core.platform.common
 
+import androidx.compose.runtime.Composable
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.datetime.LocalDate
 import platform.CoreGraphics.CGContextAddLineToPoint
@@ -165,4 +166,9 @@ class IOSPdfPrinter() : PdfPrinter {
 
         printController.presentAnimated(true, completionHandler = null)
     }
+}
+
+@Composable
+actual fun getPdfPrinter(): PdfPrinter {
+    return IOSPdfPrinter()
 }

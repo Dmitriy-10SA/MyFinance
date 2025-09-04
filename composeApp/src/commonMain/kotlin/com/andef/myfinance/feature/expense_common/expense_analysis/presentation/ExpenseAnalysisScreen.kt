@@ -40,7 +40,7 @@ import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.design.topbar.ui.UiTopBar
 import com.andef.myfinance.core.domain.expense_common.expense_category.entities.BaseExpenseCategory
 import com.andef.myfinance.core.domain.expense_common.expense_category.entities.ExpenseCategoryModel
-import com.andef.myfinance.core.platform.common.PdfPrinter
+import com.andef.myfinance.core.platform.common.getPdfPrinter
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red
 import com.andef.myfinance.core.utils.blackOrWhiteColor
@@ -62,8 +62,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun ExpenseAnalysisScreen(
     isLightTheme: Boolean,
-    navHostController: NavHostController,
-    pdfPrinter: PdfPrinter
+    navHostController: NavHostController
 ) {
     val viewModel = koinViewModel<ExpenseAnalysisViewModel>()
     val state = viewModel.state.collectAsState()
@@ -93,8 +92,7 @@ fun ExpenseAnalysisScreen(
                 navHostController = navHostController,
                 scope = scope,
                 snackbarHostState = snackbarHostState,
-                viewModel = viewModel,
-                pdfPrinter = pdfPrinter
+                viewModel = viewModel
             )
         }
     ) { topBarPadding ->
@@ -225,8 +223,7 @@ private fun TopBar(
     viewModel: ExpenseAnalysisViewModel,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
-    navHostController: NavHostController,
-    pdfPrinter: PdfPrinter
+    navHostController: NavHostController
 ) {
     UiTopBar(
         isLightTheme = isLightTheme,
@@ -286,8 +283,7 @@ private fun TopBar(
                 startDate = startDate.value,
                 endDate = endDate.value,
                 scope = scope,
-                snackbarHostState = snackbarHostState,
-                pdfPrinter = pdfPrinter
+                snackbarHostState = snackbarHostState
             )
         }
     )
@@ -300,9 +296,9 @@ private fun RowScope.ActionsForTopBar(
     isLightTheme: Boolean,
     viewModel: ExpenseAnalysisViewModel,
     startDate: LocalDate,
-    endDate: LocalDate,
-    pdfPrinter: PdfPrinter
+    endDate: LocalDate
 ) {
+    val pdfPrinter = getPdfPrinter()
     IconButton(
         onClick = {
             viewModel.send(

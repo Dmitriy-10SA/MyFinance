@@ -17,3 +17,10 @@ fun formatLocalDate(date: LocalDate): String {
                 "${date.year}"
     }
 }
+
+fun formatLocalDateForPrint(date: LocalDate): String {
+    val today = LocalDate.now()
+    return "${date.day.toString().padStart(2, '0')}." +
+            "${date.month.number.toString().padStart(2, '0')}." +
+            "${date.year}"
+}

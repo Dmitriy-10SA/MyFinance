@@ -38,7 +38,6 @@ fun AppNavGraph(
     val backupManager = getKoin().get<BackupManager>()
     val linkOpener = getKoin().get<LinkOpener>()
     val moneyDecimalFormatter = getKoin().get<MoneyDecimalFormatter>()
-    val pdfPrinter = getKoin().get<PdfPrinter>()
 
     NavHost(
         navController = navHostController,
@@ -74,8 +73,7 @@ fun AppNavGraph(
             IncomeAnalysisScreen(
                 isLightTheme = isLightTheme,
                 navHostController = navHostController,
-                paddingValues = paddingValues,
-                pdfPrinter = pdfPrinter
+                paddingValues = paddingValues
             )
         }
         composable(
@@ -114,8 +112,7 @@ fun AppNavGraph(
         ) {
             ExpenseAnalysisScreen(
                 isLightTheme = isLightTheme,
-                navHostController = navHostController,
-                pdfPrinter = pdfPrinter
+                navHostController = navHostController
             )
         }
         composable(

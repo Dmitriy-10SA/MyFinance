@@ -371,10 +371,9 @@ private fun MainContent(
                 .fillMaxSize()
                 .padding(top = topBarPadding.calculateTopPadding())
                 .navigationBarsPadding(),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { Spacer(modifier = Modifier.height(0.dp)) }
+            item { Spacer(modifier = Modifier.height(12.dp)) }
             item {
                 Text(
                     modifier = Modifier
@@ -397,33 +396,40 @@ private fun MainContent(
                     onClick = {}
                 )
             }
-            item {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    textAlign = TextAlign.Start,
-                    text = "Добавленные категории:",
-                    fontSize = 14.sp,
-                    color = grayColor(isLightTheme)
-                )
+            if (state.value.incomeCategories.isNotEmpty()) {
+                item { Spacer(modifier = Modifier.height(12.dp)) }
+                item {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        textAlign = TextAlign.Start,
+                        text = "Добавленные категории:",
+                        fontSize = 14.sp,
+                        color = grayColor(isLightTheme)
+                    )
+                }
+                items(items = state.value.incomeCategories, key = { it.id }) {
+                    UiIncomeCategoryCard(
+                        isLightTheme = isLightTheme,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
+                        category = it.title,
+                        onClick = {
+                            viewModel.send(IncomeCategoryAddIntent.ChangeCurrentIncomeCategoryId(it.id))
+                            viewModel.send(
+                                IncomeCategoryAddIntent.ChangeCurrentIncomeCategoryTitle(
+                                    it.title
+                                )
+                            )
+                            viewModel.send(IncomeCategoryAddIntent.ChangeOldTitle(it.title))
+                            viewModel.send(IncomeCategoryAddIntent.ChangeActionsDialogVisible(true))
+                        }
+                    )
+                }
             }
-            items(items = state.value.incomeCategories, key = { it.id }) {
-                UiIncomeCategoryCard(
-                    isLightTheme = isLightTheme,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItem(),
-                    category = it.title,
-                    onClick = {
-                        viewModel.send(IncomeCategoryAddIntent.ChangeCurrentIncomeCategoryId(it.id))
-                        viewModel.send(IncomeCategoryAddIntent.ChangeCurrentIncomeCategoryTitle(it.title))
-                        viewModel.send(IncomeCategoryAddIntent.ChangeOldTitle(it.title))
-                        viewModel.send(IncomeCategoryAddIntent.ChangeActionsDialogVisible(true))
-                    }
-                )
-            }
-            item { Spacer(modifier = Modifier.height(0.dp)) }
+            item { Spacer(modifier = Modifier.height(12.dp)) }
         }
         UiSnackbar(
             paddingValues = topBarPadding,

@@ -13,8 +13,10 @@ import android.print.PrintAttributes
 import android.print.PrintDocumentAdapter
 import android.print.PrintDocumentInfo
 import android.print.PrintManager
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
-import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
+import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDateForPrint
 import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
 import kotlinx.datetime.LocalDate
 import java.io.File
@@ -26,7 +28,7 @@ class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
         maxDate: LocalDate,
         minDate: LocalDate
     ) {
-        val file = context.generatePdf(true,incomes, maxDate, minDate)
+        val file = context.generatePdf(true, incomes, maxDate, minDate)
         context.printPdf(file)
     }
 
@@ -35,7 +37,7 @@ class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
         maxDate: LocalDate,
         minDate: LocalDate
     ) {
-        val file = context.generatePdf(false,expenses, maxDate, minDate)
+        val file = context.generatePdf(false, expenses, maxDate, minDate)
         context.printPdf(file)
     }
 
@@ -106,7 +108,7 @@ class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
                 // Вторая строка с датами — поменьше шрифт
                 paintHeader.textSize = 16f
                 val dateRange =
-                    "${formatLocalDate(minDate)} - ${formatLocalDate(maxDate)}"
+                    "${formatLocalDateForPrint(minDate)} - ${formatLocalDateForPrint(maxDate)}"
                 val dateWidth = paintHeader.measureText(dateRange)
                 canvas.drawText(dateRange, (pageWidth - dateWidth) / 2, margin + 55f, paintHeader)
             }
@@ -160,7 +162,7 @@ class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
             }
 
             // Рисуем дату слева
-            canvas.drawText(formatLocalDate(date), columnDateStartX, currentY, paintText)
+            canvas.drawText(formatLocalDateForPrint(date), columnDateStartX, currentY, paintText)
 
             // Рисуем сумму справа, выровнено по правому краю колонки
             val sumText = formatPriceRuble(totalAmount)
@@ -254,4 +256,10 @@ class PdfPrintDocumentAdapter(
             writeResultCallback?.onWriteFailed(e.message)
         }
     }
+}
+
+@Composable
+actual fun getPdfPrinter(): PdfPrinter {
+    val context = LocalContext.current
+    return AndroidPdfPrinter(context)
 }
