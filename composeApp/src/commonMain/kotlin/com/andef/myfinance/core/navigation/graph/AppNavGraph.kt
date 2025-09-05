@@ -12,6 +12,8 @@ import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.platform.backup.BackupManager
 import com.andef.myfinance.core.platform.common.LinkOpener
 import com.andef.myfinance.core.platform.common.MoneyDecimalFormatter
+import com.andef.myfinance.core.platform.common.PermissionManager
+import com.andef.myfinance.core.platform.common.SettingsOpener
 import com.andef.myfinance.core.utils.anims.fadeInAnim
 import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.feature.backup.presentation.main.BackupMainScreen
@@ -22,6 +24,7 @@ import com.andef.myfinance.feature.expense_common.expense_category.presentation.
 import com.andef.myfinance.feature.income_common.income_add_and_change.presentation.IncomeAddAndChangeScreen
 import com.andef.myfinance.feature.income_common.income_analysis.presentation.IncomeAnalysisScreen
 import com.andef.myfinance.feature.income_common.income_category.presentation.IncomeCategoryAddScreen
+import com.andef.myfinance.feature.reminder_common.reminder_all.presentation.AllRemindersScreen
 import kotlinx.datetime.LocalDate
 import org.koin.compose.getKoin
 
@@ -39,6 +42,8 @@ fun AppNavGraph(
     val backupManager = getKoin().get<BackupManager>()
     val linkOpener = getKoin().get<LinkOpener>()
     val moneyDecimalFormatter = getKoin().get<MoneyDecimalFormatter>()
+    val settingsOpener = getKoin().get<SettingsOpener>()
+    val permissionManager = getKoin().get<PermissionManager>()
 
     NavHost(
         navController = navHostController,
@@ -160,12 +165,13 @@ fun AppNavGraph(
             enterTransition = { fadeInAnim() },
             exitTransition = { fadeOutAnim() }
         ) {
-//            AllRemindersScreen(
-//                isLightTheme = isLightTheme,
-//                navHostController = navHostController,
-//                viewModelFactory = viewModelFactory,
-//                paddingValues = paddingValues
-//            )
+            AllRemindersScreen(
+                isLightTheme = isLightTheme,
+                navHostController = navHostController,
+                paddingValues = paddingValues,
+                settingsOpener = settingsOpener,
+                permissionManager = permissionManager
+            )
         }
         composable(
             route = Screen.ReminderAddScreen.route,
