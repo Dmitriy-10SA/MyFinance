@@ -54,6 +54,9 @@ kotlin {
 
             //splash
             implementation(libs.androidx.core.splashscreen)
+
+            //ui-controller
+            implementation(libs.accompanist.systemuicontroller)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
