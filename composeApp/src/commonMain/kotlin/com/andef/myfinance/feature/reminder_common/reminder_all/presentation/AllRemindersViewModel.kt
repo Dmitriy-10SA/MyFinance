@@ -80,8 +80,10 @@ class AllRemindersViewModel(
             job?.cancel()
             job = viewModelScope.launch {
                 val today = LocalDate.now()
-                val previousMonday = getFirstMondayInWeekOfDate(today)
-                val endSunday = getLastSundayInWeekOfDate(today)
+                val lastWeek = today.minusDays(7)
+                val nextWeek = today.plusDays(21)
+                val previousMonday = getFirstMondayInWeekOfDate(lastWeek)
+                val endSunday = getLastSundayInWeekOfDate(nextWeek)
                 getRemindersUseCase.invoke(previousMonday, endSunday)
                     .onStart {
                         _state.value = _state.value.copy(isLoading = true, isError = false)

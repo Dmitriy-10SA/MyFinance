@@ -161,7 +161,7 @@ private fun AddOrChangeBottomSheet(
                     viewModel.send(ExpenseCategoryAddIntent.ChangeCurrentExpenseCategoryTitle(it))
                 },
                 modifier = Modifier.fillMaxWidth(),
-                placeholderText = "Ваша категория",
+                placeholderText = "Категория",
                 leadingIcon = painterResource(Res.drawable.my_finance_more_horiz),
                 contentDescription = "Иконка три горизонтальные точки",
                 keyboardOptions = KeyboardOptions(
@@ -411,7 +411,7 @@ private fun MainContent(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
                         textAlign = TextAlign.Start,
-                        text = "Ваши категории:",
+                        text = "Добавленные категории:",
                         fontSize = 14.sp,
                         color = grayColor(isLightTheme)
                     )
@@ -440,7 +440,6 @@ private fun MainContent(
                     )
                 }
             }
-            item { Spacer(modifier = Modifier.height(12.dp)) }
         }
         UiSnackbar(
             paddingValues = topBarPadding,

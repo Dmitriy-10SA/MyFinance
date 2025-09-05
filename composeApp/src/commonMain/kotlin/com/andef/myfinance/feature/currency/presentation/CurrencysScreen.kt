@@ -73,7 +73,6 @@ fun CurrencysScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { Spacer(modifier = Modifier.height(12.dp)) }
             items(items = currencys, key = { getCurrencyId(it.first) }) { currency ->
                 UiCurrencyCard(
                     isLightTheme = isLightTheme,
@@ -84,7 +83,6 @@ fun CurrencysScreen(
                         .animateItem()
                 )
             }
-            item { Spacer(modifier = Modifier.height(12.dp)) }
         }
     }
     UiLoading(isLightTheme = isLightTheme, isVisible = state.value.isLoading)
