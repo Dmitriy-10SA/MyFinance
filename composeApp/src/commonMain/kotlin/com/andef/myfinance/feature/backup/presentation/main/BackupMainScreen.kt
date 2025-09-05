@@ -215,7 +215,7 @@ private fun onSaveData(
             onSuccess = { backupData ->
                 try {
                     backupManager.saveBackupFile(backupData)
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     showSnackbar(scope, snackbarHostState, "Ошибка! Попробуйте ещё раз!")
                 }
             },
