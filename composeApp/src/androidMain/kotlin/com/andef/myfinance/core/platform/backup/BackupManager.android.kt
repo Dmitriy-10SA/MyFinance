@@ -45,12 +45,12 @@ class AndroidBackupManager(private val context: Context) : BackupManager {
             putExtra(Intent.EXTRA_STREAM, uri)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
-        context.startActivity(
-            Intent.createChooser(
-                intent,
-                "Поделиться резервной копией"
-            )
-        )
+        val chooser = Intent.createChooser(
+            intent, "Поделиться резервной копией"
+        ).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(chooser)
     }
 
     private fun importDataFromJson(uri: Uri, context: Context): BackupData? {
