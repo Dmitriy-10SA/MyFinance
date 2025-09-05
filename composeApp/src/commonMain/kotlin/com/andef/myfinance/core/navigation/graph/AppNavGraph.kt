@@ -25,6 +25,7 @@ import com.andef.myfinance.feature.income_common.income_add_and_change.presentat
 import com.andef.myfinance.feature.income_common.income_analysis.presentation.IncomeAnalysisScreen
 import com.andef.myfinance.feature.income_common.income_category.presentation.IncomeCategoryAddScreen
 import com.andef.myfinance.feature.reminder_common.reminder_all.presentation.AllRemindersScreen
+import com.andef.myfinance.feature.reminder_common.reminder_main.presentation.ReminderAddScreen
 import kotlinx.datetime.LocalDate
 import org.koin.compose.getKoin
 
@@ -178,13 +179,12 @@ fun AppNavGraph(
             enterTransition = { fadeInAnim() },
             exitTransition = { fadeOutAnim() }
         ) {
-//            ReminderAddScreen(
-//                reminderId = null,
-//                isLightTheme = isLightTheme,
-//                navHostController = navHostController,
-//                viewModelFactory = viewModelFactory,
-//                paddingValues = paddingValues
-//            )
+            ReminderAddScreen(
+                reminderId = null,
+                isLightTheme = isLightTheme,
+                navHostController = navHostController,
+                paddingValues = paddingValues
+            )
         }
         composable(
             route = Screen.ReminderScreen.route,
@@ -192,16 +192,14 @@ fun AppNavGraph(
             enterTransition = { fadeInAnim() },
             exitTransition = { fadeOutAnim() }
         ) {
-            val id =
-                it.arguments?.read { getLong(Screen.ID_PARAM) }
-                    ?: throw IllegalArgumentException()
-//            ReminderAddScreen(
-//                reminderId = id,
-//                isLightTheme = isLightTheme,
-//                navHostController = navHostController,
-//                viewModelFactory = viewModelFactory,
-//                paddingValues = paddingValues
-//            )
+            val id = it.arguments?.read { getLong(Screen.ID_PARAM) }
+                ?: throw IllegalArgumentException()
+            ReminderAddScreen(
+                reminderId = id,
+                isLightTheme = isLightTheme,
+                navHostController = navHostController,
+                paddingValues = paddingValues
+            )
         }
         composable(
             route = Screen.BackupMainScreen.route,

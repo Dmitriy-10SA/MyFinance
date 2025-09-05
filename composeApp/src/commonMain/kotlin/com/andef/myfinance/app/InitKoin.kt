@@ -26,6 +26,7 @@ import com.andef.myfinance.feature.income_common.income_analysis.di.incomeAnalys
 import com.andef.myfinance.feature.income_common.income_category.di.incomeCategoryAddViewModelModule
 import com.andef.myfinance.feature.income_common.income_main.di.incomeMainViewModelModule
 import com.andef.myfinance.feature.reminder_common.reminder_all.di.allRemindersViewModelModule
+import com.andef.myfinance.feature.reminder_common.reminder_main.di.reminderAddViewModelModule
 import com.andef.myfinance.feature.totals.di.totalsViewModelModule
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModelOf
@@ -44,7 +45,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             totalsViewModelModule + incomeAddAndChangeViewModelModule +
             expenseAddAndChangeViewModelModule + incomeAnalysisViewModelModule +
             incomeCategoryAddViewModelModule + expenseAnalysisViewModelModule +
-            expenseCategoryAddViewModelModule + allRemindersViewModelModule
+            expenseCategoryAddViewModelModule + allRemindersViewModelModule +
+            reminderAddViewModelModule
     startKoin {
         config?.invoke(this)
         modules(

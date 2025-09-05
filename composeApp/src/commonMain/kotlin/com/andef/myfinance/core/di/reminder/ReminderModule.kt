@@ -7,6 +7,7 @@ import com.andef.myfinance.core.domain.reminder.repository.ReminderRepository
 import com.andef.myfinance.core.domain.reminder.usecases.AddReminderUseCase
 import com.andef.myfinance.core.domain.reminder.usecases.ChangeReminderUseCase
 import com.andef.myfinance.core.domain.reminder.usecases.DeleteReminderUseCase
+import com.andef.myfinance.core.domain.reminder.usecases.GetReminderByIdUseCase
 import com.andef.myfinance.core.domain.reminder.usecases.GetRemindersAsListUseCase
 import com.andef.myfinance.core.domain.reminder.usecases.GetRemindersUseCase
 import com.andef.myfinance.db.AppDatabase
@@ -26,6 +27,7 @@ private val reminderRepositoryModule = module {
     factoryOf(::GetRemindersUseCase)
     factoryOf(::GetRemindersAsListUseCase)
     factoryOf(::GetRemindersUseCase)
+    factoryOf(::GetReminderByIdUseCase)
 }
 
 private val reminderDaoModule = module {
