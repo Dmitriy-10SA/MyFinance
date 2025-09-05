@@ -113,7 +113,7 @@ private fun AppDrawer(
 ) {
     ModalNavigationDrawer(
         drawerState = drawerState,
-        gesturesEnabled = drawerState.isOpen,
+        gesturesEnabled = currentRoute in mainRoutes,
         drawerContent = {
             MainDrawerSheetContent(
                 navHostController = navHostController,
