@@ -86,8 +86,8 @@ fun CurrencysScreen(
     UiAlertDialog(
         isLightTheme = isLightTheme,
         isVisible = state.value.isError,
-        title = "Ошибка!",
-        subtitle = "Проверьте подключение к интернету и повторите попытку",
+        title = "Упс, ошибка!",
+        subtitle = "Проверьте подключение к интернету и повторите попытку!",
         onDismissRequest = navHostController::popBackStack,
         yesTitle = "Повторить",
         cancelTitle = "Выйти",

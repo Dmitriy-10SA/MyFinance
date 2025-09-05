@@ -271,7 +271,7 @@ private fun DeleteDialog(
         },
         cancelTitle = "Отмена",
         yesTitle = "Удалить",
-        subtitle = "Вы уверены? Это действие необратимо",
+        subtitle = "Вы уверены? Это действие необратимо!",
         cancelTitleColor = Blue,
         yesTitleColor = Red,
         onCancelClick = {
