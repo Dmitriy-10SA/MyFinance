@@ -1,6 +1,6 @@
 TEAM_ID=
 
-PRODUCT_NAME=MyFinance
+PRODUCT_NAME=Мои финансы
 PRODUCT_BUNDLE_IDENTIFIER=com.andef.myfinance.MyFinance$(TEAM_ID)
 
 CURRENT_PROJECT_VERSION=1
