@@ -29,6 +29,3 @@ UPDATE expense SET category = ? WHERE category = ?;
 
 deleteAllExpensesByCategory:
 DELETE FROM expense WHERE category = ?;
-
-lastInsertRowId:
-SELECT last_insert_rowid();
