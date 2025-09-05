@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MyFinanceSplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/blue</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/icon_for_splash</item>
+        <item name="windowSplashScreenAnimationDuration">600</item>
+        <item name="postSplashScreenTheme">@style/Theme.MyFinanceAndef</item>
+    </style>
+
+    <style name="Theme.MyFinanceAndef" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
