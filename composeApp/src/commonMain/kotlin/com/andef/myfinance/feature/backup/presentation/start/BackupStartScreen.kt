@@ -109,17 +109,6 @@ fun BackupStartScreen(
             onTelegramClick = { linkOpener.openLink("https://t.me/dsemkin") },
             onMailClick = { linkOpener.openLink("mailto:semkin_dmitriy10@vk.com") }
         )
-        if (state.startPicker) {
-            backupManager.pickBackupFile { backupData ->
-                onResultForPickBackupFile(
-                    viewModel = viewModel,
-                    backupData = backupData,
-                    navHostController = navHostController,
-                    scope = scope,
-                    snackbarHostState = snackbarHostState
-                )
-            }
-        }
         UiSnackbar(
             paddingValues = PaddingValues(
                 top = topBarPadding.calculateTopPadding(),

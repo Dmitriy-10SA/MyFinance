@@ -66,6 +66,15 @@ fun BackupMainScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val launcher = backupManager.pickBackupFile { backupData ->
+        onResultForPickBackupFile(
+            viewModel = viewModel,
+            backupData = backupData,
+            scope = scope,
+            snackbarHostState = snackbarHostState
+        )
+    }
+
     UiScaffold(
         isLightTheme = isLightTheme,
         topBar = {
@@ -103,7 +112,8 @@ fun BackupMainScreen(
                 viewModel = viewModel,
                 scope = scope,
                 snackbarHostState = snackbarHostState,
-                backupManager = backupManager
+                backupManager = backupManager,
+                onBackupClick = { launcher() }
             )
             BackupHelpDownText(
                 isLightTheme = isLightTheme,
@@ -148,17 +158,9 @@ private fun ColumnScope.MainContent(
     viewModel: BackupMainViewModel,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
-    backupManager: BackupManager
+    backupManager: BackupManager,
+    onBackupClick: () -> Unit
 ) {
-    val launcher = backupManager.pickBackupFile { backupData ->
-        onResultForPickBackupFile(
-            viewModel = viewModel,
-            backupData = backupData,
-            scope = scope,
-            snackbarHostState = snackbarHostState
-        )
-    }
-
     Column(
         modifier = Modifier
             .weight(1f)
@@ -196,7 +198,7 @@ private fun ColumnScope.MainContent(
         UiButton(
             modifier = Modifier.fillMaxWidth(),
             text = "Восстановить данные",
-            onClick = { launcher() }
+            onClick = onBackupClick
         )
         Spacer(modifier = Modifier.height(6.dp))
     }
