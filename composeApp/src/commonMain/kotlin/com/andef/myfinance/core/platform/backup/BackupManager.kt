@@ -6,4 +6,6 @@ import com.andef.myfinance.core.domain.backup.entities.BackupData
 interface BackupManager {
     @Composable
     fun pickBackupFile(onResult: (BackupData?) -> Unit): () -> Unit
+
+    fun saveBackupFile(backupData: BackupData)
 }
