@@ -9,7 +9,7 @@ import platform.UserNotifications.UNAuthorizationOptionSound
 import platform.UserNotifications.UNUserNotificationCenter
 
 class IosPermissionManager : PermissionManager {
-    private val _remindersGranted = MutableStateFlow(false)
+    private val _remindersGranted = MutableStateFlow(true)
     override val remindersGranted: StateFlow<Boolean> = _remindersGranted.asStateFlow()
 
     override fun refreshRemindersPermissions() {
