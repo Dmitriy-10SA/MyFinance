@@ -400,6 +400,8 @@ private fun DeleteDialog(
         isLightTheme = isLightTheme,
         title = "Удаление напоминания",
         subtitle = "Вы уверены? Данное действие невозможно отменить!",
+        yesTitle = "Удалить",
+        cancelTitle = "Отмена",
         cancelTitleColor = Blue,
         yesTitleColor = Red,
         onDismissRequest = {
