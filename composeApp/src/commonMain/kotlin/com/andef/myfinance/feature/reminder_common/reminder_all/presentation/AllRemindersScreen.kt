@@ -398,7 +398,10 @@ private fun DeleteDialog(
 ) {
     UiAlertDialog(
         isLightTheme = isLightTheme,
-        title = "Вы уверены?",
+        title = "Удаление напоминания",
+        subtitle = "Вы уверены? Данное действие невозможно отменить!",
+        cancelTitleColor = Blue,
+        yesTitleColor = Red,
         onDismissRequest = {
             viewModel.send(AllRemindersIntent.DeleteDialogVisibleChange(isVisible = false))
         },
