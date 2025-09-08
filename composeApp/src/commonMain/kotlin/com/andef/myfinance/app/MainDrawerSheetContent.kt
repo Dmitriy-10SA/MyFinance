@@ -193,27 +193,25 @@ private fun InnerContent(
             .fillMaxSize()
             .statusBarsPadding()
             .navigationBarsPadding(),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(3.dp))
+        Spacer(modifier = Modifier.height(15.dp))
         Icon(
             modifier = Modifier.size(100.dp),
             tint = blackOrWhiteColor(isLightTheme),
             painter = painterResource(Res.drawable.my_finance_icon),
             contentDescription = "Иконка приложения"
         )
+        Spacer(modifier = Modifier.height(12.dp))
         UsernameContent(isLightTheme, username, nameChangeSheetVisible)
+        Spacer(modifier = Modifier.height(12.dp))
         HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
             color = blackOrWhiteColor(isLightTheme).copy(alpha = 0.2f)
         )
         LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start
         ) {
             item {
@@ -329,8 +327,9 @@ private fun InnerContent(
             thickness = 1.dp,
             color = blackOrWhiteColor(isLightTheme).copy(alpha = 0.2f)
         )
+        Spacer(modifier = Modifier.height(12.dp))
         UiThemeContent(isLightTheme = isLightTheme, viewModel = viewModel)
-        Spacer(modifier = Modifier.height(0.dp))
+        Spacer(modifier = Modifier.height(12.dp))
     }
 }
 
