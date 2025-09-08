@@ -2,6 +2,12 @@
 
 <h1 align="center">MyFinance</h1>
 
+<p align="center">
+  <a href="https://www.rustore.ru/catalog/app/com.andef.myfinance">
+    <strong>Download app (скачать приложение)</strong>
+  </a>
+</p>
+
 <h3 align="center">
 En: My finances is a convenient app for Android and IOS budget control and spending planning. Add income, expenses, and reminders, analyze your finances, and keep track of currency rates, news, deposits, and loans. Everything for your financial well-being!
 </h3>
@@ -13,12 +19,6 @@ Ru: Мои финансы — удобное приложение для Android
 </h3>
 
 ---
-
-<p align="center">
-  <a href="https://www.rustore.ru/catalog/app/com.andef.myfinance">
-    <strong>Download app (скачать приложение)</strong>
-  </a>
-</p>
 
 ## 🛠️ Используемые технологии
 
