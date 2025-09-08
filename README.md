@@ -1,16 +1,21 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+<p align="center"><img alt="rounded-in-photoretrica" src="https://github.com/user-attachments/assets/f05825dc-ebdc-4fb9-968f-e05fee3817c3" width="200" /></p>
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+<h1 align="center">MyFinance</h1>
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+<h3 align="center">
+En: My finances is a convenient app for Android and IOS budget control and spending planning. Add income, expenses, and reminders, analyze your finances, and keep track of currency rates, news, deposits, and loans. Everything for your financial well-being!
+</h3>
 
+---
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+<h3 align="center">
+Ru: Мои финансы — удобное приложение для Android и IOS контроля бюджета и планирования трат. Добавляйте доходы, расходы и напоминания, анализируйте финансы, следите за курсами валют, новостями, вкладами и кредитами. Всё для вашего финансового благополучия!
+</h3>
+
+---
+
+<p align="center">
+  <a href="https://www.rustore.ru/catalog/app/com.andef.myfinance">
+    <strong>Download app (скачать приложение)</strong>
+  </a>
+</p>
