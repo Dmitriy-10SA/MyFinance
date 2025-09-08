@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -53,7 +52,6 @@ import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.getters.getTitleForIncome
-import com.andef.myfinance.core.utils.grayColor
 import com.andef.myfinance.core.utils.showSnackbar
 import kotlinx.coroutines.CoroutineScope
 import myfinance.composeapp.generated.resources.Res
@@ -373,18 +371,6 @@ private fun MainContent(
                 .navigationBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { Spacer(modifier = Modifier.height(12.dp)) }
-            item {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    textAlign = TextAlign.Start,
-                    text = "Базовые категории:",
-                    fontSize = 14.sp,
-                    color = grayColor(isLightTheme)
-                )
-            }
             items(items = BaseIncomeCategory.entries.map { it.title }, key = { it }) {
                 UiIncomeCategoryCard(
                     isLightTheme = isLightTheme,
@@ -397,18 +383,6 @@ private fun MainContent(
                 )
             }
             if (state.value.incomeCategories.isNotEmpty()) {
-                item { Spacer(modifier = Modifier.height(12.dp)) }
-                item {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        textAlign = TextAlign.Start,
-                        text = "Добавленные категории:",
-                        fontSize = 14.sp,
-                        color = grayColor(isLightTheme)
-                    )
-                }
                 items(items = state.value.incomeCategories, key = { it.id }) {
                     UiIncomeCategoryCard(
                         isLightTheme = isLightTheme,
