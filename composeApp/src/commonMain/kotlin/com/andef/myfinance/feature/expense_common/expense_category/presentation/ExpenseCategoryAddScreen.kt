@@ -380,18 +380,6 @@ private fun MainContent(
                 .navigationBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { Spacer(modifier = Modifier.height(12.dp)) }
-            item {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    textAlign = TextAlign.Start,
-                    text = "Базовые категории:",
-                    fontSize = 14.sp,
-                    color = grayColor(isLightTheme)
-                )
-            }
             items(items = BaseExpenseCategory.entries.map { it.title }, key = { it }) {
                 UiExpenseCategoryCard(
                     isLightTheme = isLightTheme,
@@ -404,18 +392,6 @@ private fun MainContent(
                 )
             }
             if (state.value.expenseCategories.isNotEmpty()) {
-                item { Spacer(modifier = Modifier.height(12.dp)) }
-                item {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        textAlign = TextAlign.Start,
-                        text = "Добавленные категории:",
-                        fontSize = 14.sp,
-                        color = grayColor(isLightTheme)
-                    )
-                }
                 items(items = state.value.expenseCategories, key = { it.id }) {
                     UiExpenseCategoryCard(
                         isLightTheme = isLightTheme,
