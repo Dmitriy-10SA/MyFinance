@@ -12,7 +12,6 @@ import com.andef.myfinance.app.App
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsLightThemeAsFlowUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsLightThemeUseCase
 import com.andef.myfinance.core.platform.common.AndroidInterstitialAdManager
-import com.andef.myfinance.core.platform.common.InterstitialAdManager
 import com.andef.myfinance.core.utils.DarkGray
 import com.andef.myfinance.core.utils.White
 import com.google.accompanist.systemuicontroller.SystemUiController
@@ -20,7 +19,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.koin.android.ext.android.getKoin
 
 class MainActivity : ComponentActivity() {
-    lateinit var interstitialAdManager: InterstitialAdManager
+    lateinit var interstitialAdManager: AndroidInterstitialAdManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -34,6 +33,7 @@ class MainActivity : ComponentActivity() {
                     getKoin().get<GetIsLightThemeUseCase>()
                         .invoke(isSystemInDarkTheme())
                 )
+            interstitialAdManager.setLightTheme(isLightTheme.value)
             SystemUiSettings(
                 systemUiController = rememberSystemUiController(),
                 isLightTheme = isLightTheme.value

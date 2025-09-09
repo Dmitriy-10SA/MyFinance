@@ -18,6 +18,7 @@ import com.yandex.mobile.ads.banner.BannerAdSize
 import com.yandex.mobile.ads.banner.BannerAdView
 import com.yandex.mobile.ads.common.AdRequest
 import com.yandex.mobile.ads.common.AdRequestError
+import com.yandex.mobile.ads.common.AdTheme
 import com.yandex.mobile.ads.common.ImpressionData
 import kotlin.math.roundToInt
 
@@ -48,7 +49,8 @@ private fun UiStickBanner(isLightTheme: Boolean, id: String, modifier: Modifier)
                 setAdUnitId(id)
                 setAdSize(adSize)
                 val config = AdRequest.Builder()
-                    .setParameters(mapOf("theme" to if (isLightTheme) "light" else "dark"))
+                    .setPreferredTheme(if (isLightTheme) AdTheme.LIGHT else AdTheme.DARK)
+                    .setContextTags(contextTags)
                     .build()
                 setBannerAdEventListener(object : BannerAdEventListener {
                     override fun onAdLoaded() {
@@ -87,3 +89,11 @@ private fun UiStickBanner(isLightTheme: Boolean, id: String, modifier: Modifier)
         }
     }
 }
+
+private val contextTags = listOf(
+    "бюджет",
+    "доходы",
+    "аналитика",
+    "инвестирование",
+    "финансовые советы"
+)
