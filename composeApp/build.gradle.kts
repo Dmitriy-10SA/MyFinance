@@ -104,12 +104,13 @@ kotlin {
 
 android {
     namespace = "com.andef.myfinance"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.andef.myfinance"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        minSdk = 26
+        //noinspection OldTargetApi
+        targetSdk = 35
         versionCode = 18
         versionName = "18.0"
     }

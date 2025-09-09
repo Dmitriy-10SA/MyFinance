@@ -5,7 +5,9 @@ import java.text.DecimalFormatSymbols
 import java.util.Locale
 
 class AndroidMoneyDecimalFormatter : MoneyDecimalFormatter {
-    private val dfs = DecimalFormatSymbols(Locale("ru", "RU")).apply {
+    private val dfs = DecimalFormatSymbols(
+        Locale.Builder().setLanguage("ru").setRegion("RU").build()
+    ).apply {
         groupingSeparator = ' '
         decimalSeparator = '.'
     }
