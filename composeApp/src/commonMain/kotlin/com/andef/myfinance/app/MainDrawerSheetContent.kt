@@ -90,10 +90,10 @@ fun MainDrawerSheetContent(
     drawerState: DrawerState,
     viewModel: AppViewModel,
     username: String,
-    isLightTheme: Boolean
+    isLightTheme: Boolean,
+    interstitialAdManager: InterstitialAdManager
 ) {
     val linkOpener = getKoin().get<LinkOpener>()
-    val interstitialAdManager = getKoin().get<InterstitialAdManager>()
     val nameChangeSheetState = rememberModalBottomSheetState()
     val nameChangeSheetVisible = rememberSaveable { mutableStateOf(false) }
     var usernameValue by remember { mutableStateOf(username) }

@@ -1,7 +1,6 @@
 package com.andef.myfinance.app
 
 import com.andef.myfinance.core.di.backup.backupModule
-import com.andef.myfinance.core.di.common.interstitialAdManagerModule
 import com.andef.myfinance.core.di.common.linkOpenerModule
 import com.andef.myfinance.core.di.common.loggerModule
 import com.andef.myfinance.core.di.common.moneyDecimalFormatterModule
@@ -58,7 +57,6 @@ fun initKoin(config: KoinAppDeclaration? = null) {
                 linkOpenerModule(),
                 loggerModule(),
                 settingsOpenerModule(),
-                interstitialAdManagerModule(),
                 permissionManagerModule(),
                 moneyDecimalFormatterModule(),
                 appViewModelModule
