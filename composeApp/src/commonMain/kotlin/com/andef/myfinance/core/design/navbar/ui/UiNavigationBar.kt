@@ -2,7 +2,12 @@ package com.andef.myfinance.core.design.navbar.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -14,6 +19,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.andef.myfinance.core.design.ads.type.UiAdsType
+import com.andef.myfinance.core.design.ads.ui.UiAds
 import com.andef.myfinance.core.design.navbar.item.UiNavigationBarItem
 import com.andef.myfinance.core.utils.anims.fadeInAnim
 import com.andef.myfinance.core.utils.anims.fadeOutAnim
@@ -30,7 +37,7 @@ fun UiNavigationBar(
     isVisible: Boolean = true
 ) {
     AnimatedVisibility(visible = isVisible, enter = fadeInAnim(), exit = fadeOutAnim()) {
-        Column {
+        Column(modifier = Modifier.windowInsetsPadding(insets = WindowInsets.navigationBars)) {
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 thickness = 1.dp,
@@ -38,6 +45,8 @@ fun UiNavigationBar(
             )
             NavigationBar(
                 modifier = Modifier.fillMaxWidth(),
+                windowInsets = WindowInsets.navigationBars
+                    .only(sides = WindowInsetsSides.Horizontal),
                 containerColor = darkGrayOrWhiteColor(isLightTheme = isLightTheme),
                 contentColor = blackOrWhiteColor(isLightTheme = isLightTheme)
             ) {
@@ -65,6 +74,7 @@ fun UiNavigationBar(
                     )
                 }
             }
+            UiAds(modifier = Modifier.fillMaxWidth(), type = UiAdsType.StickyBanner)
         }
     }
 }
