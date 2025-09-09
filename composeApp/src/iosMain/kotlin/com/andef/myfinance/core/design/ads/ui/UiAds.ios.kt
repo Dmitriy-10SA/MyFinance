@@ -5,5 +5,5 @@ import androidx.compose.ui.Modifier
 import com.andef.myfinance.core.design.ads.type.UiAdsType
 
 @Composable
-actual fun UiAds(id: String, modifier: Modifier, type: UiAdsType) {
+actual fun UiAds(isLightTheme: Boolean, id: String, modifier: Modifier, type: UiAdsType) {
 }

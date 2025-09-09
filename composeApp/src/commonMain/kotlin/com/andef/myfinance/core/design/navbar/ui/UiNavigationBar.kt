@@ -74,7 +74,12 @@ fun UiNavigationBar(
                     )
                 }
             }
-            UiAds(id = BANNER_ID, modifier = Modifier.fillMaxWidth(), type = UiAdsType.StickyBanner)
+            UiAds(
+                id = BANNER_ID,
+                modifier = Modifier.fillMaxWidth(),
+                type = UiAdsType.StickyBanner,
+                isLightTheme = isLightTheme
+            )
         }
     }
 }

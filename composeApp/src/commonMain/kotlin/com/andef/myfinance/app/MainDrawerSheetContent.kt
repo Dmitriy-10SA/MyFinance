@@ -218,7 +218,12 @@ private fun InnerContent(
             thickness = 1.dp,
             color = blackOrWhiteColor(isLightTheme).copy(alpha = 0.2f)
         )
-        UiAds(id = BANNER_ID, modifier = Modifier.fillMaxWidth(), type = UiAdsType.StickyBanner)
+        UiAds(
+            id = BANNER_ID,
+            modifier = Modifier.fillMaxWidth(),
+            type = UiAdsType.StickyBanner,
+            isLightTheme = isLightTheme
+        )
         LazyColumn(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start

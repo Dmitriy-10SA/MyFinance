@@ -22,14 +22,18 @@ import com.yandex.mobile.ads.common.ImpressionData
 import kotlin.math.roundToInt
 
 @Composable
-actual fun UiAds(id: String, modifier: Modifier, type: UiAdsType) {
+actual fun UiAds(isLightTheme: Boolean, id: String, modifier: Modifier, type: UiAdsType) {
     when (type) {
-        UiAdsType.StickyBanner -> UiStickBanner(id = id, modifier = modifier)
+        UiAdsType.StickyBanner -> UiStickBanner(
+            isLightTheme = isLightTheme,
+            id = id,
+            modifier = modifier
+        )
     }
 }
 
 @Composable
-private fun UiStickBanner(id: String, modifier: Modifier) {
+private fun UiStickBanner(isLightTheme: Boolean, id: String, modifier: Modifier) {
     var bannerView by remember { mutableStateOf<BannerAdView?>(null) }
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -43,6 +47,9 @@ private fun UiStickBanner(id: String, modifier: Modifier) {
 
                 setAdUnitId(id)
                 setAdSize(adSize)
+                val config = AdRequest.Builder()
+                    .setParameters(mapOf("theme" to if (isLightTheme) "light" else "dark"))
+                    .build()
                 setBannerAdEventListener(object : BannerAdEventListener {
                     override fun onAdLoaded() {
                         Log.d("YandexAds", "Banner loaded")
@@ -57,7 +64,7 @@ private fun UiStickBanner(id: String, modifier: Modifier) {
                     override fun onLeftApplication() {}
                     override fun onReturnedToApplication() {}
                 })
-                loadAd(AdRequest.Builder().build())
+                loadAd(config)
                 bannerView = this
             }
         },

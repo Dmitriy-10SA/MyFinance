@@ -20,11 +20,11 @@ class AndroidInterstitialAdManager(
     init {
         interstitialAdLoader = InterstitialAdLoader(activity).apply {
             setAdLoadListener(object : InterstitialAdLoadListener {
-                override fun onAdLoaded(ad: InterstitialAd) {
-                    interstitialAd = ad
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    this@AndroidInterstitialAdManager.interstitialAd = interstitialAd
                 }
 
-                override fun onAdFailedToLoad(adRequestError: AdRequestError) {}
+                override fun onAdFailedToLoad(error: AdRequestError) {}
             })
         }
         loadAd()
