@@ -8,6 +8,7 @@ custom-calendar = "2.8.0"
 coreSplashscreen = "1.0.1"
 kotlin = "2.2.10"
 kotlinxDatetime = "0.7.1"
+mobileads = "7.15.2"
 multiplatformSettings = "1.3.0"
 navigationCompose = "2.9.0-rc01"
 sqldelight = "2.1.0"
@@ -27,6 +28,7 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 
 custom-calendar = { module = "com.kizitonwose.calendar:compose-multiplatform", version.ref = "custom-calendar" }
 
+mobileads = { module = "com.yandex.android:mobileads", version.ref = "mobileads" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
