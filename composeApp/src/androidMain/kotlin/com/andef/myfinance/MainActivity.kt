@@ -11,6 +11,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.andef.myfinance.app.App
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsLightThemeAsFlowUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsLightThemeUseCase
+import com.andef.myfinance.core.platform.common.AndroidInterstitialAdManager
 import com.andef.myfinance.core.utils.DarkGray
 import com.andef.myfinance.core.utils.White
 import com.google.accompanist.systemuicontroller.SystemUiController
@@ -18,10 +19,13 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.koin.android.ext.android.getKoin
 
 class MainActivity : ComponentActivity() {
+    lateinit var interstitialAdManager: AndroidInterstitialAdManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        interstitialAdManager = AndroidInterstitialAdManager(this, INTERSTITIAL_ID)
         setContent {
             val isLightTheme = getKoin().get<GetIsLightThemeAsFlowUseCase>()
                 .invoke()
@@ -29,14 +33,22 @@ class MainActivity : ComponentActivity() {
                     getKoin().get<GetIsLightThemeUseCase>()
                         .invoke(isSystemInDarkTheme())
                 )
+            interstitialAdManager.setLightTheme(isLightTheme.value)
             SystemUiSettings(
                 systemUiController = rememberSystemUiController(),
                 isLightTheme = isLightTheme.value
             )
-            App()
+            App(interstitialAdManager)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        interstitialAdManager.destroy()
+    }
 }
+
+private const val INTERSTITIAL_ID = "R-M-17151552-5"
 
 @Composable
 private fun SystemUiSettings(systemUiController: SystemUiController, isLightTheme: Boolean) {

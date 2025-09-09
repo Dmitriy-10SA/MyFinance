@@ -44,6 +44,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.andef.myfinance.core.design.ads.type.UiAdsType
+import com.andef.myfinance.core.design.ads.ui.UiAds
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiConnectionModalBottomSheet
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiModalBottomSheet
 import com.andef.myfinance.core.design.button.ui.UiButton
@@ -51,6 +53,7 @@ import com.andef.myfinance.core.design.drawer.sheet.ui.UiModalDrawerSheet
 import com.andef.myfinance.core.design.drawer.sheet.ui.UiModalDrawerSheetInnerItem
 import com.andef.myfinance.core.design.textfield.ui.UiTextField
 import com.andef.myfinance.core.navigation.routes.Screen
+import com.andef.myfinance.core.platform.common.InterstitialAdManager
 import com.andef.myfinance.core.platform.common.LinkOpener
 import com.andef.myfinance.core.utils.Black
 import com.andef.myfinance.core.utils.DarkGray
@@ -87,7 +90,8 @@ fun MainDrawerSheetContent(
     drawerState: DrawerState,
     viewModel: AppViewModel,
     username: String,
-    isLightTheme: Boolean
+    isLightTheme: Boolean,
+    interstitialAdManager: InterstitialAdManager
 ) {
     val linkOpener = getKoin().get<LinkOpener>()
     val nameChangeSheetState = rememberModalBottomSheetState()
@@ -105,7 +109,8 @@ fun MainDrawerSheetContent(
             drawerState = drawerState,
             nameChangeSheetVisible = nameChangeSheetVisible,
             feedbackSheetVisible = feedbackSheetVisible,
-            viewModel = viewModel
+            viewModel = viewModel,
+            interstitialAdManager = interstitialAdManager
         )
         UsernameChangeBottomSheet(
             onUsernameChange = { usernameValue = it },
@@ -177,6 +182,8 @@ private fun UsernameChangeBottomSheet(
     }
 }
 
+private const val BANNER_ID = "R-M-17151552-4"
+
 @Composable
 private fun InnerContent(
     isLightTheme: Boolean,
@@ -186,7 +193,8 @@ private fun InnerContent(
     drawerState: DrawerState,
     nameChangeSheetVisible: MutableState<Boolean>,
     feedbackSheetVisible: MutableState<Boolean>,
-    viewModel: AppViewModel
+    viewModel: AppViewModel,
+    interstitialAdManager: InterstitialAdManager
 ) {
     Column(
         modifier = Modifier
@@ -209,6 +217,12 @@ private fun InnerContent(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
             color = blackOrWhiteColor(isLightTheme).copy(alpha = 0.2f)
+        )
+        UiAds(
+            id = BANNER_ID,
+            modifier = Modifier.fillMaxWidth(),
+            type = UiAdsType.StickyBanner,
+            isLightTheme = isLightTheme
         )
         LazyColumn(
             modifier = Modifier.weight(1f),
@@ -307,7 +321,9 @@ private fun InnerContent(
                     onClick = {
                         scope.launch {
                             drawerState.close()
-                            navHostController.navigate(Screen.BackupMainScreen.route)
+                            interstitialAdManager.showAd {
+                                navHostController.navigate(Screen.BackupMainScreen.route)
+                            }
                         }
                     }
                 )

@@ -25,6 +25,7 @@ import com.andef.myfinance.core.navigation.graph.AppNavGraph
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.navigation.routes.Screen.MainScreens.fabRoutes
 import com.andef.myfinance.core.navigation.routes.Screen.MainScreens.mainRoutes
+import com.andef.myfinance.core.platform.common.InterstitialAdManager
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.navigateWithSaveState
 import kotlinx.coroutines.CoroutineScope
@@ -41,7 +42,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App() {
+fun App(interstitialAdManager: InterstitialAdManager) {
     val viewModel = koinViewModel<AppViewModel>()
     val state = viewModel.state.collectAsState().value
 
@@ -85,7 +86,8 @@ fun App() {
                 }
             },
             viewModel = viewModel,
-            username = state.username
+            username = state.username,
+            interstitialAdManager = interstitialAdManager
         )
     }
 }
@@ -107,7 +109,8 @@ private fun AppDrawer(
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
     onDatesDismiss: () -> Unit,
     onTabClick: (UiTopBarTab) -> Unit,
-    onItemClick: (UiNavigationBarItem) -> Unit
+    onItemClick: (UiNavigationBarItem) -> Unit,
+    interstitialAdManager: InterstitialAdManager
 ) {
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -119,7 +122,8 @@ private fun AppDrawer(
                 drawerState = drawerState,
                 viewModel = viewModel,
                 username = username,
-                isLightTheme = isLightTheme
+                isLightTheme = isLightTheme,
+                interstitialAdManager = interstitialAdManager
             )
         },
         content = {
