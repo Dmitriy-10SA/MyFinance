@@ -23,18 +23,30 @@ import com.yandex.mobile.ads.common.ImpressionData
 import kotlin.math.roundToInt
 
 @Composable
-actual fun UiAds(isLightTheme: Boolean, id: String, modifier: Modifier, type: UiAdsType) {
+actual fun UiAds(
+    isLightTheme: Boolean,
+    id: String,
+    modifier: Modifier,
+    type: UiAdsType,
+    contextTags: List<String>
+) {
     when (type) {
         UiAdsType.StickyBanner -> UiStickBanner(
             isLightTheme = isLightTheme,
             id = id,
-            modifier = modifier
+            modifier = modifier,
+            contextTags = contextTags
         )
     }
 }
 
 @Composable
-private fun UiStickBanner(isLightTheme: Boolean, id: String, modifier: Modifier) {
+private fun UiStickBanner(
+    isLightTheme: Boolean,
+    id: String,
+    modifier: Modifier,
+    contextTags: List<String>
+) {
     var bannerView by remember { mutableStateOf<BannerAdView?>(null) }
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -89,11 +101,3 @@ private fun UiStickBanner(isLightTheme: Boolean, id: String, modifier: Modifier)
         }
     }
 }
-
-private val contextTags = listOf(
-    "бюджет",
-    "доходы",
-    "аналитика",
-    "инвестирование",
-    "финансовые советы"
-)
