@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private const val INTERSTITIAL_ID = "demo-interstitial-yandex" //R-M-17151552-5
+private const val INTERSTITIAL_ID = "R-M-17151552-5"
 
 @Composable
 private fun SystemUiSettings(systemUiController: SystemUiController, isLightTheme: Boolean) {
