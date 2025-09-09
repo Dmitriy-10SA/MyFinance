@@ -53,6 +53,7 @@ import com.andef.myfinance.core.design.drawer.sheet.ui.UiModalDrawerSheet
 import com.andef.myfinance.core.design.drawer.sheet.ui.UiModalDrawerSheetInnerItem
 import com.andef.myfinance.core.design.textfield.ui.UiTextField
 import com.andef.myfinance.core.navigation.routes.Screen
+import com.andef.myfinance.core.platform.common.InterstitialAdManager
 import com.andef.myfinance.core.platform.common.LinkOpener
 import com.andef.myfinance.core.utils.Black
 import com.andef.myfinance.core.utils.DarkGray
@@ -92,6 +93,7 @@ fun MainDrawerSheetContent(
     isLightTheme: Boolean
 ) {
     val linkOpener = getKoin().get<LinkOpener>()
+    val interstitialAdManager = getKoin().get<InterstitialAdManager>()
     val nameChangeSheetState = rememberModalBottomSheetState()
     val nameChangeSheetVisible = rememberSaveable { mutableStateOf(false) }
     var usernameValue by remember { mutableStateOf(username) }
@@ -107,7 +109,8 @@ fun MainDrawerSheetContent(
             drawerState = drawerState,
             nameChangeSheetVisible = nameChangeSheetVisible,
             feedbackSheetVisible = feedbackSheetVisible,
-            viewModel = viewModel
+            viewModel = viewModel,
+            interstitialAdManager = interstitialAdManager
         )
         UsernameChangeBottomSheet(
             onUsernameChange = { usernameValue = it },
@@ -190,7 +193,8 @@ private fun InnerContent(
     drawerState: DrawerState,
     nameChangeSheetVisible: MutableState<Boolean>,
     feedbackSheetVisible: MutableState<Boolean>,
-    viewModel: AppViewModel
+    viewModel: AppViewModel,
+    interstitialAdManager: InterstitialAdManager
 ) {
     Column(
         modifier = Modifier
@@ -312,7 +316,9 @@ private fun InnerContent(
                     onClick = {
                         scope.launch {
                             drawerState.close()
-                            navHostController.navigate(Screen.BackupMainScreen.route)
+                            interstitialAdManager.showAd {
+                                navHostController.navigate(Screen.BackupMainScreen.route)
+                            }
                         }
                     }
                 )
