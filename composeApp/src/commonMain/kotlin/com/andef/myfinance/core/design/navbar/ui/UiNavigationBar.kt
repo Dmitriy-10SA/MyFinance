@@ -74,7 +74,9 @@ fun UiNavigationBar(
                     )
                 }
             }
-            UiAds(modifier = Modifier.fillMaxWidth(), type = UiAdsType.StickyBanner)
+            UiAds(id = BANNER_ID, modifier = Modifier.fillMaxWidth(), type = UiAdsType.StickyBanner)
         }
     }
 }
+
+private const val BANNER_ID = "demo-banner-yandex" //R-M-17151552-3

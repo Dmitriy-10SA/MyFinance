@@ -22,14 +22,14 @@ import com.yandex.mobile.ads.common.ImpressionData
 import kotlin.math.roundToInt
 
 @Composable
-actual fun UiAds(modifier: Modifier, type: UiAdsType) {
+actual fun UiAds(id: String, modifier: Modifier, type: UiAdsType) {
     when (type) {
-        UiAdsType.StickyBanner -> UiStickBanner(modifier)
+        UiAdsType.StickyBanner -> UiStickBanner(id = id, modifier = modifier)
     }
 }
 
 @Composable
-private fun UiStickBanner(modifier: Modifier) {
+private fun UiStickBanner(id: String, modifier: Modifier) {
     var bannerView by remember { mutableStateOf<BannerAdView?>(null) }
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -41,7 +41,7 @@ private fun UiStickBanner(modifier: Modifier) {
                 val adWidthDp = (adWidthPx / ctx.resources.displayMetrics.density).roundToInt()
                 val adSize = BannerAdSize.stickySize(ctx, adWidthDp)
 
-                setAdUnitId(STICKY_BANNER_ID)
+                setAdUnitId(id)
                 setAdSize(adSize)
                 setBannerAdEventListener(object : BannerAdEventListener {
                     override fun onAdLoaded() {
@@ -80,6 +80,3 @@ private fun UiStickBanner(modifier: Modifier) {
         }
     }
 }
-
-private const val STICKY_BANNER_ID = "demo-banner-yandex"
-//R-M-17151552-3

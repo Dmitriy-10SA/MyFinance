@@ -179,6 +179,8 @@ private fun UsernameChangeBottomSheet(
     }
 }
 
+private const val BANNER_ID = "demo-banner-yandex" //R-M-17151552-4
+
 @Composable
 private fun InnerContent(
     isLightTheme: Boolean,
@@ -212,7 +214,7 @@ private fun InnerContent(
             thickness = 1.dp,
             color = blackOrWhiteColor(isLightTheme).copy(alpha = 0.2f)
         )
-        UiAds(modifier = Modifier.fillMaxWidth(), type = UiAdsType.StickyBanner)
+        UiAds(id = BANNER_ID, modifier = Modifier.fillMaxWidth(), type = UiAdsType.StickyBanner)
         LazyColumn(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start
