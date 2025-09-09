@@ -182,7 +182,7 @@ private fun UsernameChangeBottomSheet(
     }
 }
 
-private const val BANNER_ID = "demo-banner-yandex" //R-M-17151552-4
+private const val BANNER_ID = "R-M-17151552-4"
 
 @Composable
 private fun InnerContent(
