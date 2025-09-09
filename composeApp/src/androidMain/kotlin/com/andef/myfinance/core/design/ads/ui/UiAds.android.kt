@@ -82,3 +82,4 @@ private fun UiStickBanner(modifier: Modifier) {
 }
 
 private const val STICKY_BANNER_ID = "demo-banner-yandex"
+//R-M-17151552-3
