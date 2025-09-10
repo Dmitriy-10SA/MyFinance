@@ -141,7 +141,8 @@ private fun AppDrawer(
                 onTabClick = onTabClick,
                 currentRoute = currentRoute,
                 isFirstStart = isFirstStart,
-                onItemClick = onItemClick
+                onItemClick = onItemClick,
+                interstitialAdManager = interstitialAdManager
             )
         }
     )
@@ -162,7 +163,8 @@ private fun AppDrawerContent(
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
     onDatesDismiss: () -> Unit,
     onTabClick: (UiTopBarTab) -> Unit,
-    onItemClick: (UiNavigationBarItem) -> Unit
+    onItemClick: (UiNavigationBarItem) -> Unit,
+    interstitialAdManager: InterstitialAdManager
 ) {
     UiScaffold(
         isLightTheme = isLightTheme,
@@ -193,7 +195,8 @@ private fun AppDrawerContent(
             startDate = startDate,
             endDate = endDate,
             currentRoute = currentRoute,
-            mainScreenIsVisible = currentRoute in mainRoutes
+            mainScreenIsVisible = currentRoute in mainRoutes,
+            interstitialAdManager = interstitialAdManager
         )
         UiRangeDatePickerDialog(
             isVisible = datePickerVisible,
