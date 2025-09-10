@@ -11,7 +11,7 @@ SELECT id, amount, category, date, note FROM income;
 DROP TABLE income;
 ALTER TABLE income_new RENAME TO income;
 
-CREATE TABLE income_category (
+CREATE TABLE IF NOT EXISTS income_category (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     title TEXT NOT NULL
 );
@@ -29,7 +29,7 @@ SELECT id, amount, category, date, note FROM expense;
 DROP TABLE expense;
 ALTER TABLE expense_new RENAME TO expense;
 
-CREATE TABLE expense_category (
+CREATE TABLE IF NOT EXISTS expense_category (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     title TEXT NOT NULL
 );
