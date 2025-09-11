@@ -114,8 +114,8 @@ android {
         minSdk = 26
         //noinspection OldTargetApi
         targetSdk = 35
-        versionCode = 20
-        versionName = "20.0"
+        versionCode = 21
+        versionName = "21.0"
     }
     packaging {
         resources {

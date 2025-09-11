@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 val Blue = Color(0xFF00ACFF)
+val Yellow = Color(0xFFFFB800)
 val Red = Color(0xFFFF4848)
 val White = Color(0xFFFFFFFF)
 val Black = Color(0xFF000000)
