@@ -44,8 +44,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.andef.myfinance.core.design.ads.type.UiAdsType
-import com.andef.myfinance.core.design.ads.ui.UiAds
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiConnectionModalBottomSheet
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiModalBottomSheet
 import com.andef.myfinance.core.design.button.ui.UiButton
@@ -217,12 +215,6 @@ private fun InnerContent(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
             color = blackOrWhiteColor(isLightTheme).copy(alpha = 0.2f)
-        )
-        UiAds(
-            id = BANNER_ID,
-            modifier = Modifier.fillMaxWidth(),
-            type = UiAdsType.StickyBanner,
-            isLightTheme = isLightTheme
         )
         LazyColumn(
             modifier = Modifier.weight(1f),

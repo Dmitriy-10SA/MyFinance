@@ -7,15 +7,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -46,8 +44,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
-import com.andef.myfinance.core.design.ads.type.UiAdsType
-import com.andef.myfinance.core.design.ads.ui.UiAds
 import com.andef.myfinance.core.design.alert.dialog.ui.UiAlertDialog
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiModalBottomSheet
 import com.andef.myfinance.core.design.button.ui.UiButton
@@ -147,23 +143,13 @@ fun AllRemindersScreen(
                 iconContentDescription = "Иконка добавить",
                 isVisible = !state.value.isLoading
             )
-        },
-        bottomBar = {
-            UiAds(
-                isLightTheme = isLightTheme,
-                id = BANNER_ID,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .windowInsetsPadding(WindowInsets.navigationBars),
-                type = UiAdsType.StickyBanner,
-                contextTags = contextTags
-            )
         }
     ) { topBarPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(topBarPadding),
+                .padding(top = topBarPadding.calculateTopPadding())
+                .navigationBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(items = state.value.remindersForScreenAsList, key = { it.id }) { reminder ->
