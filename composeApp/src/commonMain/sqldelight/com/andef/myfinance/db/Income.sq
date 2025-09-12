@@ -1,0 +1,31 @@
+CREATE TABLE income (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    amount REAL NOT NULL,
+    category TEXT NOT NULL,
+    date INTEGER NOT NULL,
+    note TEXT
+);
+
+getIncomeById:
+SELECT * FROM income WHERE id = ?;
+
+insertIncome:
+INSERT OR REPLACE INTO income(amount, category, date, note)
+VALUES (?, ?, ?, ?);
+
+updateIncome:
+UPDATE income SET amount = ?, category = ?, date = ?, note = ? WHERE id = ?;
+
+deleteIncomeById:
+DELETE FROM income WHERE id = ?;
+
+getIncomesByDateRange:
+SELECT * FROM income
+WHERE date BETWEEN ? AND ?
+ORDER BY date DESC;
+
+changeAllIncomeCategory:
+UPDATE income SET category = ? WHERE category = ?;
+
+deleteAllIncomesByCategory:
+DELETE FROM income WHERE category = ?;
