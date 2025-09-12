@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class IncomeAnalysisMainAdsViewModel(private val application: Application) : AndroidViewModel(application) {
+class IncomeAnalysisAdsViewModel(private val application: Application) : AndroidViewModel(application) {
     private var nativeAdLoader: NativeAdLoader? = null
 
     private val _adViews = MutableStateFlow(listOf<NativeAd>())
@@ -46,7 +46,7 @@ class IncomeAnalysisMainAdsViewModel(private val application: Application) : And
         }
     }
 
-    companion object {
+    companion object Companion {
         private const val ID = "demo-native-content-yandex"
     }
 }

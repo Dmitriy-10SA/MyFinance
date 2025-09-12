@@ -1,15 +1,9 @@
-package com.andef.myfinance.feature.income_common.income_analysis.presentation
+package com.andef.myfinance.feature.expense_common.expense_analysis.presentation
 
-import android.app.Application
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -19,7 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -31,14 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.andef.myfinance.core.design.alert.dialog.ui.UiAlertDialog
 import com.andef.myfinance.core.design.card.date.amount.row.UiDateAndAmountRow
@@ -49,28 +35,22 @@ import com.andef.myfinance.core.design.loading.ui.UiLoading
 import com.andef.myfinance.core.design.piechart.ui.UiPieChart
 import com.andef.myfinance.core.design.piechart.ui.UiPieChartData
 import com.andef.myfinance.core.design.scaffold.ui.UiScaffold
-import com.andef.myfinance.core.design.snackbar.type.UiSnackbarType
-import com.andef.myfinance.core.design.snackbar.ui.UiSnackbar
 import com.andef.myfinance.core.design.topbar.type.UiTopBarTab
 import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.design.topbar.ui.UiTopBar
-import com.andef.myfinance.core.domain.income_common.income_category.entities.BaseIncomeCategory
-import com.andef.myfinance.core.domain.income_common.income_category.entities.IncomeCategoryModel
+import com.andef.myfinance.core.domain.expense_common.expense_category.entities.BaseExpenseCategory
+import com.andef.myfinance.core.domain.expense_common.expense_category.entities.ExpenseCategoryModel
 import com.andef.myfinance.core.platform.common.InterstitialAdManager
 import com.andef.myfinance.core.platform.common.getPdfPrinter
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red
-import com.andef.myfinance.core.utils.anims.fadeInAnim
-import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.generatters.generateColorFromString
-import com.andef.myfinance.core.utils.getters.getTitleForIncome
+import com.andef.myfinance.core.utils.getters.getTitleForExpense
 import com.andef.myfinance.core.utils.getters.minusDays
 import com.andef.myfinance.core.utils.getters.minusMonths
 import com.andef.myfinance.core.utils.getters.minusYears
 import com.andef.myfinance.core.utils.getters.now
-import com.andef.myfinance.feature.income_common.income_main.presentation.nativeAdAppearance
-import com.yandex.mobile.ads.nativeads.template.NativeBannerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -81,25 +61,13 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-actual fun IncomeAnalysisScreen(
+actual fun ExpenseAnalysisScreen(
     isLightTheme: Boolean,
     navHostController: NavHostController,
-    paddingValues: PaddingValues,
     interstitialAdManager: InterstitialAdManager
 ) {
-    val viewModel = koinViewModel<IncomeAnalysisViewModel>()
+    val viewModel = koinViewModel<ExpenseAnalysisViewModel>()
     val state = viewModel.state.collectAsState()
-
-    val application = LocalContext.current.applicationContext as Application
-    val adsViewModel: IncomeAnalysisAdsViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                @Suppress("UNCHECKED_CAST")
-                return IncomeAnalysisAdsViewModel(application) as T
-            }
-        }
-    )
-    val adViews = adsViewModel.adViews.collectAsState().value
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -110,15 +78,13 @@ actual fun IncomeAnalysisScreen(
     val lastSelectedTabIndex = remember { mutableIntStateOf(0) }
 
     LaunchedEffect(startDate.value, endDate.value) {
-        viewModel.send(IncomeAnalysisIntent.LoadIncomes(startDate.value, endDate.value))
+        viewModel.send(ExpenseAnalysisIntent.LoadExpenses(startDate.value, endDate.value))
     }
 
     UiScaffold(
         isLightTheme = isLightTheme,
         topBar = {
             TopBar(
-                snackbarHostState = snackbarHostState,
-                scope = scope,
                 isLightTheme = isLightTheme,
                 selectedTabIndex = selectedTabIndex,
                 lastSelectedTabIndex = lastSelectedTabIndex,
@@ -126,20 +92,15 @@ actual fun IncomeAnalysisScreen(
                 endDate = endDate,
                 datePickerVisible = datePickerVisible,
                 navHostController = navHostController,
+                scope = scope,
+                snackbarHostState = snackbarHostState,
                 viewModel = viewModel,
                 interstitialAdManager = interstitialAdManager
-            )
-        },
-        snackbarHost = {
-            UiSnackbar(
-                paddingValues = paddingValues,
-                snackbarHostState = snackbarHostState,
-                type = UiSnackbarType.Error
             )
         }
     ) { topBarPadding ->
         val totalAmount = state.value.totalAmount
-        val incomesForAnalysis = state.value.incomesForAnalysis
+        val expensesForAnalysis = state.value.expensesForAnalysis
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -149,74 +110,33 @@ actual fun IncomeAnalysisScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             stickyHeader {
-                AnimatedVisibility(
-                    visible = incomesForAnalysis.isNotEmpty(),
-                    exit = fadeOutAnim(),
-                    enter = fadeInAnim()
-                ) {
-                    UiDateAndAmountRow(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .padding(top = 12.dp),
-                        totalAmount = state.value.totalAmount,
-                        isIncome = true,
-                        isLightTheme = isLightTheme,
-                        startDate = startDate.value,
-                        endDate = endDate.value
-                    )
-                }
+                UiDateAndAmountRow(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 12.dp),
+                    isIncome = false,
+                    totalAmount = state.value.totalAmount,
+                    isLightTheme = isLightTheme,
+                    startDate = startDate.value,
+                    endDate = endDate.value
+                )
             }
             item { Spacer(modifier = Modifier.height(6.dp)) }
-            when (incomesForAnalysis.isEmpty()) {
-                true -> {
-                    item {
-                        Text(
-                            text = "Пока нет данных о доходах. Вот несколько предложений для Вас:",
-                            color = blackOrWhiteColor(isLightTheme),
-                            fontSize = 16.sp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .padding(top = 16.dp)
-                                .padding(bottom = 16.dp)
-                                .animateItem(tween(810, easing = FastOutSlowInEasing)),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    items(adViews.size, key = { "$isLightTheme-$it" }) { index ->
-                        AndroidView(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 14.dp)
-                                .animateItem(tween(810, easing = FastOutSlowInEasing)),
-                            factory = { context ->
-                                NativeBannerView(context).apply {
-                                    applyAppearance(nativeAdAppearance(isLightTheme))
-                                    setAd(adViews[index])
-                                }
-                            }
-                        )
-                    }
-                }
-
-                false -> {
-                    item {
-                        UiPieChart(
-                            modifier = Modifier
-                                .size(300.dp)
-                                .padding(top = 16.dp, bottom = 12.dp),
-                            pieChartData = UiPieChartData(
-                                slices = getSlices(totalAmount, incomesForAnalysis)
-                            )
-                        )
-                    }
-                    item {
-                        UiLegendRows(
-                            isLightTheme = isLightTheme,
-                            items = getUiLegendAmountItems(totalAmount, incomesForAnalysis)
-                        )
-                    }
-                }
+            item {
+                UiPieChart(
+                    modifier = Modifier
+                        .size(300.dp)
+                        .padding(top = 16.dp, bottom = 12.dp),
+                    pieChartData = UiPieChartData(
+                        slices = getSlices(totalAmount, expensesForAnalysis)
+                    )
+                )
+            }
+            item {
+                UiLegendRows(
+                    isLightTheme = isLightTheme,
+                    items = getUiLegendAmountItems(totalAmount, expensesForAnalysis)
+                )
             }
             item { Spacer(modifier = Modifier.height(12.dp)) }
         }
@@ -246,7 +166,7 @@ actual fun IncomeAnalysisScreen(
         cancelTitleColor = Red,
         yesTitleColor = Blue,
         onYesClick = {
-            viewModel.send(IncomeAnalysisIntent.LoadIncomes(startDate.value, endDate.value))
+            viewModel.send(ExpenseAnalysisIntent.LoadExpenses(startDate.value, endDate.value))
         },
         onCancelClick = navHostController::popBackStack
     )
@@ -254,53 +174,58 @@ actual fun IncomeAnalysisScreen(
 
 private fun getUiLegendAmountItems(
     totalAmount: Double,
-    incomeForAnalysis: List<Pair<IncomeCategoryModel, Double>>
+    incomeForAnalysis: List<Pair<ExpenseCategoryModel, Double>>
 ): List<UiLegendAmountItem> {
     return incomeForAnalysis.map {
         UiLegendAmountItem(
-            title = getTitleForIncome(it.first.title),
+            title = getTitleForExpense(it.first.title),
             amount = it.second,
-            isIncome = true,
-            color = getColorForIncomeCategory(it.first.title),
-            percent = (it.second / totalAmount * 100).toFloat()
+            color = getColorForExpenseCategory(it.first.title),
+            percent = (it.second / totalAmount * 100).toFloat(),
+            isIncome = false
         )
     }
 }
 
 private fun getSlices(
     totalAmount: Double,
-    incomeForAnalysis: List<Pair<IncomeCategoryModel, Double>>
+    incomeForAnalysis: List<Pair<ExpenseCategoryModel, Double>>
 ): List<UiPieChartData.Slice> {
     return incomeForAnalysis.map {
         UiPieChartData.Slice(
             value = (it.second / totalAmount * 100).toFloat(),
-            color = getColorForIncomeCategory(it.first.title)
+            color = getColorForExpenseCategory(it.first.title)
         )
     }
 }
 
-private fun getColorForIncomeCategory(category: String): Color {
+private fun getColorForExpenseCategory(category: String): Color {
     return when (category) {
-        BaseIncomeCategory.SALARY.title -> Color(0xFF4BCFA9)
-        BaseIncomeCategory.BANK.title -> Color(0xFF4A9FF5)
-        BaseIncomeCategory.LUCK.title -> Color(0xFFFF6B6B)
-        BaseIncomeCategory.GIFTS.title -> Color(0xFFFFD166)
-        BaseIncomeCategory.OTHER.title -> Color(0xFFA38BFE)
+        BaseExpenseCategory.PRODUCTS.title -> Color(0xFF4BCFA9)
+        BaseExpenseCategory.CAFE.title -> Color(0xFFFF9F59)
+        BaseExpenseCategory.HOME.title -> Color(0xFF4A9FF5)
+        BaseExpenseCategory.GIFTS.title -> Color(0xFFFFD166)
+        BaseExpenseCategory.STUDY.title -> Color(0xFF8E7CC3)
+        BaseExpenseCategory.HEALTH.title -> Color(0xFFEB5757)
+        BaseExpenseCategory.TRANSPORT.title -> Color(0xFF828282)
+        BaseExpenseCategory.SPORT.title -> Color(0xFF27AE60)
+        BaseExpenseCategory.CLOTHES.title -> Color(0xFFBB6BD9)
+        BaseExpenseCategory.OTHER.title -> Color(0xFFBDBDBD)
         else -> generateColorFromString(category)
     }
 }
 
 @Composable
 private fun TopBar(
-    snackbarHostState: SnackbarHostState,
-    scope: CoroutineScope,
     isLightTheme: Boolean,
     selectedTabIndex: MutableState<Int>,
     lastSelectedTabIndex: MutableState<Int>,
     startDate: MutableState<LocalDate>,
     endDate: MutableState<LocalDate>,
     datePickerVisible: MutableState<Boolean>,
-    viewModel: IncomeAnalysisViewModel,
+    viewModel: ExpenseAnalysisViewModel,
+    scope: CoroutineScope,
+    snackbarHostState: SnackbarHostState,
     navHostController: NavHostController,
     interstitialAdManager: InterstitialAdManager
 ) {
@@ -350,7 +275,7 @@ private fun TopBar(
                 }
             }
         ),
-        title = "Анализ доходов",
+        title = "Анализ расходов",
         navigationIconTint = Blue,
         navigationIcon = painterResource(Res.drawable.my_finance_arrow_back),
         navigationIconContentDescription = "Назад",
@@ -374,7 +299,7 @@ private fun RowScope.ActionsForTopBar(
     snackbarHostState: SnackbarHostState,
     scope: CoroutineScope,
     isLightTheme: Boolean,
-    viewModel: IncomeAnalysisViewModel,
+    viewModel: ExpenseAnalysisViewModel,
     startDate: LocalDate,
     endDate: LocalDate,
     interstitialAdManager: InterstitialAdManager
@@ -384,9 +309,9 @@ private fun RowScope.ActionsForTopBar(
         onClick = {
             interstitialAdManager.showAd {
                 viewModel.send(
-                    IncomeAnalysisIntent.GetIncomesForPdf(
-                        onSuccess = { incomes, maxDate, minDate ->
-                            pdfPrinter.printIncomePdf(incomes, maxDate, minDate)
+                    ExpenseAnalysisIntent.GetExpensesForPdf(
+                        onSuccess = { expenses, maxDate, minDate ->
+                            pdfPrinter.printExpensePdf(expenses, maxDate, minDate)
                         },
                         onError = { msg ->
                             scope.launch {
@@ -410,7 +335,7 @@ private fun RowScope.ActionsForTopBar(
     ) {
         Icon(
             painter = painterResource(Res.drawable.my_finance_print),
-            contentDescription = "Печать доходов"
+            contentDescription = "Печать расходов"
         )
     }
 }
