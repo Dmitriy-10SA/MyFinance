@@ -47,6 +47,6 @@ class ExpenseAnalysisAdsViewModel(private val application: Application) : Androi
     }
 
     companion object Companion {
-        private const val ID = "R-M-17151552-7"
+        private const val ID = "R-M-17151552-10"
     }
 }

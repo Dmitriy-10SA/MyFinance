@@ -53,6 +53,6 @@ class MainDrawerSheetContentAdsViewModel(private val application: Application) :
     }
 
     companion object Companion {
-        private const val ID = "R-M-17151552-7"
+        private const val ID = "R-M-17151552-12"
     }
 }
