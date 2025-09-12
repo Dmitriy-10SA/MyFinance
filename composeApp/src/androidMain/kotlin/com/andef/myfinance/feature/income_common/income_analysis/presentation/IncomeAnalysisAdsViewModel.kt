@@ -47,6 +47,6 @@ class IncomeAnalysisAdsViewModel(private val application: Application) : Android
     }
 
     companion object Companion {
-        private const val ID = "demo-native-content-yandex"
+        private const val ID = "R-M-17151552-7"
     }
 }
