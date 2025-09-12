@@ -172,7 +172,7 @@ private fun MainContent(
                         .padding(horizontal = 16.dp)
                         .padding(top = 12.dp)
                         .animateItem(),
-                    isIncome = true,
+                    isIncome = false,
                     totalAmount = state.totalAmount,
                     isLightTheme = isLightTheme,
                     startDate = startDate,
@@ -222,7 +222,7 @@ private fun MainContent(
                                 .fillMaxWidth()
                                 .padding(top = 8.dp, bottom = 4.dp)
                                 .animateItem(),
-                            isIncome = true,
+                            isIncome = false,
                             isLightTheme = isLightTheme,
                             date = expenseForLazyColumn.date,
                             amount = expenseForLazyColumn.totalAmount
