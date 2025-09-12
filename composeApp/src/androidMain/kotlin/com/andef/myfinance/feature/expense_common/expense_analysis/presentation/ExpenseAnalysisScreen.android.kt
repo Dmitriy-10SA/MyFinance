@@ -1,9 +1,14 @@
 package com.andef.myfinance.feature.expense_common.expense_analysis.presentation
 
+import android.app.Application
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -13,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -24,7 +30,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.andef.myfinance.core.design.alert.dialog.ui.UiAlertDialog
 import com.andef.myfinance.core.design.card.date.amount.row.UiDateAndAmountRow
@@ -44,6 +57,8 @@ import com.andef.myfinance.core.platform.common.InterstitialAdManager
 import com.andef.myfinance.core.platform.common.getPdfPrinter
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red
+import com.andef.myfinance.core.utils.anims.fadeInAnim
+import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.getters.getTitleForExpense
@@ -51,6 +66,8 @@ import com.andef.myfinance.core.utils.getters.minusDays
 import com.andef.myfinance.core.utils.getters.minusMonths
 import com.andef.myfinance.core.utils.getters.minusYears
 import com.andef.myfinance.core.utils.getters.now
+import com.andef.myfinance.feature.income_common.income_main.presentation.nativeAdAppearance
+import com.yandex.mobile.ads.nativeads.template.NativeBannerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -68,6 +85,17 @@ actual fun ExpenseAnalysisScreen(
 ) {
     val viewModel = koinViewModel<ExpenseAnalysisViewModel>()
     val state = viewModel.state.collectAsState()
+
+    val application = LocalContext.current.applicationContext as Application
+    val adsViewModel: ExpenseAnalysisAdsViewModel = viewModel(
+        factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return ExpenseAnalysisAdsViewModel(application) as T
+            }
+        }
+    )
+    val adViews = adsViewModel.adViews.collectAsState().value
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -110,33 +138,74 @@ actual fun ExpenseAnalysisScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             stickyHeader {
-                UiDateAndAmountRow(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 12.dp),
-                    isIncome = false,
-                    totalAmount = state.value.totalAmount,
-                    isLightTheme = isLightTheme,
-                    startDate = startDate.value,
-                    endDate = endDate.value
-                )
+                AnimatedVisibility(
+                    visible = expensesForAnalysis.isNotEmpty(),
+                    exit = fadeOutAnim(),
+                    enter = fadeInAnim()
+                ) {
+                    UiDateAndAmountRow(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 12.dp),
+                        isIncome = false,
+                        totalAmount = state.value.totalAmount,
+                        isLightTheme = isLightTheme,
+                        startDate = startDate.value,
+                        endDate = endDate.value
+                    )
+                }
             }
             item { Spacer(modifier = Modifier.height(6.dp)) }
-            item {
-                UiPieChart(
-                    modifier = Modifier
-                        .size(300.dp)
-                        .padding(top = 16.dp, bottom = 12.dp),
-                    pieChartData = UiPieChartData(
-                        slices = getSlices(totalAmount, expensesForAnalysis)
-                    )
-                )
-            }
-            item {
-                UiLegendRows(
-                    isLightTheme = isLightTheme,
-                    items = getUiLegendAmountItems(totalAmount, expensesForAnalysis)
-                )
+            when (expensesForAnalysis.isEmpty()) {
+                true -> {
+                    item {
+                        Text(
+                            text = "Пока нет данных о расходах. Вот несколько предложений для Вас:",
+                            color = blackOrWhiteColor(isLightTheme),
+                            fontSize = 16.sp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .padding(top = 16.dp)
+                                .padding(bottom = 16.dp)
+                                .animateItem(tween(810, easing = FastOutSlowInEasing)),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    items(adViews.size, key = { "$isLightTheme-$it" }) { index ->
+                        AndroidView(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 14.dp)
+                                .animateItem(tween(810, easing = FastOutSlowInEasing)),
+                            factory = { context ->
+                                NativeBannerView(context).apply {
+                                    applyAppearance(nativeAdAppearance(isLightTheme))
+                                    setAd(adViews[index])
+                                }
+                            }
+                        )
+                    }
+                }
+
+                false -> {
+                    item {
+                        UiPieChart(
+                            modifier = Modifier
+                                .size(300.dp)
+                                .padding(top = 16.dp, bottom = 12.dp),
+                            pieChartData = UiPieChartData(
+                                slices = getSlices(totalAmount, expensesForAnalysis)
+                            )
+                        )
+                    }
+                    item {
+                        UiLegendRows(
+                            isLightTheme = isLightTheme,
+                            items = getUiLegendAmountItems(totalAmount, expensesForAnalysis)
+                        )
+                    }
+                }
             }
             item { Spacer(modifier = Modifier.height(12.dp)) }
         }
