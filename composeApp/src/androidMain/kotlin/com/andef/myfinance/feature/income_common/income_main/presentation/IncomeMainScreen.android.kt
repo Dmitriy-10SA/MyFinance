@@ -1,12 +1,9 @@
 package com.andef.myfinance.feature.income_common.income_main.presentation
 
 import android.app.Application
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -66,6 +63,8 @@ import com.andef.myfinance.core.utils.GrayForLight
 import com.andef.myfinance.core.utils.Red
 import com.andef.myfinance.core.utils.White
 import com.andef.myfinance.core.utils.Yellow
+import com.andef.myfinance.core.utils.anims.fadeInAnim
+import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
@@ -183,75 +182,97 @@ private fun MainContent(
     listState: LazyListState,
     onIncomeCardClick: (IncomeModel) -> Unit
 ) {
-    AnimatedContent(
-        targetState = incomesForLazyColumn.isEmpty(),
-        transitionSpec = {
-            (fadeIn(animationSpec = tween(400, easing = FastOutSlowInEasing)))
-                .togetherWith(fadeOut(animationSpec = tween(400, easing = FastOutSlowInEasing)))
-        }
-    ) { isEmpty ->
-        when (isEmpty) {
-            true -> EmptyContent(
-                paddingValues = paddingValues,
-                isLightTheme = isLightTheme,
-                adViews = adViews
-            )
-
-            false -> NotEmptyContent(
-                paddingValues = paddingValues,
-                totalAmount = totalAmount,
-                incomesForLazyColumn = incomesForLazyColumn,
-                isLightTheme = isLightTheme,
-                startDate = startDate,
-                endDate = endDate,
-                listState = listState,
-                onIncomeCardClick = onIncomeCardClick
-            )
-        }
-    }
-    UiLoading(isVisible = isLoading, isLightTheme = isLightTheme)
-}
-
-@Composable
-private fun EmptyContent(
-    paddingValues: PaddingValues,
-    isLightTheme: Boolean,
-    adViews: List<NativeAd>
-) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues),
+        state = listState,
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         stickyHeader {
-            Text(
-                text = "Доходы пока не добавлены. Возможно, Вас заинтересуют эти предложения:",
-                fontSize = 16.sp,
-                color = blackOrWhiteColor(isLightTheme),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                textAlign = TextAlign.Center
-            )
+            AnimatedVisibility(
+                visible = incomesForLazyColumn.isNotEmpty(),
+                exit = fadeOutAnim(),
+                enter = fadeInAnim()
+            ) {
+                UiDateAndAmountRow(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 12.dp)
+                        .animateItem(),
+                    isIncome = true,
+                    totalAmount = totalAmount,
+                    isLightTheme = isLightTheme,
+                    startDate = startDate,
+                    endDate = endDate
+                )
+            }
         }
-        item { Spacer(modifier = Modifier.height(16.dp)) }
-        items(adViews.size, key = { "$isLightTheme-$it" }) { index ->
-            AndroidView(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .animateItem(tween(810, easing = FastOutSlowInEasing)),
-                factory = { context ->
-                    NativeBannerView(context).apply {
-                        applyAppearance(nativeAdAppearance(isLightTheme))
-                        setAd(adViews[index])
+        item { Spacer(modifier = Modifier.height(6.dp)) }
+        when (incomesForLazyColumn.isEmpty()) {
+            true -> {
+                item {
+                    Text(
+                        text = "Пока нет данных о доходах. Вот несколько предложений для Вас:",
+                        color = blackOrWhiteColor(isLightTheme),
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 16.dp)
+                            .padding(bottom = 16.dp)
+                            .animateItem(tween(810, easing = FastOutSlowInEasing)),
+                        textAlign = TextAlign.Center
+                    )
+                }
+                items(adViews.size, key = { "$isLightTheme-$it" }) { index ->
+                    AndroidView(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 14.dp)
+                            .animateItem(tween(810, easing = FastOutSlowInEasing)),
+                        factory = { context ->
+                            NativeBannerView(context).apply {
+                                applyAppearance(nativeAdAppearance(isLightTheme))
+                                setAd(adViews[index])
+                            }
+                        }
+                    )
+                }
+            }
+
+            false -> {
+                incomesForLazyColumn.forEach { incomeForLazyColumn ->
+                    item(key = "date-${incomeForLazyColumn.date}") {
+                        Spacer(modifier = Modifier.height(18.dp))
+                        UiDateAndAmountRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp, bottom = 4.dp)
+                                .animateItem(),
+                            isIncome = true,
+                            isLightTheme = isLightTheme,
+                            date = incomeForLazyColumn.date,
+                            amount = incomeForLazyColumn.totalAmount
+                        )
+                    }
+                    items(items = incomeForLazyColumn.incomeModels, key = { it.id }) { income ->
+                        UiIncomeCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItem(),
+                            isLightTheme = isLightTheme,
+                            incomeModel = income,
+                            onClick = { onIncomeCardClick(income) }
+                        )
                     }
                 }
-            )
+            }
         }
-        item { Spacer(modifier = Modifier.height(16.dp)) }
+        item { Spacer(modifier = Modifier.height(12.dp)) }
     }
+    UiLoading(isVisible = isLoading, isLightTheme = isLightTheme)
 }
 
 fun nativeAdAppearance(isLightTheme: Boolean): NativeTemplateAppearance {
@@ -265,7 +286,8 @@ fun nativeAdAppearance(isLightTheme: Boolean): NativeTemplateAppearance {
         .withBannerAppearance(
             BannerAppearance.Builder()
                 .setBackgroundColor(backgroundColor.toArgb())
-                .setBorderWidth(0f)
+                .setBorderWidth(0.1f)
+                .setBorderColor(bodyColor.copy(alpha = 0.2f).toArgb())
                 .build()
         )
         .withImageAppearance(
@@ -333,67 +355,6 @@ fun nativeAdAppearance(isLightTheme: Boolean): NativeTemplateAppearance {
                 .build()
         )
         .build()
-}
-
-@Composable
-private fun NotEmptyContent(
-    paddingValues: PaddingValues,
-    totalAmount: Double,
-    incomesForLazyColumn: List<IncomeForLazyColumn>,
-    isLightTheme: Boolean,
-    startDate: LocalDate,
-    endDate: LocalDate,
-    listState: LazyListState,
-    onIncomeCardClick: (IncomeModel) -> Unit
-) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
-        state = listState,
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        stickyHeader {
-            UiDateAndAmountRow(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 12.dp),
-                isIncome = true,
-                totalAmount = totalAmount,
-                isLightTheme = isLightTheme,
-                startDate = startDate,
-                endDate = endDate
-            )
-        }
-        item { Spacer(modifier = Modifier.height(6.dp)) }
-        incomesForLazyColumn.forEach { incomeForLazyColumn ->
-            item(key = "date-${incomeForLazyColumn.date}") {
-                Spacer(modifier = Modifier.height(18.dp))
-                UiDateAndAmountRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp, bottom = 4.dp)
-                        .animateItem(),
-                    isIncome = true,
-                    isLightTheme = isLightTheme,
-                    date = incomeForLazyColumn.date,
-                    amount = incomeForLazyColumn.totalAmount
-                )
-            }
-            items(items = incomeForLazyColumn.incomeModels, key = { it.id }) { income ->
-                UiIncomeCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItem(),
-                    isLightTheme = isLightTheme,
-                    incomeModel = income,
-                    onClick = { onIncomeCardClick(income) }
-                )
-            }
-        }
-        item { Spacer(modifier = Modifier.height(12.dp)) }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
