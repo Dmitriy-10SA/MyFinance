@@ -1,6 +1,5 @@
 package com.andef.myfinance.feature.reminder_common.reminder_all.presentation
 
-import android.app.Application
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -40,17 +39,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.andef.myfinance.core.design.alert.dialog.ui.UiAlertDialog
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiModalBottomSheet
@@ -76,9 +70,7 @@ import com.andef.myfinance.core.utils.getters.minusDays
 import com.andef.myfinance.core.utils.getters.now
 import com.andef.myfinance.core.utils.getters.plusDays
 import com.andef.myfinance.core.utils.grayColor
-import com.andef.myfinance.feature.income_common.income_main.presentation.nativeAdAppearance
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
-import com.yandex.mobile.ads.nativeads.template.NativeBannerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
@@ -104,17 +96,6 @@ actual fun AllRemindersScreen(
 ) {
     val viewModel = koinViewModel<AllRemindersViewModel>()
     val state = viewModel.state.collectAsState()
-
-    val application = LocalContext.current.applicationContext as Application
-    val adsViewModel: AllRemindersAdsViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                @Suppress("UNCHECKED_CAST")
-                return AllRemindersAdsViewModel(application) as T
-            }
-        }
-    )
-    val adViews = adsViewModel.adViews.collectAsState().value
 
     LaunchedEffect(Unit) { viewModel.send(AllRemindersIntent.SubscribeToReminders) }
 
@@ -173,62 +154,27 @@ actual fun AllRemindersScreen(
                 .navigationBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            when (state.value.remindersForScreenAsList.isEmpty()) {
-                true -> {
-                    item {
-                        Text(
-                            text = "Пока нет напоминаний. Вот несколько предложений для Вас:",
-                            color = blackOrWhiteColor(isLightTheme),
-                            fontSize = 16.sp,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .padding(top = 16.dp)
-                                .padding(bottom = 16.dp)
-                                .animateItem(tween(810, easing = FastOutSlowInEasing)),
-                            textAlign = TextAlign.Center
+            items(
+                items = state.value.remindersForScreenAsList,
+                key = { it.id }) { reminder ->
+                UiReminderCard(
+                    onClick = {
+                        viewModel.send(
+                            AllRemindersIntent.ReminderBottomSheetVisibleChange(
+                                isVisible = true,
+                                reminderId = reminder.id,
+                                reminderText = reminder.text,
+                                reminderDate = reminder.date,
+                                reminderTime = reminder.time
+                            )
                         )
-                    }
-                    items(adViews.size, key = { "$isLightTheme-$it" }) { index ->
-                        AndroidView(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 14.dp)
-                                .animateItem(tween(810, easing = FastOutSlowInEasing)),
-                            factory = { context ->
-                                NativeBannerView(context).apply {
-                                    applyAppearance(nativeAdAppearance(isLightTheme))
-                                    setAd(adViews[index])
-                                }
-                            }
-                        )
-                    }
-                }
-
-                false -> {
-                    items(
-                        items = state.value.remindersForScreenAsList,
-                        key = { it.id }) { reminder ->
-                        UiReminderCard(
-                            onClick = {
-                                viewModel.send(
-                                    AllRemindersIntent.ReminderBottomSheetVisibleChange(
-                                        isVisible = true,
-                                        reminderId = reminder.id,
-                                        reminderText = reminder.text,
-                                        reminderDate = reminder.date,
-                                        reminderTime = reminder.time
-                                    )
-                                )
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .animateItem(),
-                            isLightTheme = isLightTheme,
-                            reminderModel = reminder
-                        )
-                    }
-                }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItem(tween(800, easing = FastOutSlowInEasing)),
+                    isLightTheme = isLightTheme,
+                    reminderModel = reminder
+                )
             }
             item { Spacer(modifier = Modifier.height(12.dp)) }
         }
@@ -269,9 +215,6 @@ actual fun AllRemindersScreen(
         snackbarHostState = snackbarHostState
     )
 }
-
-private const val BANNER_ID = "R-M-17151552-6"
-private val contextTags = listOf("напоминания", "бюджет")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

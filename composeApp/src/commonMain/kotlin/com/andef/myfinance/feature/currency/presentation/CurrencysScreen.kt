@@ -1,5 +1,7 @@
 package com.andef.myfinance.feature.currency.presentation
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -77,7 +79,7 @@ fun CurrencysScreen(
                     percent = currency.second,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .animateItem()
+                        .animateItem(tween(800, easing = FastOutSlowInEasing))
                 )
             }
         }

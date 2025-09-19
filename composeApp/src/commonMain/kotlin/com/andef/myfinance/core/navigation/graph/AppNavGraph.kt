@@ -10,7 +10,6 @@ import androidx.navigation.navArgument
 import androidx.savedstate.read
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.platform.backup.BackupManager
-import com.andef.myfinance.core.platform.common.InterstitialAdManager
 import com.andef.myfinance.core.platform.common.LinkOpener
 import com.andef.myfinance.core.platform.common.MoneyDecimalFormatter
 import com.andef.myfinance.core.platform.common.PermissionManager
@@ -39,8 +38,7 @@ fun AppNavGraph(
     startDate: LocalDate,
     endDate: LocalDate,
     currentRoute: String?,
-    mainScreenIsVisible: Boolean,
-    interstitialAdManager: InterstitialAdManager
+    mainScreenIsVisible: Boolean
 ) {
     val backupManager = getKoin().get<BackupManager>()
     val linkOpener = getKoin().get<LinkOpener>()
@@ -82,8 +80,7 @@ fun AppNavGraph(
             IncomeAnalysisScreen(
                 isLightTheme = isLightTheme,
                 navHostController = navHostController,
-                paddingValues = paddingValues,
-                interstitialAdManager = interstitialAdManager
+                paddingValues = paddingValues
             )
         }
         composable(
@@ -122,8 +119,7 @@ fun AppNavGraph(
         ) {
             ExpenseAnalysisScreen(
                 isLightTheme = isLightTheme,
-                navHostController = navHostController,
-                interstitialAdManager = interstitialAdManager
+                navHostController = navHostController
             )
         }
         composable(

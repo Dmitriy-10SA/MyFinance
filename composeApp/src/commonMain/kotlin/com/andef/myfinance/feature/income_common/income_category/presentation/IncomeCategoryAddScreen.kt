@@ -1,5 +1,7 @@
 package com.andef.myfinance.feature.income_common.income_category.presentation
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -376,7 +378,7 @@ private fun MainContent(
                     isLightTheme = isLightTheme,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .animateItem(),
+                        .animateItem(tween(800, easing = FastOutSlowInEasing)),
                     enabled = false,
                     category = it,
                     onClick = {}
@@ -388,7 +390,7 @@ private fun MainContent(
                         isLightTheme = isLightTheme,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .animateItem(),
+                            .animateItem(tween(800, easing = FastOutSlowInEasing)),
                         category = it.title,
                         onClick = {
                             viewModel.send(IncomeCategoryAddIntent.ChangeCurrentIncomeCategoryId(it.id))
