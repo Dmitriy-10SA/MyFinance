@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -42,10 +45,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun SystemUiSettings(systemUiController: SystemUiController, isLightTheme: Boolean) {
     with(systemUiController) {
-        val color = when (isLightTheme) {
-            true -> White
-            false -> DarkGray
-        }
+        val color = animateColorAsState(
+            when (isLightTheme) {
+                true -> White
+                false -> DarkGray
+            },
+            tween(800, easing = FastOutSlowInEasing)
+        ).value
         setNavigationBarColor(color = color, darkIcons = isLightTheme)
         setStatusBarColor(color = color, darkIcons = isLightTheme)
     }
