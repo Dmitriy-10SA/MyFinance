@@ -169,13 +169,9 @@ private fun MainContent(
                     },
                     onDragEnd = {
                         if (totalDrag > 100) {
-                            println("Свайп вправо")
                             onRightSwipe()
-                            // viewModel.send(IncomeMainIntent.ChangeDateRangeToPrevious)
                         } else if (totalDrag < -100) {
-                            println("Свайп влево")
                             onLeftSwipe()
-                            // viewModel.send(IncomeMainIntent.ChangeDateRangeToNext)
                         }
                     }
                 )

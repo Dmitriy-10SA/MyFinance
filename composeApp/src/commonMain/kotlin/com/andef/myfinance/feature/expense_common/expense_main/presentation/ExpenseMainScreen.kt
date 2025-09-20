@@ -3,6 +3,7 @@ package com.andef.myfinance.feature.expense_common.expense_main.presentation
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,11 +29,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -68,7 +73,9 @@ fun ExpenseMainScreen(
     navHostController: NavHostController,
     paddingValues: PaddingValues,
     startDate: LocalDate,
-    endDate: LocalDate
+    endDate: LocalDate,
+    onLeftSwipe: () -> Unit,
+    onRightSwipe: () -> Unit
 ) {
     val viewModel = koinViewModel<ExpenseMainViewModel>()
     val state = viewModel.state.collectAsState().value
@@ -96,7 +103,17 @@ fun ExpenseMainScreen(
         viewModel.send(ExpenseMainIntent.SubscribeForExpenses(startDate, endDate))
     }
 
-    MainContent(paddingValues, state, isLightTheme, viewModel, startDate, endDate, listState)
+    MainContent(
+        paddingValues,
+        state,
+        isLightTheme,
+        viewModel,
+        startDate,
+        endDate,
+        listState,
+        onLeftSwipe,
+        onRightSwipe
+    )
     BottomSheetWithDeleteDialog(
         navHostController = navHostController,
         viewModel = viewModel,
@@ -117,12 +134,30 @@ private fun MainContent(
     viewModel: ExpenseMainViewModel,
     startDate: LocalDate,
     endDate: LocalDate,
-    listState: LazyListState
+    listState: LazyListState,
+    onLeftSwipe: () -> Unit,
+    onRightSwipe: () -> Unit
 ) {
+    var totalDrag by remember { mutableStateOf(0f) }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues),
+            .padding(paddingValues)
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures(
+                    onDragStart = { totalDrag = 0f },
+                    onHorizontalDrag = { _, dragAmount ->
+                        totalDrag += dragAmount
+                    },
+                    onDragEnd = {
+                        if (totalDrag > 100) {
+                            onRightSwipe()
+                        } else if (totalDrag < -100) {
+                            onLeftSwipe()
+                        }
+                    }
+                )
+            },
         state = listState,
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
