@@ -62,8 +62,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 actual fun ExpenseAnalysisScreen(
     isLightTheme: Boolean,
-    navHostController: NavHostController,
-    interstitialAdManager: InterstitialAdManager
+    navHostController: NavHostController
 ) {
     val viewModel = koinViewModel<ExpenseAnalysisViewModel>()
     val state = viewModel.state.collectAsState()
@@ -93,8 +92,7 @@ actual fun ExpenseAnalysisScreen(
                 navHostController = navHostController,
                 scope = scope,
                 snackbarHostState = snackbarHostState,
-                viewModel = viewModel,
-                interstitialAdManager = interstitialAdManager
+                viewModel = viewModel
             )
         }
     ) { topBarPadding ->
@@ -225,8 +223,7 @@ private fun TopBar(
     viewModel: ExpenseAnalysisViewModel,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
-    navHostController: NavHostController,
-    interstitialAdManager: InterstitialAdManager
+    navHostController: NavHostController
 ) {
     UiTopBar(
         isLightTheme = isLightTheme,
@@ -286,8 +283,7 @@ private fun TopBar(
                 startDate = startDate.value,
                 endDate = endDate.value,
                 scope = scope,
-                snackbarHostState = snackbarHostState,
-                interstitialAdManager = interstitialAdManager
+                snackbarHostState = snackbarHostState
             )
         }
     )
@@ -300,32 +296,29 @@ private fun RowScope.ActionsForTopBar(
     isLightTheme: Boolean,
     viewModel: ExpenseAnalysisViewModel,
     startDate: LocalDate,
-    endDate: LocalDate,
-    interstitialAdManager: InterstitialAdManager
+    endDate: LocalDate
 ) {
     val pdfPrinter = getPdfPrinter()
     IconButton(
         onClick = {
-            interstitialAdManager.showAd {
-                viewModel.send(
-                    ExpenseAnalysisIntent.GetExpensesForPdf(
-                        onSuccess = { expenses, maxDate, minDate ->
-                            pdfPrinter.printExpensePdf(expenses, maxDate, minDate)
-                        },
-                        onError = { msg ->
-                            scope.launch {
-                                snackbarHostState.currentSnackbarData?.dismiss()
-                                snackbarHostState.showSnackbar(
-                                    message = msg,
-                                    withDismissAction = true
-                                )
-                            }
-                        },
-                        startDate = startDate,
-                        endDate = endDate
-                    )
+            viewModel.send(
+                ExpenseAnalysisIntent.GetExpensesForPdf(
+                    onSuccess = { expenses, maxDate, minDate ->
+                        pdfPrinter.printExpensePdf(expenses, maxDate, minDate)
+                    },
+                    onError = { msg ->
+                        scope.launch {
+                            snackbarHostState.currentSnackbarData?.dismiss()
+                            snackbarHostState.showSnackbar(
+                                message = msg,
+                                withDismissAction = true
+                            )
+                        }
+                    },
+                    startDate = startDate,
+                    endDate = endDate
                 )
-            }
+            )
         },
         colors = IconButtonDefaults.iconButtonColors(
             containerColor = Color.Transparent,

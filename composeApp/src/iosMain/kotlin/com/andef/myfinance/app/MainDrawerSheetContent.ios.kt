@@ -87,8 +87,7 @@ actual fun MainDrawerSheetContent(
     drawerState: DrawerState,
     viewModel: AppViewModel,
     username: String,
-    isLightTheme: Boolean,
-    interstitialAdManager: InterstitialAdManager
+    isLightTheme: Boolean
 ) {
     val linkOpener = getKoin().get<LinkOpener>()
     val nameChangeSheetState = rememberModalBottomSheetState()
@@ -106,8 +105,7 @@ actual fun MainDrawerSheetContent(
             drawerState = drawerState,
             nameChangeSheetVisible = nameChangeSheetVisible,
             feedbackSheetVisible = feedbackSheetVisible,
-            viewModel = viewModel,
-            interstitialAdManager = interstitialAdManager
+            viewModel = viewModel
         )
         UsernameChangeBottomSheet(
             onUsernameChange = { usernameValue = it },
@@ -179,8 +177,6 @@ private fun UsernameChangeBottomSheet(
     }
 }
 
-private const val BANNER_ID = "R-M-17151552-4"
-
 @Composable
 private fun InnerContent(
     isLightTheme: Boolean,
@@ -190,8 +186,7 @@ private fun InnerContent(
     drawerState: DrawerState,
     nameChangeSheetVisible: MutableState<Boolean>,
     feedbackSheetVisible: MutableState<Boolean>,
-    viewModel: AppViewModel,
-    interstitialAdManager: InterstitialAdManager
+    viewModel: AppViewModel
 ) {
     Column(
         modifier = Modifier
@@ -312,9 +307,7 @@ private fun InnerContent(
                     onClick = {
                         scope.launch {
                             drawerState.close()
-                            interstitialAdManager.showAd {
-                                navHostController.navigate(Screen.BackupMainScreen.route)
-                            }
+                            navHostController.navigate(Screen.BackupMainScreen.route)
                         }
                     }
                 )

@@ -66,8 +66,7 @@ import org.koin.compose.viewmodel.koinViewModel
 actual fun IncomeAnalysisScreen(
     isLightTheme: Boolean,
     navHostController: NavHostController,
-    paddingValues: PaddingValues,
-    interstitialAdManager: InterstitialAdManager
+    paddingValues: PaddingValues
 ) {
     val viewModel = koinViewModel<IncomeAnalysisViewModel>()
     val state = viewModel.state.collectAsState()
@@ -97,8 +96,7 @@ actual fun IncomeAnalysisScreen(
                 endDate = endDate,
                 datePickerVisible = datePickerVisible,
                 navHostController = navHostController,
-                viewModel = viewModel,
-                interstitialAdManager = interstitialAdManager
+                viewModel = viewModel
             )
         },
         snackbarHost = {
@@ -231,8 +229,7 @@ private fun TopBar(
     endDate: MutableState<LocalDate>,
     datePickerVisible: MutableState<Boolean>,
     viewModel: IncomeAnalysisViewModel,
-    navHostController: NavHostController,
-    interstitialAdManager: InterstitialAdManager
+    navHostController: NavHostController
 ) {
     UiTopBar(
         isLightTheme = isLightTheme,
@@ -292,8 +289,7 @@ private fun TopBar(
                 startDate = startDate.value,
                 endDate = endDate.value,
                 scope = scope,
-                snackbarHostState = snackbarHostState,
-                interstitialAdManager = interstitialAdManager
+                snackbarHostState = snackbarHostState
             )
         }
     )
@@ -306,32 +302,29 @@ private fun RowScope.ActionsForTopBar(
     isLightTheme: Boolean,
     viewModel: IncomeAnalysisViewModel,
     startDate: LocalDate,
-    endDate: LocalDate,
-    interstitialAdManager: InterstitialAdManager
+    endDate: LocalDate
 ) {
     val pdfPrinter = getPdfPrinter()
     IconButton(
         onClick = {
-            interstitialAdManager.showAd {
-                viewModel.send(
-                    IncomeAnalysisIntent.GetIncomesForPdf(
-                        onSuccess = { incomes, maxDate, minDate ->
-                            pdfPrinter.printIncomePdf(incomes, maxDate, minDate)
-                        },
-                        onError = { msg ->
-                            scope.launch {
-                                snackbarHostState.currentSnackbarData?.dismiss()
-                                snackbarHostState.showSnackbar(
-                                    message = msg,
-                                    withDismissAction = true
-                                )
-                            }
-                        },
-                        startDate = startDate,
-                        endDate = endDate
-                    )
+            viewModel.send(
+                IncomeAnalysisIntent.GetIncomesForPdf(
+                    onSuccess = { incomes, maxDate, minDate ->
+                        pdfPrinter.printIncomePdf(incomes, maxDate, minDate)
+                    },
+                    onError = { msg ->
+                        scope.launch {
+                            snackbarHostState.currentSnackbarData?.dismiss()
+                            snackbarHostState.showSnackbar(
+                                message = msg,
+                                withDismissAction = true
+                            )
+                        }
+                    },
+                    startDate = startDate,
+                    endDate = endDate
                 )
-            }
+            )
         },
         colors = IconButtonDefaults.iconButtonColors(
             containerColor = Color.Transparent,
