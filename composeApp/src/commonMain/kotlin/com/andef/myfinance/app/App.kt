@@ -85,7 +85,9 @@ fun App() {
                 }
             },
             viewModel = viewModel,
-            username = state.username
+            username = state.username,
+            onMainScreensLeftSwipe = { viewModel.send(AppIntent.LeftSwipe) },
+            onMainScreensRightSwipe = { viewModel.send(AppIntent.RightSwipe) }
         )
     }
 }
@@ -107,11 +109,13 @@ private fun AppDrawer(
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
     onDatesDismiss: () -> Unit,
     onTabClick: (UiTopBarTab) -> Unit,
-    onItemClick: (UiNavigationBarItem) -> Unit
+    onItemClick: (UiNavigationBarItem) -> Unit,
+    onMainScreensLeftSwipe: () -> Unit,
+    onMainScreensRightSwipe: () -> Unit
 ) {
     ModalNavigationDrawer(
         drawerState = drawerState,
-        gesturesEnabled = currentRoute in mainRoutes,
+        gesturesEnabled = drawerState.isOpen,
         drawerContent = {
             MainDrawerSheetContent(
                 navHostController = navHostController,
@@ -137,7 +141,9 @@ private fun AppDrawer(
                 onTabClick = onTabClick,
                 currentRoute = currentRoute,
                 isFirstStart = isFirstStart,
-                onItemClick = onItemClick
+                onItemClick = onItemClick,
+                onMainScreensLeftSwipe = onMainScreensLeftSwipe,
+                onMainScreensRightSwipe = onMainScreensRightSwipe
             )
         }
     )
@@ -158,7 +164,9 @@ private fun AppDrawerContent(
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
     onDatesDismiss: () -> Unit,
     onTabClick: (UiTopBarTab) -> Unit,
-    onItemClick: (UiNavigationBarItem) -> Unit
+    onItemClick: (UiNavigationBarItem) -> Unit,
+    onMainScreensLeftSwipe: () -> Unit,
+    onMainScreensRightSwipe: () -> Unit
 ) {
     UiScaffold(
         isLightTheme = isLightTheme,
@@ -189,7 +197,9 @@ private fun AppDrawerContent(
             startDate = startDate,
             endDate = endDate,
             currentRoute = currentRoute,
-            mainScreenIsVisible = currentRoute in mainRoutes
+            mainScreenIsVisible = currentRoute in mainRoutes,
+            onMainScreensLeftSwipe = onMainScreensLeftSwipe,
+            onMainScreensRightSwipe = onMainScreensRightSwipe
         )
         UiRangeDatePickerDialog(
             isVisible = datePickerVisible,

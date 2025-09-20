@@ -3,6 +3,7 @@ package com.andef.myfinance.feature.income_common.income_main.presentation
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,11 +29,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -46,6 +51,7 @@ import com.andef.myfinance.core.design.snackbar.ui.UiSnackbar
 import com.andef.myfinance.core.domain.income_common.income.entities.IncomeModel
 import com.andef.myfinance.core.domain.income_common.income_category.entities.IncomeCategoryModel
 import com.andef.myfinance.core.navigation.routes.Screen
+import com.andef.myfinance.core.platform.common.Logger
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red
 import com.andef.myfinance.core.utils.blackOrWhiteColor
@@ -61,6 +67,7 @@ import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_delete
 import myfinance.composeapp.generated.resources.my_finance_edit
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.getKoin
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(markerClass = [ExperimentalMaterial3Api::class])
@@ -70,7 +77,9 @@ fun IncomeMainScreen(
     navHostController: NavHostController,
     paddingValues: PaddingValues,
     startDate: LocalDate,
-    endDate: LocalDate
+    endDate: LocalDate,
+    onLeftSwipe: () -> Unit,
+    onRightSwipe: () -> Unit
 ) {
     val viewModel = koinViewModel<IncomeMainViewModel>()
     val state = viewModel.state.collectAsState().value
@@ -117,7 +126,9 @@ fun IncomeMainScreen(
                 )
             )
         },
-        listState = listState
+        listState = listState,
+        onLeftSwipe = onLeftSwipe,
+        onRightSwipe = onRightSwipe
     )
     BottomSheetWithDeleteDialog(
         navHostController = navHostController,
@@ -141,12 +152,34 @@ private fun MainContent(
     startDate: LocalDate,
     endDate: LocalDate,
     listState: LazyListState,
-    onIncomeCardClick: (IncomeModel) -> Unit
+    onIncomeCardClick: (IncomeModel) -> Unit,
+    onLeftSwipe: () -> Unit,
+    onRightSwipe: () -> Unit
 ) {
+    var totalDrag by remember { mutableStateOf(0f) }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues),
+            .padding(paddingValues)
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures(
+                    onDragStart = { totalDrag = 0f },
+                    onHorizontalDrag = { _, dragAmount ->
+                        totalDrag += dragAmount
+                    },
+                    onDragEnd = {
+                        if (totalDrag > 100) {
+                            println("Свайп вправо")
+                            onRightSwipe()
+                            // viewModel.send(IncomeMainIntent.ChangeDateRangeToPrevious)
+                        } else if (totalDrag < -100) {
+                            println("Свайп влево")
+                            onLeftSwipe()
+                            // viewModel.send(IncomeMainIntent.ChangeDateRangeToNext)
+                        }
+                    }
+                )
+            },
         state = listState,
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally

@@ -38,7 +38,9 @@ fun AppNavGraph(
     startDate: LocalDate,
     endDate: LocalDate,
     currentRoute: String?,
-    mainScreenIsVisible: Boolean
+    mainScreenIsVisible: Boolean,
+    onMainScreensLeftSwipe: () -> Unit,
+    onMainScreensRightSwipe: () -> Unit
 ) {
     val backupManager = getKoin().get<BackupManager>()
     val linkOpener = getKoin().get<LinkOpener>()
@@ -70,7 +72,9 @@ fun AppNavGraph(
             isLightTheme = isLightTheme,
             startDate = startDate,
             endDate = endDate,
-            mainScreenIsVisible = mainScreenIsVisible
+            mainScreenIsVisible = mainScreenIsVisible,
+            onRightSwipe = onMainScreensRightSwipe,
+            onLeftSwipe = onMainScreensLeftSwipe
         )
         composable(
             route = Screen.IncomeAnalysisScreen.route,
