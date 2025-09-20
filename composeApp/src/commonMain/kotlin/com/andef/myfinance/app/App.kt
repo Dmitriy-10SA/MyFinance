@@ -25,7 +25,6 @@ import com.andef.myfinance.core.navigation.graph.AppNavGraph
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.navigation.routes.Screen.MainScreens.fabRoutes
 import com.andef.myfinance.core.navigation.routes.Screen.MainScreens.mainRoutes
-import com.andef.myfinance.core.platform.common.InterstitialAdManager
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.navigateWithSaveState
 import kotlinx.coroutines.CoroutineScope
@@ -42,7 +41,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(interstitialAdManager: InterstitialAdManager) {
+fun App() {
     val viewModel = koinViewModel<AppViewModel>()
     val state = viewModel.state.collectAsState().value
 
@@ -86,8 +85,7 @@ fun App(interstitialAdManager: InterstitialAdManager) {
                 }
             },
             viewModel = viewModel,
-            username = state.username,
-            interstitialAdManager = interstitialAdManager
+            username = state.username
         )
     }
 }
@@ -109,8 +107,7 @@ private fun AppDrawer(
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
     onDatesDismiss: () -> Unit,
     onTabClick: (UiTopBarTab) -> Unit,
-    onItemClick: (UiNavigationBarItem) -> Unit,
-    interstitialAdManager: InterstitialAdManager
+    onItemClick: (UiNavigationBarItem) -> Unit
 ) {
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -122,8 +119,7 @@ private fun AppDrawer(
                 drawerState = drawerState,
                 viewModel = viewModel,
                 username = username,
-                isLightTheme = isLightTheme,
-                interstitialAdManager = interstitialAdManager
+                isLightTheme = isLightTheme
             )
         },
         content = {
@@ -141,8 +137,7 @@ private fun AppDrawer(
                 onTabClick = onTabClick,
                 currentRoute = currentRoute,
                 isFirstStart = isFirstStart,
-                onItemClick = onItemClick,
-                interstitialAdManager = interstitialAdManager
+                onItemClick = onItemClick
             )
         }
     )
@@ -163,8 +158,7 @@ private fun AppDrawerContent(
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
     onDatesDismiss: () -> Unit,
     onTabClick: (UiTopBarTab) -> Unit,
-    onItemClick: (UiNavigationBarItem) -> Unit,
-    interstitialAdManager: InterstitialAdManager
+    onItemClick: (UiNavigationBarItem) -> Unit
 ) {
     UiScaffold(
         isLightTheme = isLightTheme,
@@ -195,8 +189,7 @@ private fun AppDrawerContent(
             startDate = startDate,
             endDate = endDate,
             currentRoute = currentRoute,
-            mainScreenIsVisible = currentRoute in mainRoutes,
-            interstitialAdManager = interstitialAdManager
+            mainScreenIsVisible = currentRoute in mainRoutes
         )
         UiRangeDatePickerDialog(
             isVisible = datePickerVisible,

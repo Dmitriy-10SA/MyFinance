@@ -1,7 +1,5 @@
 package com.andef.myfinance.feature.income_common.income_main.presentation
 
-import android.app.Application
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
@@ -35,15 +33,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.andef.myfinance.core.design.alert.dialog.ui.UiAlertDialog
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiModalBottomSheet
@@ -55,31 +46,14 @@ import com.andef.myfinance.core.design.snackbar.ui.UiSnackbar
 import com.andef.myfinance.core.domain.income_common.income.entities.IncomeModel
 import com.andef.myfinance.core.domain.income_common.income_category.entities.IncomeCategoryModel
 import com.andef.myfinance.core.navigation.routes.Screen
-import com.andef.myfinance.core.utils.Black
 import com.andef.myfinance.core.utils.Blue
-import com.andef.myfinance.core.utils.DarkGray
-import com.andef.myfinance.core.utils.GrayForDark
-import com.andef.myfinance.core.utils.GrayForLight
 import com.andef.myfinance.core.utils.Red
-import com.andef.myfinance.core.utils.White
-import com.andef.myfinance.core.utils.Yellow
-import com.andef.myfinance.core.utils.anims.fadeInAnim
-import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
 import com.andef.myfinance.core.utils.getters.getTitleForIncome
 import com.andef.myfinance.core.utils.grayColor
 import com.andef.myfinance.feature.income_common.income_main.domain.entities.IncomeForLazyColumn
-import com.yandex.mobile.ads.nativeads.NativeAd
-import com.yandex.mobile.ads.nativeads.template.NativeBannerView
-import com.yandex.mobile.ads.nativeads.template.SizeConstraint
-import com.yandex.mobile.ads.nativeads.template.appearance.BannerAppearance
-import com.yandex.mobile.ads.nativeads.template.appearance.ButtonAppearance
-import com.yandex.mobile.ads.nativeads.template.appearance.ImageAppearance
-import com.yandex.mobile.ads.nativeads.template.appearance.NativeTemplateAppearance
-import com.yandex.mobile.ads.nativeads.template.appearance.RatingAppearance
-import com.yandex.mobile.ads.nativeads.template.appearance.TextAppearance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -100,17 +74,6 @@ actual fun IncomeMainScreen(
 ) {
     val viewModel = koinViewModel<IncomeMainViewModel>()
     val state = viewModel.state.collectAsState().value
-
-    val application = LocalContext.current.applicationContext as Application
-    val adsViewModel: IncomeMainAdsViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                @Suppress("UNCHECKED_CAST")
-                return IncomeMainAdsViewModel(application) as T
-            }
-        }
-    )
-    val adViews = adsViewModel.adViews.collectAsState().value
 
     val sheetState = rememberModalBottomSheetState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -154,7 +117,6 @@ actual fun IncomeMainScreen(
                 )
             )
         },
-        adViews = adViews,
         listState = listState
     )
     BottomSheetWithDeleteDialog(
@@ -177,7 +139,6 @@ private fun MainContent(
     isLightTheme: Boolean,
     isLoading: Boolean,
     startDate: LocalDate,
-    adViews: List<NativeAd>,
     endDate: LocalDate,
     listState: LazyListState,
     onIncomeCardClick: (IncomeModel) -> Unit
@@ -191,170 +152,46 @@ private fun MainContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         stickyHeader {
-            AnimatedVisibility(
-                visible = incomesForLazyColumn.isNotEmpty(),
-                exit = fadeOutAnim(),
-                enter = fadeInAnim()
-            ) {
-                UiDateAndAmountRow(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 12.dp)
-                        .animateItem(),
-                    isIncome = true,
-                    totalAmount = totalAmount,
-                    isLightTheme = isLightTheme,
-                    startDate = startDate,
-                    endDate = endDate
-                )
-            }
+            UiDateAndAmountRow(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 12.dp),
+                isIncome = true,
+                totalAmount = totalAmount,
+                isLightTheme = isLightTheme,
+                startDate = startDate,
+                endDate = endDate
+            )
         }
         item { Spacer(modifier = Modifier.height(6.dp)) }
-        when (incomesForLazyColumn.isEmpty()) {
-            true -> {
-                item {
-                    Text(
-                        text = "Пока нет данных о доходах. Вот несколько предложений для Вас:",
-                        color = blackOrWhiteColor(isLightTheme),
-                        fontSize = 16.sp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .padding(top = 16.dp)
-                            .padding(bottom = 16.dp)
-                            .animateItem(tween(810, easing = FastOutSlowInEasing)),
-                        textAlign = TextAlign.Center
-                    )
-                }
-                items(adViews.size, key = { "$isLightTheme-$it" }) { index ->
-                    AndroidView(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 14.dp)
-                            .animateItem(tween(810, easing = FastOutSlowInEasing)),
-                        factory = { context ->
-                            NativeBannerView(context).apply {
-                                applyAppearance(nativeAdAppearance(isLightTheme))
-                                setAd(adViews[index])
-                            }
-                        }
-                    )
-                }
+        incomesForLazyColumn.forEach { incomeForLazyColumn ->
+            item(key = "date-${incomeForLazyColumn.date}") {
+                Spacer(modifier = Modifier.height(18.dp))
+                UiDateAndAmountRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, bottom = 4.dp)
+                        .animateItem(tween(800, easing = FastOutSlowInEasing)),
+                    isIncome = true,
+                    isLightTheme = isLightTheme,
+                    date = incomeForLazyColumn.date,
+                    amount = incomeForLazyColumn.totalAmount
+                )
             }
-
-            false -> {
-                incomesForLazyColumn.forEach { incomeForLazyColumn ->
-                    item(key = "date-${incomeForLazyColumn.date}") {
-                        Spacer(modifier = Modifier.height(18.dp))
-                        UiDateAndAmountRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 8.dp, bottom = 4.dp)
-                                .animateItem(),
-                            isIncome = true,
-                            isLightTheme = isLightTheme,
-                            date = incomeForLazyColumn.date,
-                            amount = incomeForLazyColumn.totalAmount
-                        )
-                    }
-                    items(items = incomeForLazyColumn.incomeModels, key = { it.id }) { income ->
-                        UiIncomeCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .animateItem(),
-                            isLightTheme = isLightTheme,
-                            incomeModel = income,
-                            onClick = { onIncomeCardClick(income) }
-                        )
-                    }
-                }
+            items(items = incomeForLazyColumn.incomeModels, key = { it.id }) { income ->
+                UiIncomeCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItem(tween(800, easing = FastOutSlowInEasing)),
+                    isLightTheme = isLightTheme,
+                    incomeModel = income,
+                    onClick = { onIncomeCardClick(income) }
+                )
             }
         }
         item { Spacer(modifier = Modifier.height(12.dp)) }
     }
     UiLoading(isVisible = isLoading, isLightTheme = isLightTheme)
-}
-
-fun nativeAdAppearance(isLightTheme: Boolean): NativeTemplateAppearance {
-    val backgroundColor = if (isLightTheme) White else DarkGray
-    val titleColor = if (isLightTheme) Black else White
-    val bodyColor = if (isLightTheme) GrayForLight else GrayForDark
-    val ageColor = if (isLightTheme) GrayForLight else GrayForDark
-    val ratingStarColor = Yellow
-
-    return NativeTemplateAppearance.Builder()
-        .withBannerAppearance(
-            BannerAppearance.Builder()
-                .setBackgroundColor(backgroundColor.toArgb())
-                .setBorderWidth(0.1f)
-                .setBorderColor(bodyColor.copy(alpha = 0.2f).toArgb())
-                .build()
-        )
-        .withImageAppearance(
-            ImageAppearance.Builder()
-                .setWidthConstraint(SizeConstraint(SizeConstraint.SizeConstraintType.FIXED, 60f))
-                .build()
-        )
-        .withCallToActionAppearance(
-            ButtonAppearance.Builder()
-                .setNormalColor(Blue.toArgb())
-                .setPressedColor(Blue.toArgb())
-                .setTextAppearance(
-                    TextAppearance.Builder()
-                        .setTextColor(White.toArgb())
-                        .setTextSize(14f)
-                        .build()
-                )
-                .build()
-        )
-        .withDomainAppearance(
-            TextAppearance.Builder()
-                .setTextColor(bodyColor.toArgb())
-                .setTextSize(12f)
-                .build()
-        )
-        .withAgeAppearance(
-            TextAppearance.Builder()
-                .setTextColor(ageColor.toArgb())
-                .setTextSize(12f)
-                .build()
-        )
-        .withBodyAppearance(
-            TextAppearance.Builder()
-                .setTextColor(bodyColor.toArgb())
-                .setTextSize(12f)
-                .build()
-        )
-        .withRatingAppearance(
-            RatingAppearance.Builder()
-                .setProgressStarColor(ratingStarColor.toArgb())
-                .build()
-        )
-        .withTitleAppearance(
-            TextAppearance.Builder()
-                .setTextColor(titleColor.toArgb())
-                .setTextSize(14f)
-                .build()
-        )
-        .withReviewCountAppearance(
-            TextAppearance.Builder()
-                .setTextColor(bodyColor.toArgb())
-                .setTextSize(12f)
-                .build()
-        )
-        .withSponsoredAppearance(
-            TextAppearance.Builder()
-                .setTextColor(bodyColor.toArgb())
-                .setTextSize(10f)
-                .build()
-        )
-        .withWarningAppearance(
-            TextAppearance.Builder()
-                .setTextColor(bodyColor.toArgb())
-                .setTextSize(10f)
-                .build()
-        )
-        .build()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

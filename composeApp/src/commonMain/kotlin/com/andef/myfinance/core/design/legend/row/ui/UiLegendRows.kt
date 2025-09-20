@@ -26,10 +26,10 @@ import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
 import com.andef.myfinance.core.utils.grayColor
 
 @Composable
-fun UiLegendRows(isLightTheme: Boolean, items: List<UiLegendAmountItem>) {
+fun UiLegendRows(modifier: Modifier = Modifier, isLightTheme: Boolean, items: List<UiLegendAmountItem>) {
     items.forEach { item ->
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.End
         ) {

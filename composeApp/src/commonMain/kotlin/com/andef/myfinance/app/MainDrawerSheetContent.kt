@@ -4,7 +4,6 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.andef.myfinance.core.platform.common.InterstitialAdManager
 import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -15,6 +14,5 @@ expect fun MainDrawerSheetContent(
     drawerState: DrawerState,
     viewModel: AppViewModel,
     username: String,
-    isLightTheme: Boolean,
-    interstitialAdManager: InterstitialAdManager
+    isLightTheme: Boolean
 )

@@ -40,7 +40,6 @@ import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.design.topbar.ui.UiTopBar
 import com.andef.myfinance.core.domain.expense_common.expense_category.entities.BaseExpenseCategory
 import com.andef.myfinance.core.domain.expense_common.expense_category.entities.ExpenseCategoryModel
-import com.andef.myfinance.core.platform.common.InterstitialAdManager
 import com.andef.myfinance.core.platform.common.getPdfPrinter
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red

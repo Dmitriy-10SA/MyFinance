@@ -57,9 +57,6 @@ kotlin {
 
             //ui-controller
             implementation(libs.accompanist.systemuicontroller)
-
-            //ads
-            implementation(libs.mobileads)
         }
         commonMain.dependencies {
             implementation(compose.runtime)

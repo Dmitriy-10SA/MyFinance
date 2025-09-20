@@ -51,7 +51,6 @@ import com.andef.myfinance.core.design.drawer.sheet.ui.UiModalDrawerSheet
 import com.andef.myfinance.core.design.drawer.sheet.ui.UiModalDrawerSheetInnerItem
 import com.andef.myfinance.core.design.textfield.ui.UiTextField
 import com.andef.myfinance.core.navigation.routes.Screen
-import com.andef.myfinance.core.platform.common.InterstitialAdManager
 import com.andef.myfinance.core.platform.common.LinkOpener
 import com.andef.myfinance.core.utils.Black
 import com.andef.myfinance.core.utils.DarkGray

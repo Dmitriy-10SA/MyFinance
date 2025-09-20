@@ -1,7 +1,5 @@
 package com.andef.myfinance.app
 
-import android.app.Application
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,9 +29,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,16 +38,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiConnectionModalBottomSheet
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiModalBottomSheet
@@ -61,21 +51,14 @@ import com.andef.myfinance.core.design.drawer.sheet.ui.UiModalDrawerSheet
 import com.andef.myfinance.core.design.drawer.sheet.ui.UiModalDrawerSheetInnerItem
 import com.andef.myfinance.core.design.textfield.ui.UiTextField
 import com.andef.myfinance.core.navigation.routes.Screen
-import com.andef.myfinance.core.platform.common.InterstitialAdManager
 import com.andef.myfinance.core.platform.common.LinkOpener
 import com.andef.myfinance.core.utils.Black
 import com.andef.myfinance.core.utils.DarkGray
 import com.andef.myfinance.core.utils.GrayForDark
 import com.andef.myfinance.core.utils.GrayForLight
 import com.andef.myfinance.core.utils.White
-import com.andef.myfinance.core.utils.anims.fadeInAnim
-import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.core.utils.blackOrWhiteColor
-import com.andef.myfinance.feature.income_common.income_main.presentation.nativeAdAppearance
-import com.yandex.mobile.ads.nativeads.NativeAd
-import com.yandex.mobile.ads.nativeads.template.NativeBannerView
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_analytics
@@ -104,8 +87,7 @@ actual fun MainDrawerSheetContent(
     drawerState: DrawerState,
     viewModel: AppViewModel,
     username: String,
-    isLightTheme: Boolean,
-    interstitialAdManager: InterstitialAdManager
+    isLightTheme: Boolean
 ) {
     val linkOpener = getKoin().get<LinkOpener>()
     val nameChangeSheetState = rememberModalBottomSheetState()
@@ -113,17 +95,6 @@ actual fun MainDrawerSheetContent(
     var usernameValue by remember { mutableStateOf(username) }
     val feedbackSheetState = rememberModalBottomSheetState()
     val feedbackSheetVisible = rememberSaveable { mutableStateOf(false) }
-
-    val application = LocalContext.current.applicationContext as Application
-    val adsViewModel: MainDrawerSheetContentAdsViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                @Suppress("UNCHECKED_CAST")
-                return MainDrawerSheetContentAdsViewModel(application) as T
-            }
-        }
-    )
-    val addView = adsViewModel.adView.collectAsState().value
 
     UiModalDrawerSheet(isLightTheme = isLightTheme, drawerState = drawerState) {
         InnerContent(
@@ -134,9 +105,7 @@ actual fun MainDrawerSheetContent(
             drawerState = drawerState,
             nameChangeSheetVisible = nameChangeSheetVisible,
             feedbackSheetVisible = feedbackSheetVisible,
-            viewModel = viewModel,
-            interstitialAdManager = interstitialAdManager,
-            adView = addView
+            viewModel = viewModel
         )
         UsernameChangeBottomSheet(
             onUsernameChange = { usernameValue = it },
@@ -217,17 +186,8 @@ private fun InnerContent(
     drawerState: DrawerState,
     nameChangeSheetVisible: MutableState<Boolean>,
     feedbackSheetVisible: MutableState<Boolean>,
-    viewModel: AppViewModel,
-    interstitialAdManager: InterstitialAdManager,
-    adView: NativeAd?
+    viewModel: AppViewModel
 ) {
-    var adVisible by remember { mutableStateOf(true) }
-    LaunchedEffect(isLightTheme) {
-        adVisible = false
-        delay(1400)
-        adVisible = true
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -250,26 +210,6 @@ private fun InnerContent(
             thickness = 1.dp,
             color = blackOrWhiteColor(isLightTheme).copy(alpha = 0.2f)
         )
-        AnimatedVisibility (visible = adVisible, enter = fadeInAnim(), exit = fadeOutAnim()) {
-            adView?.let {
-                AndroidView(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = 200.dp),
-                    factory = { context ->
-                        NativeBannerView(context).apply {
-                            applyAppearance(nativeAdAppearance(isLightTheme))
-                            setAd(adView)
-                        }
-                    }
-                )
-                HorizontalDivider(
-                    modifier = Modifier.fillMaxWidth(),
-                    thickness = 1.dp,
-                    color = blackOrWhiteColor(isLightTheme).copy(alpha = 0.2f)
-                )
-            }
-        }
         LazyColumn(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start
@@ -367,9 +307,7 @@ private fun InnerContent(
                     onClick = {
                         scope.launch {
                             drawerState.close()
-                            interstitialAdManager.showAd {
-                                navHostController.navigate(Screen.BackupMainScreen.route)
-                            }
+                            navHostController.navigate(Screen.BackupMainScreen.route)
                         }
                     }
                 )

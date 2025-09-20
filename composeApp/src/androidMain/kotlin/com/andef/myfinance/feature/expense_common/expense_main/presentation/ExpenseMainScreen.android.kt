@@ -1,7 +1,6 @@
 package com.andef.myfinance.feature.expense_common.expense_main.presentation
 
-import android.app.Application
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
@@ -35,14 +34,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.andef.myfinance.core.design.alert.dialog.ui.UiAlertDialog
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiModalBottomSheet
@@ -55,16 +48,11 @@ import com.andef.myfinance.core.domain.expense_common.expense_category.entities.
 import com.andef.myfinance.core.navigation.routes.Screen
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red
-import com.andef.myfinance.core.utils.anims.fadeInAnim
-import com.andef.myfinance.core.utils.anims.fadeOutAnim
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
 import com.andef.myfinance.core.utils.getters.getTitleForExpense
 import com.andef.myfinance.core.utils.grayColor
-import com.andef.myfinance.feature.income_common.income_main.presentation.nativeAdAppearance
-import com.yandex.mobile.ads.nativeads.NativeAd
-import com.yandex.mobile.ads.nativeads.template.NativeBannerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -85,17 +73,6 @@ actual fun ExpenseMainScreen(
 ) {
     val viewModel = koinViewModel<ExpenseMainViewModel>()
     val state = viewModel.state.collectAsState().value
-
-    val application = LocalContext.current.applicationContext as Application
-    val adsViewModel: ExpenseMainAdsViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                @Suppress("UNCHECKED_CAST")
-                return ExpenseMainAdsViewModel(application) as T
-            }
-        }
-    )
-    val adViews = adsViewModel.adViews.collectAsState().value
 
     val sheetState = rememberModalBottomSheetState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -120,16 +97,7 @@ actual fun ExpenseMainScreen(
         viewModel.send(ExpenseMainIntent.SubscribeForExpenses(startDate, endDate))
     }
 
-    MainContent(
-        paddingValues,
-        state,
-        isLightTheme,
-        viewModel,
-        startDate,
-        endDate,
-        adViews,
-        listState
-    )
+    MainContent(paddingValues, state, isLightTheme, viewModel, startDate, endDate, listState)
     BottomSheetWithDeleteDialog(
         navHostController = navHostController,
         viewModel = viewModel,
@@ -150,7 +118,6 @@ private fun MainContent(
     viewModel: ExpenseMainViewModel,
     startDate: LocalDate,
     endDate: LocalDate,
-    adViews: List<NativeAd>,
     listState: LazyListState
 ) {
     LazyColumn(
@@ -162,93 +129,51 @@ private fun MainContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         stickyHeader {
-            AnimatedVisibility(
-                visible = state.expensesForLazyColumn.isNotEmpty(),
-                exit = fadeOutAnim(),
-                enter = fadeInAnim()
-            ) {
-                UiDateAndAmountRow(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 12.dp)
-                        .animateItem(),
-                    isIncome = false,
-                    totalAmount = state.totalAmount,
-                    isLightTheme = isLightTheme,
-                    startDate = startDate,
-                    endDate = endDate
-                )
-            }
+            UiDateAndAmountRow(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 12.dp),
+                isIncome = false,
+                totalAmount = state.totalAmount,
+                isLightTheme = isLightTheme,
+                startDate = startDate,
+                endDate = endDate
+            )
         }
         item { Spacer(modifier = Modifier.height(6.dp)) }
-        when (state.expensesForLazyColumn.isEmpty()) {
-            true -> {
-                item {
-                    Text(
-                        text = "Пока нет данных о расходах. Вот несколько предложений для Вас:",
-                        color = blackOrWhiteColor(isLightTheme),
-                        fontSize = 16.sp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .padding(top = 16.dp)
-                            .padding(bottom = 16.dp)
-                            .animateItem(tween(810, easing = FastOutSlowInEasing)),
-                        textAlign = TextAlign.Center
-                    )
-                }
-                items(adViews.size, key = { "$isLightTheme-$it" }) { index ->
-                    AndroidView(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 14.dp)
-                            .animateItem(tween(810, easing = FastOutSlowInEasing)),
-                        factory = { context ->
-                            NativeBannerView(context).apply {
-                                applyAppearance(nativeAdAppearance(isLightTheme))
-                                setAd(adViews[index])
-                            }
-                        }
-                    )
-                }
+        state.expensesForLazyColumn.forEach { expenseForLazyColumn ->
+            item(key = "date-${expenseForLazyColumn.date}") {
+                Spacer(modifier = Modifier.height(18.dp))
+                UiDateAndAmountRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, bottom = 4.dp)
+                        .animateItem(tween(800, easing = FastOutSlowInEasing)),
+                    isIncome = false,
+                    isLightTheme = isLightTheme,
+                    date = expenseForLazyColumn.date,
+                    amount = expenseForLazyColumn.totalAmount
+                )
             }
-
-            false -> {
-                state.expensesForLazyColumn.forEach { expenseForLazyColumn ->
-                    item(key = "date-${expenseForLazyColumn.date}") {
-                        Spacer(modifier = Modifier.height(18.dp))
-                        UiDateAndAmountRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 8.dp, bottom = 4.dp)
-                                .animateItem(),
-                            isIncome = false,
-                            isLightTheme = isLightTheme,
-                            date = expenseForLazyColumn.date,
-                            amount = expenseForLazyColumn.totalAmount
+            items(items = expenseForLazyColumn.expenseModels, key = { it.id }) { expense ->
+                UiExpenseCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItem(tween(800, easing = FastOutSlowInEasing)),
+                    isLightTheme = isLightTheme,
+                    expenseModel = expense,
+                    onClick = {
+                        viewModel.send(
+                            ExpenseMainIntent.BottomSheetVisibleChange(
+                                isVisible = true,
+                                date = expense.date,
+                                category = expense.category,
+                                amount = expense.amount,
+                                id = expense.id
+                            )
                         )
                     }
-                    items(items = expenseForLazyColumn.expenseModels, key = { it.id }) { expense ->
-                        UiExpenseCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .animateItem(),
-                            isLightTheme = isLightTheme,
-                            expenseModel = expense,
-                            onClick = {
-                                viewModel.send(
-                                    ExpenseMainIntent.BottomSheetVisibleChange(
-                                        isVisible = true,
-                                        date = expense.date,
-                                        category = expense.category,
-                                        amount = expense.amount,
-                                        id = expense.id
-                                    )
-                                )
-                            }
-                        )
-                    }
-                }
+                )
             }
         }
         item { Spacer(modifier = Modifier.height(12.dp)) }
