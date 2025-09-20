@@ -9,5 +9,5 @@ sealed class AppIntent {
     class TabClick(val tab: UiTopBarTab) : AppIntent()
     class CurrentRouteChange(val route: String?) : AppIntent()
     object LeftSwipe : AppIntent()
-    object RightSwipe : AppIntent()
+    class RightSwipe(val openDrawerSheet: () -> Unit) : AppIntent()
 }

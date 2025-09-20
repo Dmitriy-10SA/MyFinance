@@ -87,7 +87,13 @@ fun App() {
             viewModel = viewModel,
             username = state.username,
             onMainScreensLeftSwipe = { viewModel.send(AppIntent.LeftSwipe) },
-            onMainScreensRightSwipe = { viewModel.send(AppIntent.RightSwipe) }
+            onMainScreensRightSwipe = {
+                viewModel.send(
+                    intent = AppIntent.RightSwipe {
+                        scope.launch { drawerState.open() }
+                    }
+                )
+            }
         )
     }
 }

@@ -3,7 +3,6 @@ package com.andef.myfinance.app
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andef.myfinance.core.design.topbar.type.UiTopBarTab
-import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsFirstStartUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsLightThemeAsFlowUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsLightThemeUseCase
@@ -63,8 +62,8 @@ class AppViewModel(
                 leftSwipe()
             }
 
-            AppIntent.RightSwipe -> {
-                rightSwipe()
+            is AppIntent.RightSwipe -> {
+                rightSwipe(openDrawerSheet = intent.openDrawerSheet)
             }
         }
     }
@@ -84,10 +83,12 @@ class AppViewModel(
         }
     }
 
-    private fun rightSwipe() {
+    private fun rightSwipe(openDrawerSheet: () -> Unit) {
         val currentTabIndex = _state.value.selectedTabIndex
         if (currentTabIndex in 1..5) {
             tabClick(getUiTopBarTapByIndex(currentTabIndex - 1))
+        } else {
+            openDrawerSheet()
         }
     }
 
