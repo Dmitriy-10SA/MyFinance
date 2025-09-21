@@ -1,5 +1,7 @@
 package com.andef.myfinance.feature.totals.presentation
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -123,12 +125,14 @@ private fun MainContent(
             UiPieChart(
                 modifier = Modifier
                     .size(300.dp)
-                    .padding(top = 16.dp, bottom = 12.dp),
+                    .padding(top = 16.dp, bottom = 12.dp)
+                    .animateItem(tween(800, easing = FastOutSlowInEasing)),
                 pieChartData = UiPieChartData(slices = slices)
             )
         }
         item {
             UiLegendRows(
+                modifier = Modifier.animateItem(tween(800, easing = FastOutSlowInEasing)),
                 isLightTheme = isLightTheme,
                 items = listOf(
                     UiLegendAmountItem(
