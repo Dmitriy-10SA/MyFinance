@@ -1,7 +1,6 @@
 package com.andef.myfinance.core.design.legend.row.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +24,11 @@ import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
 import com.andef.myfinance.core.utils.grayColor
 
 @Composable
-fun UiLegendRows(modifier: Modifier = Modifier, isLightTheme: Boolean, items: List<UiLegendAmountItem>) {
+fun UiLegendRows(
+    modifier: Modifier = Modifier,
+    isLightTheme: Boolean,
+    items: List<UiLegendAmountItem>
+) {
     items.forEach { item ->
         Column(
             modifier = modifier.fillMaxWidth(),
@@ -39,7 +41,7 @@ fun UiLegendRows(modifier: Modifier = Modifier, isLightTheme: Boolean, items: Li
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(4.dp))
                 Box(
                     modifier = Modifier
                         .size(12.dp)
@@ -65,7 +67,7 @@ fun UiLegendRows(modifier: Modifier = Modifier, isLightTheme: Boolean, items: Li
                     color = blackOrWhiteColor(isLightTheme = isLightTheme),
                     fontSize = 16.sp
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(4.dp))
             }
         }
     }
