@@ -1,5 +1,8 @@
 package com.andef.myfinance.feature.totals.presentation
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -11,9 +14,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.andef.myfinance.core.design.card.date.amount.row.UiDateAndAmountRow
 import com.andef.myfinance.core.design.legend.row.ui.UiLegendAmountItem
@@ -29,7 +37,9 @@ fun TotalMainScreen(
     isLightTheme: Boolean,
     paddingValues: PaddingValues,
     startDate: LocalDate,
-    endDate: LocalDate
+    endDate: LocalDate,
+    onLeftSwipe: () -> Unit,
+    onRightSwipe: () -> Unit
 ) {
     val viewModel = koinViewModel<TotalsMainViewModel>()
     val state = viewModel.state.collectAsState().value
@@ -38,7 +48,7 @@ fun TotalMainScreen(
         viewModel.send(TotalsMainIntent.SubscribeForAllIncomesAndExpenses(startDate, endDate))
     }
 
-    MainContent(paddingValues, state, isLightTheme, startDate, endDate)
+    MainContent(paddingValues, state, isLightTheme, startDate, endDate, onLeftSwipe, onRightSwipe)
 }
 
 @Composable
@@ -47,8 +57,11 @@ private fun MainContent(
     state: TotalsMainState,
     isLightTheme: Boolean,
     startDate: LocalDate,
-    endDate: LocalDate
+    endDate: LocalDate,
+    onLeftSwipe: () -> Unit,
+    onRightSwipe: () -> Unit
 ) {
+    var totalDrag by remember { mutableStateOf(0f) }
     val totalAmount = state.totalIncomesAmount + state.totalExpensesAmount
     val incomesAmount = state.totalIncomesAmount
     val expensesAmount = state.totalExpensesAmount
@@ -75,7 +88,22 @@ private fun MainContent(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues),
+            .padding(paddingValues)
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures(
+                    onDragStart = { totalDrag = 0f },
+                    onHorizontalDrag = { _, dragAmount ->
+                        totalDrag += dragAmount
+                    },
+                    onDragEnd = {
+                        if (totalDrag > 100) {
+                            onRightSwipe()
+                        } else if (totalDrag < -100) {
+                            onLeftSwipe()
+                        }
+                    }
+                )
+            },
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -97,12 +125,14 @@ private fun MainContent(
             UiPieChart(
                 modifier = Modifier
                     .size(300.dp)
-                    .padding(top = 16.dp, bottom = 12.dp),
+                    .padding(top = 16.dp, bottom = 12.dp)
+                    .animateItem(tween(800, easing = FastOutSlowInEasing)),
                 pieChartData = UiPieChartData(slices = slices)
             )
         }
         item {
             UiLegendRows(
+                modifier = Modifier.animateItem(tween(800, easing = FastOutSlowInEasing)),
                 isLightTheme = isLightTheme,
                 items = listOf(
                     UiLegendAmountItem(

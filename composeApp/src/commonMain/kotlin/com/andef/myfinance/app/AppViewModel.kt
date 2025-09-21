@@ -39,16 +39,32 @@ class AppViewModel(
 
     fun send(intent: AppIntent) {
         when (intent) {
-            is AppIntent.DatesChoose -> datesChoose(
-                startDate = intent.startDate,
-                endDate = intent.endDate
-            )
+            is AppIntent.DatesChoose -> {
+                datesChoose(
+                    startDate = intent.startDate,
+                    endDate = intent.endDate
+                )
+            }
 
-            is AppIntent.DatesDismiss -> datesDismiss()
+            is AppIntent.DatesDismiss -> {
+                datesDismiss()
+            }
 
-            is AppIntent.TabClick -> tabClick(tab = intent.tab)
+            is AppIntent.TabClick -> {
+                tabClick(tab = intent.tab)
+            }
 
-            is AppIntent.CurrentRouteChange -> currentRouteChange(route = intent.route)
+            is AppIntent.CurrentRouteChange -> {
+                currentRouteChange(route = intent.route)
+            }
+
+            AppIntent.LeftSwipe -> {
+                leftSwipe()
+            }
+
+            is AppIntent.RightSwipe -> {
+                rightSwipe(openDrawerSheet = intent.openDrawerSheet)
+            }
         }
     }
 
@@ -59,6 +75,41 @@ class AppViewModel(
             currentRoute = route
         )
     }
+
+    private fun leftSwipe() {
+        val currentTabIndex = _state.value.selectedTabIndex
+        if (currentTabIndex in 0..4) {
+            tabClick(getUiTopBarTapByIndex(currentTabIndex + 1))
+        }
+    }
+
+    private fun rightSwipe(openDrawerSheet: () -> Unit) {
+        val currentTabIndex = _state.value.selectedTabIndex
+        if (currentTabIndex in 1..5) {
+            tabClick(getUiTopBarTapByIndex(currentTabIndex - 1))
+        } else {
+            openDrawerSheet()
+        }
+    }
+
+    private fun getUiTopBarTapByIndex(index: Int): UiTopBarTab = when (index) {
+        0 -> dateTabs[0]
+        1 -> dateTabs[1]
+        2 -> dateTabs[2]
+        3 -> dateTabs[3]
+        4 -> dateTabs[4]
+        5 -> dateTabs[5]
+        else -> throw Exception()
+    }
+
+    private val dateTabs = listOf(
+        UiTopBarTab(id = 0, title = "День"),
+        UiTopBarTab(id = 1, title = "Неделя"),
+        UiTopBarTab(id = 2, title = "Месяц"),
+        UiTopBarTab(id = 3, title = "Полгода"),
+        UiTopBarTab(id = 4, title = "Год"),
+        UiTopBarTab(id = 5, title = "Период")
+    )
 
     private fun tabClick(tab: UiTopBarTab) {
         val selectedTabIndex = _state.value.selectedTabIndex

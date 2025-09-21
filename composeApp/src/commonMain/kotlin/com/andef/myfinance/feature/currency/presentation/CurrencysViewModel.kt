@@ -14,6 +14,7 @@ import com.andef.myfinance.feature.currency.domain.usecases.GetGbpRubUseCase
 import com.andef.myfinance.feature.currency.domain.usecases.GetHkdRubUseCase
 import com.andef.myfinance.feature.currency.domain.usecases.GetJpyRubUseCase
 import com.andef.myfinance.feature.currency.domain.usecases.GetUsdRubUseCase
+import io.ktor.utils.io.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
@@ -68,6 +69,7 @@ class CurrencysViewModel(
                 val otherCurrency = loadOtherCurrency(date)
                 allCurrency.addAll(otherCurrency)
                 _state.value = _state.value.copy(currencys = allCurrency)
+            } catch (_: CancellationException) {
             } catch (_: Exception) {
                 _state.value = _state.value.copy(isError = true)
             } finally {

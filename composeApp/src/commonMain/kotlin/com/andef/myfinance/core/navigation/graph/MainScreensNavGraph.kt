@@ -21,6 +21,8 @@ fun NavGraphBuilder.mainScreensNavGraph(
     startDate: LocalDate,
     endDate: LocalDate,
     mainScreenIsVisible: Boolean,
+    onLeftSwipe: () -> Unit,
+    onRightSwipe: () -> Unit
 ) {
     navigation(
         route = Screen.MainScreens.route,
@@ -43,7 +45,9 @@ fun NavGraphBuilder.mainScreensNavGraph(
                     navHostController = navHostController,
                     paddingValues = paddingValues,
                     startDate = startDate,
-                    endDate = endDate
+                    endDate = endDate,
+                    onLeftSwipe = onLeftSwipe,
+                    onRightSwipe = onRightSwipe
                 )
             }
         }
@@ -62,7 +66,9 @@ fun NavGraphBuilder.mainScreensNavGraph(
                     navHostController = navHostController,
                     paddingValues = paddingValues,
                     startDate = startDate,
-                    endDate = endDate
+                    endDate = endDate,
+                    onLeftSwipe = onLeftSwipe,
+                    onRightSwipe = onRightSwipe
                 )
             }
         }
@@ -80,7 +86,9 @@ fun NavGraphBuilder.mainScreensNavGraph(
                     isLightTheme = isLightTheme,
                     paddingValues = paddingValues,
                     startDate = startDate,
-                    endDate = endDate
+                    endDate = endDate,
+                    onLeftSwipe = onLeftSwipe,
+                    onRightSwipe = onRightSwipe
                 )
             }
         }

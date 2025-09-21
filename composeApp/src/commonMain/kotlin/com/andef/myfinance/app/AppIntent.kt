@@ -8,4 +8,6 @@ sealed class AppIntent {
     object DatesDismiss : AppIntent()
     class TabClick(val tab: UiTopBarTab) : AppIntent()
     class CurrentRouteChange(val route: String?) : AppIntent()
+    object LeftSwipe : AppIntent()
+    class RightSwipe(val openDrawerSheet: () -> Unit) : AppIntent()
 }
