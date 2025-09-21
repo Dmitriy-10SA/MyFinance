@@ -2,6 +2,7 @@ package com.andef.myfinance.feature.currency.presentation
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,11 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.navigation.NavHostController
 import com.andef.myfinance.core.design.alert.dialog.ui.UiAlertDialog
 import com.andef.myfinance.core.design.card.currency.ui.UiCurrencyCard
@@ -50,6 +54,8 @@ fun CurrencysScreen(
     val selectedTabIndex = remember { mutableIntStateOf(0) }
     val date = remember { mutableStateOf(LocalDate.now()) }
 
+    var totalDrag by remember { mutableStateOf(0f) }
+
     LaunchedEffect(date.value) { viewModel.send(CurrencysIntent.LoadCurrencys(date.value)) }
 
     UiScaffold(
@@ -68,7 +74,34 @@ fun CurrencysScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = topBarPadding.calculateTopPadding())
-                .navigationBarsPadding(),
+                .navigationBarsPadding()
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures(
+                        onDragStart = { totalDrag = 0f },
+                        onHorizontalDrag = { _, dragAmount ->
+                            totalDrag += dragAmount
+                        },
+                        onDragEnd = {
+                            if (totalDrag > 100) {
+                                if (selectedTabIndex.value in 1..4) {
+                                    onTabClick(
+                                        tabs[selectedTabIndex.value - 1],
+                                        selectedTabIndex,
+                                        date
+                                    )
+                                }
+                            } else if (totalDrag < -100) {
+                                if (selectedTabIndex.value in 0..3) {
+                                    onTabClick(
+                                        tabs[selectedTabIndex.value + 1],
+                                        selectedTabIndex,
+                                        date
+                                    )
+                                }
+                            }
+                        }
+                    )
+                },
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -126,32 +159,7 @@ private fun TopBar(
         type = UiTopBarType.WithTabs(
             tabs = tabs,
             selectedTabIndex = selectedTabIndex.value,
-            onTabClick = { tab ->
-                if (tab.id != selectedTabIndex.value || tab.id == 4) {
-                    selectedTabIndex.value = tab.id
-                    when (tab.id) {
-                        0 -> {
-                            date.value = LocalDate.now()
-                        }
-
-                        1 -> {
-                            date.value = LocalDate.now().minusDays(7)
-                        }
-
-                        2 -> {
-                            date.value = LocalDate.now().minusMonths(1)
-                        }
-
-                        3 -> {
-                            date.value = LocalDate.now().minusMonths(6)
-                        }
-
-                        else -> {
-                            date.value = LocalDate.now().minusYears(1)
-                        }
-                    }
-                }
-            }
+            onTabClick = { tab -> onTabClick(tab, selectedTabIndex, date) }
         ),
         title = "Курс валют",
         navigationIconTint = Blue,
@@ -161,9 +169,40 @@ private fun TopBar(
     )
 }
 
+private fun onTabClick(
+    tab: UiTopBarTab,
+    selectedTabIndex: MutableState<Int>,
+    date: MutableState<LocalDate>
+) {
+    if (tab.id != selectedTabIndex.value || tab.id == 4) {
+        selectedTabIndex.value = tab.id
+        when (tab.id) {
+            0 -> {
+                date.value = LocalDate.now()
+            }
+
+            1 -> {
+                date.value = LocalDate.now().minusDays(7)
+            }
+
+            2 -> {
+                date.value = LocalDate.now().minusMonths(1)
+            }
+
+            3 -> {
+                date.value = LocalDate.now().minusMonths(6)
+            }
+
+            else -> {
+                date.value = LocalDate.now().minusYears(1)
+            }
+        }
+    }
+}
+
 private val tabs = listOf(
     UiTopBarTab(id = 0, title = "День"),
-    UiTopBarTab(id = 1, title = "Неделю"),
+    UiTopBarTab(id = 1, title = "Неделя"),
     UiTopBarTab(id = 2, title = "Месяц"),
     UiTopBarTab(id = 3, title = "Полгода"),
     UiTopBarTab(id = 4, title = "Год")
