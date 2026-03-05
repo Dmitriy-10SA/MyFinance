@@ -82,8 +82,9 @@ class IncomeMainViewModel(
                             .toList()
                             .sortedByDescending { it.first }
                             .map { (date, items) ->
-                                val totalAmount = items.sumOf { it.amount }
-                                IncomeForLazyColumn(date, totalAmount, items)
+                                val sortedItems = items.sortedByDescending { it.id }
+                                val totalAmount = sortedItems.sumOf { it.amount }
+                                IncomeForLazyColumn(date, totalAmount, sortedItems)
                             }
                         val totalAmount = incomes.sumOf { it.amount }
                         incomesForLazyColumn to totalAmount

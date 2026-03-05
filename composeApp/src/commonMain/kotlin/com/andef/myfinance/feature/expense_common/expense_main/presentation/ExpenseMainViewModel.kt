@@ -79,12 +79,13 @@ class ExpenseMainViewModel(
                     .map { expenses ->
                         val expensesForLazyColumn = withContext(Dispatchers.IO) {
                             expenses
-                                .groupBy { income -> income.date }
+                                .groupBy { expense -> expense.date }
                                 .toList()
                                 .sortedByDescending { it.first }
                                 .map { (date, items) ->
-                                    val totalAmount = items.sumOf { it.amount }
-                                    ExpenseForLazyColumn(date, totalAmount, items)
+                                    val sortedItems = items.sortedByDescending { it.id }
+                                    val totalAmount = sortedItems.sumOf { it.amount }
+                                    ExpenseForLazyColumn(date, totalAmount, sortedItems)
                                 }
                         }
                         val totalAmount = withContext(Dispatchers.IO) {
