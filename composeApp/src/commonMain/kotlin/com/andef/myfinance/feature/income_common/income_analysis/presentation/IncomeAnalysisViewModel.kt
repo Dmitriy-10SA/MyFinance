@@ -69,6 +69,7 @@ class IncomeAnalysisViewModel (
                     getIncomesByDateRangeUseCase.invoke(startDate, endDate)
                         .groupBy { income -> income.category }
                         .map { entry -> entry.key to (entry.value.sumOf { it.amount }) }
+                        .sortedByDescending { it.second }
                 }
                 val totalAmount = withContext(Dispatchers.IO) {
                     var sum = 0.0
