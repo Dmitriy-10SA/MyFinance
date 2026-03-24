@@ -68,6 +68,7 @@ class ExpenseAnalysisViewModel(
                     getExpensesByDateRangeUseCase.invoke(startDate, endDate)
                         .groupBy { expense -> expense.category }
                         .map { entry -> entry.key to (entry.value.sumOf { it.amount }) }
+                        .sortedByDescending { it.second }
                 }
                 val totalAmount = withContext(Dispatchers.IO) {
                     var sum = 0.0
