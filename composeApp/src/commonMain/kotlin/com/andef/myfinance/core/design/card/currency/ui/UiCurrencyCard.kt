@@ -27,7 +27,7 @@ import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.cardColors
 import com.andef.myfinance.core.utils.cardShape
 import com.andef.myfinance.core.utils.formatters.numbers.format
-import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
+import com.andef.myfinance.core.utils.formatters.numbers.formatDecimalPriceRuble
 import com.andef.myfinance.core.utils.grayColor
 import com.andef.myfinance.feature.currency.domain.entities.CurrencyRub
 import myfinance.composeapp.generated.resources.Res
@@ -128,7 +128,7 @@ private fun PriceAndPercentColumn(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = formatPriceRuble(getAmount(currencyRub)),
+            text = formatDecimalPriceRuble(getAmount(currencyRub)),
             fontSize = 16.sp,
             color = blackOrWhiteColor(isLightTheme = isLightTheme)
         )

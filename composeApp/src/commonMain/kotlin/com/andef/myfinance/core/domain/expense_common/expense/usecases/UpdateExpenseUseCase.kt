@@ -7,7 +7,7 @@ import kotlinx.datetime.LocalDate
 class UpdateExpenseUseCase(private val repository: ExpenseRepository) {
     suspend operator fun invoke(
         id: Long,
-        amount: Double,
+        amount: Long,
         category: ExpenseCategoryModel,
         date: LocalDate,
         note: String?

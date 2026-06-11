@@ -10,15 +10,14 @@ import com.andef.myfinance.core.domain.preferences.usecases.GetUsernameAsFlowUse
 import com.andef.myfinance.core.domain.preferences.usecases.GetUsernameUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.SetIsLightThemeUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.SetUsernameUseCase
-import com.andef.myfinance.core.utils.getters.minusDays
-import com.andef.myfinance.core.utils.getters.minusMonths
-import com.andef.myfinance.core.utils.getters.minusYears
 import com.andef.myfinance.core.utils.getters.now
+import com.kizitonwose.calendar.core.minusDays
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 
 class AppViewModel(
     val getIsLightThemeAsFlowUseCase: GetIsLightThemeAsFlowUseCase,
@@ -78,14 +77,14 @@ class AppViewModel(
 
     private fun leftSwipe() {
         val currentTabIndex = _state.value.selectedTabIndex
-        if (currentTabIndex in 0..4) {
+        if (currentTabIndex in 0..3) {
             tabClick(getUiTopBarTapByIndex(currentTabIndex + 1))
         }
     }
 
     private fun rightSwipe(openDrawerSheet: () -> Unit) {
         val currentTabIndex = _state.value.selectedTabIndex
-        if (currentTabIndex in 1..5) {
+        if (currentTabIndex in 1..4) {
             tabClick(getUiTopBarTapByIndex(currentTabIndex - 1))
         } else {
             openDrawerSheet()
@@ -98,7 +97,6 @@ class AppViewModel(
         2 -> dateTabs[2]
         3 -> dateTabs[3]
         4 -> dateTabs[4]
-        5 -> dateTabs[5]
         else -> throw Exception()
     }
 
@@ -106,21 +104,36 @@ class AppViewModel(
         UiTopBarTab(id = 0, title = "День"),
         UiTopBarTab(id = 1, title = "Неделя"),
         UiTopBarTab(id = 2, title = "Месяц"),
-        UiTopBarTab(id = 3, title = "Полгода"),
-        UiTopBarTab(id = 4, title = "Год"),
-        UiTopBarTab(id = 5, title = "Период")
+        UiTopBarTab(id = 3, title = "Год"),
+        UiTopBarTab(id = 4, title = "Период")
     )
 
     private fun tabClick(tab: UiTopBarTab) {
         val selectedTabIndex = _state.value.selectedTabIndex
-        if (tab.id != selectedTabIndex || tab.id == 5) {
+        if (tab.id != selectedTabIndex || tab.id == 4) {
             val now = LocalDate.now()
             val newLastTabIndexAndDates: Pair<Int, Pair<LocalDate, LocalDate>>? = when (tab.id) {
+                // Сегодня
                 0 -> tab.id to (now to now)
-                1 -> tab.id to (now.minusDays(7) to now)
-                2 -> tab.id to (now.minusMonths(1) to now)
-                3 -> tab.id to (now.minusMonths(6) to now)
-                4 -> tab.id to (now.minusYears(1) to now)
+
+                // Текущая неделя: понедельник — сегодня
+                1 -> {
+                    val startOfWeek = now.minusDays(now.dayOfWeek.ordinal)
+                    tab.id to (startOfWeek to now)
+                }
+
+                // Текущий месяц: 1-е число месяца — сегодня
+                2 -> {
+                    val startOfMonth = LocalDate(year = now.year, month = now.month.number, day = 1)
+                    tab.id to (startOfMonth to now)
+                }
+
+                // Текущий год: 1 января — сегодня
+                3 -> {
+                    val startOfYear = LocalDate(year = now.year, month = 1, day = 1)
+                    tab.id to (startOfYear to now)
+                }
+
                 else -> null
             }
             if (newLastTabIndexAndDates != null) {
@@ -151,7 +164,7 @@ class AppViewModel(
         _state.value = _state.value.copy(
             startDate = startDate,
             endDate = endDate,
-            lastSelectedTabIndex = 5,
+            lastSelectedTabIndex = 4,
             datePickerVisible = false
         )
     }

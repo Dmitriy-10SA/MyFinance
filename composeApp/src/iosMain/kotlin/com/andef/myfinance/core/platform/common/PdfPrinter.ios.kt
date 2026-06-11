@@ -1,6 +1,7 @@
 package com.andef.myfinance.core.platform.common
 
 import androidx.compose.runtime.Composable
+import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.datetime.LocalDate
 import platform.CoreGraphics.CGContextAddLineToPoint
@@ -30,7 +31,7 @@ import platform.UIKit.drawAtPoint
 
 class IOSPdfPrinter() : PdfPrinter {
     override fun printIncomePdf(
-        incomes: List<Pair<LocalDate, Double>>,
+        incomes: List<Pair<LocalDate, Long>>,
         maxDate: LocalDate,
         minDate: LocalDate
     ) {
@@ -38,7 +39,7 @@ class IOSPdfPrinter() : PdfPrinter {
     }
 
     override fun printExpensePdf(
-        expenses: List<Pair<LocalDate, Double>>,
+        expenses: List<Pair<LocalDate, Long>>,
         maxDate: LocalDate,
         minDate: LocalDate
     ) {
@@ -48,7 +49,7 @@ class IOSPdfPrinter() : PdfPrinter {
     @OptIn(ExperimentalForeignApi::class)
     private fun print(
         isIncome: Boolean,
-        amounts: List<Pair<LocalDate, Double>>,
+        amounts: List<Pair<LocalDate, Long>>,
         maxDate: LocalDate,
         minDate: LocalDate
     ) {
@@ -127,7 +128,7 @@ class IOSPdfPrinter() : PdfPrinter {
                     point = CGPointMake(margin, currentY),
                     withAttributes = attrsText
                 )
-                (sum.toString() as NSString).drawAtPoint(
+                (formatPriceRuble(sum) as NSString).drawAtPoint(
                     point = CGPointMake(pageWidth - margin - 100.0, currentY),
                     withAttributes = attrsText
                 )
@@ -140,7 +141,7 @@ class IOSPdfPrinter() : PdfPrinter {
                 point = CGPointMake(margin, currentY + 10.0),
                 withAttributes = attrsHeader
             )
-            (total.toString() as NSString).drawAtPoint(
+            (formatPriceRuble(total) as NSString).drawAtPoint(
                 point = CGPointMake(pageWidth - margin - 100.0, currentY + 10.0),
                 withAttributes = attrsHeader
             )

@@ -58,7 +58,7 @@ class TotalsMainViewModel(
                             _state.value = _state.value.copy(
                                 isLoading = false,
                                 isError = true,
-                                totalExpensesAmount = 0.0
+                                totalExpensesAmount = 0L
                             )
                         }
                     }
@@ -101,7 +101,7 @@ class TotalsMainViewModel(
                             _state.value = _state.value.copy(
                                 isLoading = false,
                                 isError = true,
-                                totalIncomesAmount = 0.0
+                                totalIncomesAmount = 0L
                             )
                         }
                     }

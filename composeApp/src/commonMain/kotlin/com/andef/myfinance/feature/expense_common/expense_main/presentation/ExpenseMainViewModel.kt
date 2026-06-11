@@ -100,7 +100,7 @@ class ExpenseMainViewModel(
                                 isLoading = false,
                                 isError = true,
                                 expensesForLazyColumn = emptyList(),
-                                totalAmount = 0.0
+                                totalAmount = 0L
                             )
                         }
                     }

@@ -96,8 +96,7 @@ fun AppNavGraph(
                 incomeId = null,
                 isLightTheme = isLightTheme,
                 navHostController = navHostController,
-                paddingValues = paddingValues,
-                moneyDecimalFormatter = moneyDecimalFormatter
+                paddingValues = paddingValues
             )
         }
         composable(
@@ -112,8 +111,7 @@ fun AppNavGraph(
                 incomeId = id,
                 isLightTheme = isLightTheme,
                 navHostController = navHostController,
-                paddingValues = paddingValues,
-                moneyDecimalFormatter = moneyDecimalFormatter
+                paddingValues = paddingValues
             )
         }
         composable(
@@ -135,8 +133,7 @@ fun AppNavGraph(
                 expenseId = null,
                 isLightTheme = isLightTheme,
                 navHostController = navHostController,
-                paddingValues = paddingValues,
-                moneyDecimalFormatter = moneyDecimalFormatter
+                paddingValues = paddingValues
             )
         }
         composable(
@@ -151,8 +148,7 @@ fun AppNavGraph(
                 expenseId = id,
                 isLightTheme = isLightTheme,
                 navHostController = navHostController,
-                paddingValues = paddingValues,
-                moneyDecimalFormatter = moneyDecimalFormatter
+                paddingValues = paddingValues
             )
         }
         composable(

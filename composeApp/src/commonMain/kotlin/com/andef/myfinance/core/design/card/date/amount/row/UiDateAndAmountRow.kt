@@ -22,6 +22,7 @@ import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.cardColors
 import com.andef.myfinance.core.utils.cardShape
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
+import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDateRange
 import com.andef.myfinance.core.utils.formatters.numbers.formatPriceRuble
 import com.andef.myfinance.core.utils.grayColor
 import kotlinx.datetime.LocalDate
@@ -32,7 +33,7 @@ fun UiDateAndAmountRow(
     modifier: Modifier = Modifier,
     isLightTheme: Boolean,
     date: LocalDate,
-    amount: Double,
+    amount: Long,
     isIncome: Boolean
 ) {
     val amountText = if (isIncome) {
@@ -77,14 +78,13 @@ fun UiDateAndAmountRow(
     startDate: LocalDate,
     isIncome: Boolean,
     endDate: LocalDate,
-    totalAmount: Double
+    totalAmount: Long
 ) {
-    val dates = if (startDate == endDate) {
-        formatLocalDate(startDate)
-    } else {
-        "${formatLocalDate(startDate)} - ${formatLocalDate(endDate)}"
-    }
-    val sign = when (totalAmount != 0.0) {
+    val dates = formatLocalDateRange(
+        startDate = startDate,
+        endDate = endDate
+    )
+    val sign = when (totalAmount != 0L) {
         true -> if (isIncome) "+" else "-"
         false -> ""
     }

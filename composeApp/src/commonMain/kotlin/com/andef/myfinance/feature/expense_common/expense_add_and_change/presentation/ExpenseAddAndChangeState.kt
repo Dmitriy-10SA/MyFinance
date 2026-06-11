@@ -6,7 +6,7 @@ import kotlinx.datetime.LocalDate
 
 data class ExpenseAddAndChangeState(
     val expenseId: Long? = null,
-    val amount: Double? = null,
+    val amount: Long? = null,
     val category: ExpenseCategoryModel? = null,
     val date: LocalDate? = LocalDate.now(),
     val note: String? = null,

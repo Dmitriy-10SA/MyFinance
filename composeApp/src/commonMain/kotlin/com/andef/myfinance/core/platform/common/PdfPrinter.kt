@@ -5,13 +5,13 @@ import kotlinx.datetime.LocalDate
 
 interface PdfPrinter {
     fun printIncomePdf(
-        incomes: List<Pair<LocalDate, Double>>,
+        incomes: List<Pair<LocalDate, Long>>,
         maxDate: LocalDate,
         minDate: LocalDate
     )
 
     fun printExpensePdf(
-        expenses: List<Pair<LocalDate, Double>>,
+        expenses: List<Pair<LocalDate, Long>>,
         maxDate: LocalDate,
         minDate: LocalDate
     )
