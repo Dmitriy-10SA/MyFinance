@@ -15,6 +15,7 @@ import com.andef.myfinance.db.AppDatabase
 import com.andef.myfinance.db.ExpenseQueries
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
+import kotlin.math.roundToLong
 
 class ExpenseProvider : ContentProvider() {
 
@@ -45,7 +46,7 @@ class ExpenseProvider : ContentProvider() {
         return when (uriMatcher.match(uri)) {
             EXPENSES -> {
                 expenseQueries.insertExpense(
-                    amount = values?.getAsDouble(AMOUNT) ?: 0.0,
+                    amount = ((values?.getAsDouble(AMOUNT) ?: 0.0) * 100).roundToLong(),
                     category = BaseExpenseCategory.TRANSPORT.title,
                     date = localDateToInt(
                         date = values?.getAsString(DATE)?.let {

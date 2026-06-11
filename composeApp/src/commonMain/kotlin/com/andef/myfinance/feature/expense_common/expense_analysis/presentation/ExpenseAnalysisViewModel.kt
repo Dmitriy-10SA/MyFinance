@@ -36,7 +36,7 @@ class ExpenseAnalysisViewModel(
     }
 
     private fun getExpensesForPdf(
-        onSuccess: (List<Pair<LocalDate, Double>>, maxDate: LocalDate, minDate: LocalDate) -> Unit,
+        onSuccess: (List<Pair<LocalDate, Long>>, maxDate: LocalDate, minDate: LocalDate) -> Unit,
         onError: (String) -> Unit,
         startDate: LocalDate,
         endDate: LocalDate
@@ -71,7 +71,7 @@ class ExpenseAnalysisViewModel(
                         .sortedByDescending { it.second }
                 }
                 val totalAmount = withContext(Dispatchers.IO) {
-                    var sum = 0.0
+                    var sum = 0L
                     expensesForAnalysis.forEach { pair -> sum += pair.second }
                     sum
                 }
@@ -83,7 +83,7 @@ class ExpenseAnalysisViewModel(
                 _state.value = _state.value.copy(
                     isError = true,
                     expensesForAnalysis = emptyList(),
-                    totalAmount = 0.0
+                    totalAmount = 0L
                 )
             } finally {
                 _state.value = _state.value.copy(isLoading = false)

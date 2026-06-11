@@ -4,7 +4,7 @@ import com.andef.myfinance.core.domain.expense_common.expense_category.entities.
 import kotlinx.datetime.LocalDate
 
 sealed class ExpenseAddAndChangeIntent {
-    data class ChangeAmount(val amount: Double?) : ExpenseAddAndChangeIntent()
+    data class ChangeAmount(val amount: Long?) : ExpenseAddAndChangeIntent()
     data class ChangeCategory(val category: ExpenseCategoryModel) : ExpenseAddAndChangeIntent()
     data class ChangeNote(val note: String?) : ExpenseAddAndChangeIntent()
     data class ChangeDate(val date: LocalDate) : ExpenseAddAndChangeIntent()

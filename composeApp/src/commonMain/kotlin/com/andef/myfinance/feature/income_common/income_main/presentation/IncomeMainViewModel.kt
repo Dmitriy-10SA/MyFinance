@@ -96,7 +96,7 @@ class IncomeMainViewModel(
                                 isLoading = false,
                                 isError = true,
                                 incomesForLazyColumn = emptyList(),
-                                totalAmount = 0.0
+                                totalAmount = 0L
                             )
                         }
                     }

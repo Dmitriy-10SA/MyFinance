@@ -24,7 +24,7 @@ import java.io.FileOutputStream
 
 class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
     override fun printIncomePdf(
-        incomes: List<Pair<LocalDate, Double>>,
+        incomes: List<Pair<LocalDate, Long>>,
         maxDate: LocalDate,
         minDate: LocalDate
     ) {
@@ -33,7 +33,7 @@ class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
     }
 
     override fun printExpensePdf(
-        expenses: List<Pair<LocalDate, Double>>,
+        expenses: List<Pair<LocalDate, Long>>,
         maxDate: LocalDate,
         minDate: LocalDate
     ) {
@@ -50,7 +50,7 @@ class AndroidPdfPrinter(private val context: Context) : PdfPrinter {
 
     private fun Context.generatePdf(
         isIncome: Boolean,
-        amounts: List<Pair<LocalDate, Double>>,
+        amounts: List<Pair<LocalDate, Long>>,
         maxDate: LocalDate,
         minDate: LocalDate
     ): File {

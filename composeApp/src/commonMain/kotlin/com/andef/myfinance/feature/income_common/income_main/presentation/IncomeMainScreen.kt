@@ -145,7 +145,7 @@ fun IncomeMainScreen(
 @Composable
 private fun MainContent(
     paddingValues: PaddingValues,
-    totalAmount: Double,
+    totalAmount: Long,
     incomesForLazyColumn: List<IncomeForLazyColumn>,
     isLightTheme: Boolean,
     isLoading: Boolean,
@@ -317,7 +317,7 @@ private fun BottomSheetContent(
     isLightTheme: Boolean,
     category: IncomeCategoryModel,
     date: LocalDate,
-    amount: Double,
+    amount: Long,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {

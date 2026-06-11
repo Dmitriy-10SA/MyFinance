@@ -1,6 +1,6 @@
 CREATE TABLE expense (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    amount REAL NOT NULL,
+    amount INTEGER NOT NULL,
     category TEXT NOT NULL,
     date INTEGER NOT NULL,
     note TEXT

@@ -225,8 +225,8 @@ fun IncomeAnalysisScreen(
 }
 
 private fun getUiLegendAmountItems(
-    totalAmount: Double,
-    incomeForAnalysis: List<Pair<IncomeCategoryModel, Double>>
+    totalAmount: Long,
+    incomeForAnalysis: List<Pair<IncomeCategoryModel, Long>>
 ): List<UiLegendAmountItem> {
     return incomeForAnalysis.map {
         UiLegendAmountItem(
@@ -234,18 +234,26 @@ private fun getUiLegendAmountItems(
             amount = it.second,
             isIncome = true,
             color = getColorForIncomeCategory(it.first.title),
-            percent = (it.second / totalAmount * 100).toFloat()
+            percent = if (totalAmount == 0L) {
+                0f
+            } else {
+                (it.second.toDouble() / totalAmount.toDouble() * 100).toFloat()
+            }
         )
     }
 }
 
 private fun getSlices(
-    totalAmount: Double,
-    incomeForAnalysis: List<Pair<IncomeCategoryModel, Double>>
+    totalAmount: Long,
+    incomeForAnalysis: List<Pair<IncomeCategoryModel, Long>>
 ): List<UiPieChartData.Slice> {
     return incomeForAnalysis.map {
         UiPieChartData.Slice(
-            value = (it.second / totalAmount * 100).toFloat(),
+            value = if (totalAmount == 0L) {
+                0f
+            } else {
+                (it.second.toDouble() / totalAmount.toDouble() * 100).toFloat()
+            },
             color = getColorForIncomeCategory(it.first.title)
         )
     }

@@ -214,27 +214,35 @@ fun ExpenseAnalysisScreen(
 }
 
 private fun getUiLegendAmountItems(
-    totalAmount: Double,
-    incomeForAnalysis: List<Pair<ExpenseCategoryModel, Double>>
+    totalAmount: Long,
+    incomeForAnalysis: List<Pair<ExpenseCategoryModel, Long>>
 ): List<UiLegendAmountItem> {
     return incomeForAnalysis.map {
         UiLegendAmountItem(
             title = getTitleForExpense(it.first.title),
             amount = it.second,
             color = getColorForExpenseCategory(it.first.title),
-            percent = (it.second / totalAmount * 100).toFloat(),
+            percent = if (totalAmount == 0L) {
+                0f
+            } else {
+                (it.second.toDouble() / totalAmount.toDouble() * 100).toFloat()
+            },
             isIncome = false
         )
     }
 }
 
 private fun getSlices(
-    totalAmount: Double,
-    incomeForAnalysis: List<Pair<ExpenseCategoryModel, Double>>
+    totalAmount: Long,
+    incomeForAnalysis: List<Pair<ExpenseCategoryModel, Long>>
 ): List<UiPieChartData.Slice> {
     return incomeForAnalysis.map {
         UiPieChartData.Slice(
-            value = (it.second / totalAmount * 100).toFloat(),
+            value = if (totalAmount == 0L) {
+                0f
+            } else {
+                (it.second.toDouble() / totalAmount.toDouble() * 100).toFloat()
+            },
             color = getColorForExpenseCategory(it.first.title)
         )
     }

@@ -309,7 +309,7 @@ private fun BottomSheetContent(
     isLightTheme: Boolean,
     category: ExpenseCategoryModel,
     date: LocalDate,
-    amount: Double,
+    amount: Long,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {

@@ -24,7 +24,7 @@ class ExpenseRepositoryImpl(
 
     override suspend fun updateExpense(
         id: Long,
-        amount: Double,
+        amount: Long,
         category: ExpenseCategoryModel,
         date: LocalDate,
         note: String?

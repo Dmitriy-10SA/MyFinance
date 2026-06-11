@@ -55,9 +55,9 @@ fun UiLegendRows(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-                val sign = if (item.isIncome && item.amount != 0.0) {
+                val sign = if (item.isIncome && item.amount != 0L) {
                     "+"
-                } else if (!item.isIncome && item.amount != 0.0) {
+                } else if (!item.isIncome && item.amount != 0L) {
                     "-"
                 } else {
                     ""

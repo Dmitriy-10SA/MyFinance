@@ -6,11 +6,11 @@ import kotlinx.datetime.LocalDate
 
 data class IncomeMainState(
     val incomesForLazyColumn: List<IncomeForLazyColumn> = emptyList(),
-    val totalAmount: Double = 0.0,
+    val totalAmount: Long = 0L,
     val showBottomSheet: Boolean = false,
     val categoryInBottomSheet: IncomeCategoryModel? = null,
     val dateInBottomSheet: LocalDate? = null,
-    val amountInBottomSheet: Double? = null,
+    val amountInBottomSheet: Long? = null,
     val idInBottomSheet: Long? = null,
     val deleteDialogVisible: Boolean = false,
     val isLoading: Boolean = false,

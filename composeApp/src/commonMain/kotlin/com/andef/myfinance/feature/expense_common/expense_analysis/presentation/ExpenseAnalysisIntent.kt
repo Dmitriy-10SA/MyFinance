@@ -9,7 +9,7 @@ sealed class ExpenseAnalysisIntent {
     ) : ExpenseAnalysisIntent()
 
     data class GetExpensesForPdf(
-        val onSuccess: (List<Pair<LocalDate, Double>>, maxDate: LocalDate, minDate: LocalDate) -> Unit,
+        val onSuccess: (List<Pair<LocalDate, Long>>, maxDate: LocalDate, minDate: LocalDate) -> Unit,
         val onError: (String) -> Unit,
         val startDate: LocalDate,
         val endDate: LocalDate

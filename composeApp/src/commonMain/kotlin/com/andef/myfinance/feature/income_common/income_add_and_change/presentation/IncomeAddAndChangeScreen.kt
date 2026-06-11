@@ -61,6 +61,7 @@ import com.andef.myfinance.core.utils.formatters.RubleAmountVisualTransformation
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.numbers.clampToTwoDecimals
 import com.andef.myfinance.core.utils.formatters.numbers.formatAmountForEdit
+import com.andef.myfinance.core.utils.formatters.numbers.parseAmountToKopecks
 import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.grayColor
 import com.andef.myfinance.core.utils.showSnackbar
@@ -267,8 +268,14 @@ private fun RequiredFields(
     viewModel: IncomeAddAndChangeViewModel,
     moneyDecimalFormatter: MoneyDecimalFormatter
 ) {
-    var localAmount by remember(state.amount) {
-        mutableStateOf(state.amount?.let { formatAmountForEdit(it) } ?: "")
+    var localAmount by remember { mutableStateOf("") }
+    var initializedAmount by remember { mutableStateOf<Long?>(null) }
+    LaunchedEffect(state.amount) {
+        val amount = state.amount
+        if (amount != null && localAmount.isBlank() && initializedAmount != amount) {
+            localAmount = formatAmountForEdit(amount)
+            initializedAmount = amount
+        }
     }
     var typeExpanded by remember { mutableStateOf(false) }
     UiTextField(
@@ -278,7 +285,7 @@ private fun RequiredFields(
             val filtered = newText.filter { it.isDigit() || it == ',' || it == '.' }
             val clamped = clampToTwoDecimals(filtered)
             localAmount = clamped
-            val parsed = clamped.replace(',', '.').toDoubleOrNull()
+            val parsed = parseAmountToKopecks(clamped)
             viewModel.send(IncomeAddAndChangeIntent.ChangeAmount(parsed))
         },
         modifier = Modifier.fillMaxWidth(),

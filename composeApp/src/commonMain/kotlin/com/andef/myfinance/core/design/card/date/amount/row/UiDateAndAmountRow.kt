@@ -33,7 +33,7 @@ fun UiDateAndAmountRow(
     modifier: Modifier = Modifier,
     isLightTheme: Boolean,
     date: LocalDate,
-    amount: Double,
+    amount: Long,
     isIncome: Boolean
 ) {
     val amountText = if (isIncome) {
@@ -78,13 +78,13 @@ fun UiDateAndAmountRow(
     startDate: LocalDate,
     isIncome: Boolean,
     endDate: LocalDate,
-    totalAmount: Double
+    totalAmount: Long
 ) {
     val dates = formatLocalDateRange(
         startDate = startDate,
         endDate = endDate
     )
-    val sign = when (totalAmount != 0.0) {
+    val sign = when (totalAmount != 0L) {
         true -> if (isIncome) "+" else "-"
         false -> ""
     }

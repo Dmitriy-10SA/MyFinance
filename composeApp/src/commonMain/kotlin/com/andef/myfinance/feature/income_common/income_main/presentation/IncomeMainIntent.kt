@@ -13,7 +13,7 @@ sealed class IncomeMainIntent {
         val isVisible: Boolean,
         val date: LocalDate? = null,
         val category: IncomeCategoryModel? = null,
-        val amount: Double? = null,
+        val amount: Long? = null,
         val id: Long? = null
     ) : IncomeMainIntent()
 

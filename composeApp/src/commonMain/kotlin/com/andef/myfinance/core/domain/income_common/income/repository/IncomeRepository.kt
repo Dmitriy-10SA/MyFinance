@@ -10,7 +10,7 @@ interface IncomeRepository {
     suspend fun addIncome(incomeModel: IncomeModel)
     suspend fun updateIncome(
         id: Long,
-        amount: Double,
+        amount: Long,
         category: IncomeCategoryModel,
         date: LocalDate,
         note: String?

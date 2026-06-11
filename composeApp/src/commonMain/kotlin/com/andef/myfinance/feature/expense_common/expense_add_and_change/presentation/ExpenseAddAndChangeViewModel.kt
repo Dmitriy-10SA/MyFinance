@@ -140,7 +140,7 @@ class ExpenseAddAndChangeViewModel(
     private fun buttonStateCheck() {
         _state.value = _state.value.copy(
             saveButtonEnabled = _state.value.amount != null && _state.value.category != null &&
-                    _state.value.date != null && _state.value.amount != 0.0
+                    _state.value.date != null && _state.value.amount != 0L
         )
     }
 }

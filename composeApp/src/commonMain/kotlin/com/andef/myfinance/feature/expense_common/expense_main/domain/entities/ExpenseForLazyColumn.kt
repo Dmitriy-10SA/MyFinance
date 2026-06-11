@@ -5,6 +5,6 @@ import kotlinx.datetime.LocalDate
 
 data class ExpenseForLazyColumn(
     val date: LocalDate,
-    val totalAmount: Double,
+    val totalAmount: Long,
     val expenseModels: List<ExpenseModel>
 )

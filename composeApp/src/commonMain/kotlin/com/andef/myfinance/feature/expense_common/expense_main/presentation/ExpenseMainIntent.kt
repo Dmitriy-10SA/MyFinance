@@ -13,7 +13,7 @@ sealed class ExpenseMainIntent {
         val isVisible: Boolean,
         val date: LocalDate? = null,
         val category: ExpenseCategoryModel? = null,
-        val amount: Double? = null,
+        val amount: Long? = null,
         val id: Long? = null
     ) : ExpenseMainIntent()
 

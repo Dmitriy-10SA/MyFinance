@@ -4,7 +4,7 @@ import com.andef.myfinance.core.domain.income_common.income_category.entities.In
 import kotlinx.datetime.LocalDate
 
 sealed class IncomeAddAndChangeIntent {
-    data class ChangeAmount(val amount: Double?) : IncomeAddAndChangeIntent()
+    data class ChangeAmount(val amount: Long?) : IncomeAddAndChangeIntent()
     data class ChangeCategory(val category: IncomeCategoryModel) : IncomeAddAndChangeIntent()
     data class ChangeNote(val note: String?) : IncomeAddAndChangeIntent()
     data class ChangeDate(val date: LocalDate) : IncomeAddAndChangeIntent()

@@ -65,15 +65,15 @@ private fun MainContent(
     val totalAmount = state.totalIncomesAmount + state.totalExpensesAmount
     val incomesAmount = state.totalIncomesAmount
     val expensesAmount = state.totalExpensesAmount
-    val incomesPercent = if (totalAmount == 0.0) {
+    val incomesPercent = if (totalAmount == 0L) {
         0f
     } else {
-        (incomesAmount / totalAmount * 100).toFloat()
+        (incomesAmount.toDouble() / totalAmount.toDouble() * 100).toFloat()
     }
-    val expensesPercent = if (totalAmount == 0.0) {
+    val expensesPercent = if (totalAmount == 0L) {
         0f
     } else {
-        (expensesAmount / totalAmount * 100).toFloat()
+        (expensesAmount.toDouble() / totalAmount.toDouble() * 100).toFloat()
     }
     val slices = mutableListOf(
         UiPieChartData.Slice(
