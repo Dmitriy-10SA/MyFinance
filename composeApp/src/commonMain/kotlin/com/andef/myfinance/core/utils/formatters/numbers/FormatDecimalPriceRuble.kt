@@ -16,5 +16,5 @@ fun formatDecimalPriceRuble(value: Double): String {
         .joinToString(" ")
         .reversed()
 
-    return "$intStr.$fracStrв‚Ѕ"
+    return "$intStr.$fracStr‚Ѕ"
 }

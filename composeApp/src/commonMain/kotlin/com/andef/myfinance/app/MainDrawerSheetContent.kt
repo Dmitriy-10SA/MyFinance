@@ -73,7 +73,6 @@ import myfinance.composeapp.generated.resources.my_finance_outline_dark
 import myfinance.composeapp.generated.resources.my_finance_outline_light
 import myfinance.composeapp.generated.resources.my_finance_person
 import myfinance.composeapp.generated.resources.my_finance_reminder
-import myfinance.composeapp.generated.resources.my_finance_ruble
 import myfinance.composeapp.generated.resources.my_finance_trending_down
 import myfinance.composeapp.generated.resources.my_finance_trending_up
 import org.jetbrains.compose.resources.painterResource
@@ -266,20 +265,6 @@ private fun InnerContent(
                         scope.launch {
                             drawerState.close()
                             navHostController.navigate(Screen.ExpenseCategoryAddScreen.route)
-                        }
-                    }
-                )
-            }
-            item {
-                UiModalDrawerSheetInnerItem(
-                    isLightTheme = isLightTheme,
-                    itemText = "Курс валют",
-                    icon = painterResource(Res.drawable.my_finance_ruble),
-                    iconContentDescription = "Иконка рубля",
-                    onClick = {
-                        scope.launch {
-                            drawerState.close()
-                            navHostController.navigate(Screen.CurrencysScreen.route)
                         }
                     }
                 )

@@ -31,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,15 +56,13 @@ import com.andef.myfinance.core.design.textfield.ui.UiTextField
 import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.design.topbar.ui.UiTopBar
 import com.andef.myfinance.core.domain.income_common.income_category.entities.BaseIncomeCategory
-import com.andef.myfinance.core.platform.common.MoneyDecimalFormatter
 import com.andef.myfinance.core.utils.Blue
-import com.andef.myfinance.core.utils.formatters.RubleAmountVisualTransformation
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
-import com.andef.myfinance.core.utils.formatters.numbers.clampToTwoDecimals
 import com.andef.myfinance.core.utils.formatters.numbers.formatAmountForEdit
 import com.andef.myfinance.core.utils.formatters.numbers.parseAmountToKopecks
 import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.grayColor
+import com.andef.myfinance.core.utils.normalizeAmountInput
 import com.andef.myfinance.core.utils.showSnackbar
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_arrow_back
@@ -88,8 +87,7 @@ fun IncomeAddAndChangeScreen(
     incomeId: Long?,
     isLightTheme: Boolean,
     navHostController: NavHostController,
-    paddingValues: PaddingValues,
-    moneyDecimalFormatter: MoneyDecimalFormatter
+    paddingValues: PaddingValues
 ) {
     val viewModel = koinViewModel<IncomeAddAndChangeViewModel>()
     val state = viewModel.state.collectAsState().value
@@ -146,8 +144,7 @@ fun IncomeAddAndChangeScreen(
                 isLightTheme = isLightTheme,
                 scrollState = rememberScrollState(),
                 state = state,
-                viewModel = viewModel,
-                moneyDecimalFormatter = moneyDecimalFormatter
+                viewModel = viewModel
             )
             DownButton(
                 isLightTheme = isLightTheme,
@@ -182,8 +179,7 @@ private fun ColumnScope.MainContent(
     isLightTheme: Boolean,
     scrollState: ScrollState,
     state: IncomeAddAndChangeState,
-    viewModel: IncomeAddAndChangeViewModel,
-    moneyDecimalFormatter: MoneyDecimalFormatter
+    viewModel: IncomeAddAndChangeViewModel
 ) {
     Column(
         modifier = Modifier
@@ -194,7 +190,7 @@ private fun ColumnScope.MainContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(6.dp))
-        Fields(isLightTheme, state, viewModel, moneyDecimalFormatter)
+        Fields(isLightTheme, state, viewModel)
         Spacer(modifier = Modifier.height(6.dp))
     }
 }
@@ -203,8 +199,7 @@ private fun ColumnScope.MainContent(
 private fun Fields(
     isLightTheme: Boolean,
     state: IncomeAddAndChangeState,
-    viewModel: IncomeAddAndChangeViewModel,
-    moneyDecimalFormatter: MoneyDecimalFormatter
+    viewModel: IncomeAddAndChangeViewModel
 ) {
     Image(
         modifier = Modifier
@@ -232,8 +227,7 @@ private fun Fields(
     RequiredFields(
         isLightTheme = isLightTheme,
         state = state,
-        viewModel = viewModel,
-        moneyDecimalFormatter = moneyDecimalFormatter
+        viewModel = viewModel
     )
     Spacer(modifier = Modifier.height(28.dp))
     Text(
@@ -265,11 +259,10 @@ private fun Fields(
 private fun RequiredFields(
     isLightTheme: Boolean,
     state: IncomeAddAndChangeState,
-    viewModel: IncomeAddAndChangeViewModel,
-    moneyDecimalFormatter: MoneyDecimalFormatter
+    viewModel: IncomeAddAndChangeViewModel
 ) {
-    var localAmount by remember { mutableStateOf("") }
-    var initializedAmount by remember { mutableStateOf<Long?>(null) }
+    var localAmount by rememberSaveable { mutableStateOf("") }
+    var initializedAmount by rememberSaveable { mutableStateOf<Long?>(null) }
     LaunchedEffect(state.amount) {
         val amount = state.amount
         if (amount != null && localAmount.isBlank() && initializedAmount != amount) {
@@ -282,10 +275,10 @@ private fun RequiredFields(
         isLightTheme = isLightTheme,
         value = localAmount,
         onValueChange = { newText ->
-            val filtered = newText.filter { it.isDigit() || it == ',' || it == '.' }
-            val clamped = clampToTwoDecimals(filtered)
-            localAmount = clamped
-            val parsed = parseAmountToKopecks(clamped)
+            val normalized = normalizeAmountInput(newText)
+            localAmount = normalized
+
+            val parsed = parseAmountToKopecks(normalized)
             viewModel.send(IncomeAddAndChangeIntent.ChangeAmount(parsed))
         },
         modifier = Modifier.fillMaxWidth(),
@@ -293,10 +286,9 @@ private fun RequiredFields(
         leadingIcon = painterResource(Res.drawable.my_finance_ruble),
         contentDescription = "Значок рубля",
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.NumberPassword,
+            keyboardType = KeyboardType.Decimal,
             imeAction = ImeAction.Next
-        ),
-        visualTransformation = RubleAmountVisualTransformation(moneyDecimalFormatter)
+        )
     )
     Spacer(modifier = Modifier.height(16.dp))
     UiMenu(

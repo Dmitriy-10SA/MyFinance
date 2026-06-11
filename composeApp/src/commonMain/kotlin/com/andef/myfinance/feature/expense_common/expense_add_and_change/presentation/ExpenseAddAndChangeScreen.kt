@@ -31,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,15 +56,13 @@ import com.andef.myfinance.core.design.textfield.ui.UiTextField
 import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.design.topbar.ui.UiTopBar
 import com.andef.myfinance.core.domain.expense_common.expense_category.entities.BaseExpenseCategory
-import com.andef.myfinance.core.platform.common.MoneyDecimalFormatter
 import com.andef.myfinance.core.utils.Blue
-import com.andef.myfinance.core.utils.formatters.RubleAmountVisualTransformation
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
-import com.andef.myfinance.core.utils.formatters.numbers.clampToTwoDecimals
 import com.andef.myfinance.core.utils.formatters.numbers.formatAmountForEdit
 import com.andef.myfinance.core.utils.formatters.numbers.parseAmountToKopecks
 import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.grayColor
+import com.andef.myfinance.core.utils.normalizeAmountInput
 import com.andef.myfinance.core.utils.showSnackbar
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_arrow_back
@@ -93,8 +92,7 @@ fun ExpenseAddAndChangeScreen(
     expenseId: Long?,
     isLightTheme: Boolean,
     navHostController: NavHostController,
-    paddingValues: PaddingValues,
-    moneyDecimalFormatter: MoneyDecimalFormatter
+    paddingValues: PaddingValues
 ) {
     val viewModel = koinViewModel<ExpenseAddAndChangeViewModel>()
     val state = viewModel.state.collectAsState().value
@@ -151,8 +149,7 @@ fun ExpenseAddAndChangeScreen(
                 isLightTheme = isLightTheme,
                 scrollState = rememberScrollState(),
                 state = state,
-                viewModel = viewModel,
-                moneyDecimalFormatter = moneyDecimalFormatter
+                viewModel = viewModel
             )
             DownButton(
                 isLightTheme = isLightTheme,
@@ -193,11 +190,10 @@ private fun ColumnScope.MainContent(
     isLightTheme: Boolean,
     scrollState: ScrollState,
     state: ExpenseAddAndChangeState,
-    viewModel: ExpenseAddAndChangeViewModel,
-    moneyDecimalFormatter: MoneyDecimalFormatter
+    viewModel: ExpenseAddAndChangeViewModel
 ) {
-    var localAmount by remember { mutableStateOf("") }
-    var initializedAmount by remember { mutableStateOf<Long?>(null) }
+    var localAmount by rememberSaveable { mutableStateOf("") }
+    var initializedAmount by rememberSaveable { mutableStateOf<Long?>(null) }
     LaunchedEffect(state.amount) {
         val amount = state.amount
         if (amount != null && localAmount.isBlank() && initializedAmount != amount) {
@@ -242,10 +238,10 @@ private fun ColumnScope.MainContent(
             isLightTheme = isLightTheme,
             value = localAmount,
             onValueChange = { newText ->
-                val filtered = newText.filter { it.isDigit() || it == ',' || it == '.' }
-                val clamped = clampToTwoDecimals(filtered)
-                localAmount = clamped
-                val parsed = parseAmountToKopecks(clamped)
+                val normalized = normalizeAmountInput(newText)
+                localAmount = normalized
+
+                val parsed = parseAmountToKopecks(normalized)
                 viewModel.send(ExpenseAddAndChangeIntent.ChangeAmount(parsed))
             },
             modifier = Modifier.fillMaxWidth(),
@@ -253,10 +249,9 @@ private fun ColumnScope.MainContent(
             leadingIcon = painterResource(Res.drawable.my_finance_ruble),
             contentDescription = "Значок рубля",
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.NumberPassword,
+                keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Next
-            ),
-            visualTransformation = RubleAmountVisualTransformation(moneyDecimalFormatter)
+            )
         )
         Spacer(modifier = Modifier.height(16.dp))
         UiMenu(
