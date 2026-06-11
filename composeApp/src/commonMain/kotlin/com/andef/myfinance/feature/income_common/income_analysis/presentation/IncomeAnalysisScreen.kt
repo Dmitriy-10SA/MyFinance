@@ -55,13 +55,12 @@ import com.andef.myfinance.core.utils.Red
 import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.getters.getTitleForIncome
-import com.andef.myfinance.core.utils.getters.minusDays
-import com.andef.myfinance.core.utils.getters.minusMonths
-import com.andef.myfinance.core.utils.getters.minusYears
 import com.andef.myfinance.core.utils.getters.now
+import com.kizitonwose.calendar.core.minusDays
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_arrow_back
 import myfinance.composeapp.generated.resources.my_finance_print
@@ -130,7 +129,7 @@ fun IncomeAnalysisScreen(
                         },
                         onDragEnd = {
                             if (totalDrag > 100) {
-                                if (selectedTabIndex.value in 1..5) {
+                                if (selectedTabIndex.value in 1..4) {
                                     onTabClick(
                                         dateTabs[selectedTabIndex.value - 1],
                                         selectedTabIndex,
@@ -141,7 +140,7 @@ fun IncomeAnalysisScreen(
                                     )
                                 }
                             } else if (totalDrag < -100) {
-                                if (selectedTabIndex.value in 0..4) {
+                                if (selectedTabIndex.value in 0..3) {
                                     onTabClick(
                                         dateTabs[selectedTabIndex.value + 1],
                                         selectedTabIndex,
@@ -202,6 +201,8 @@ fun IncomeAnalysisScreen(
         onOkClick = { s, e ->
             startDate.value = s
             endDate.value = e
+            selectedTabIndex.value = 4
+            lastSelectedTabIndex.value = 4
             datePickerVisible.value = false
         }
     )
@@ -316,39 +317,49 @@ private fun onTabClick(
     lastSelectedTabIndex: MutableState<Int>,
     datePickerVisible: MutableState<Boolean>
 ) {
-    if (tab.id != selectedTabIndex.value || tab.id == 5) {
+    if (tab.id != selectedTabIndex.value || tab.id == 4) {
         selectedTabIndex.value = tab.id
+
+        val now = LocalDate.now()
+
         when (tab.id) {
+            // Сегодня
             0 -> {
                 lastSelectedTabIndex.value = tab.id
-                startDate.value = LocalDate.now()
-                endDate.value = LocalDate.now()
+                startDate.value = now
+                endDate.value = now
             }
 
+            // Текущая неделя: понедельник — сегодня
             1 -> {
                 lastSelectedTabIndex.value = tab.id
-                startDate.value = LocalDate.now().minusDays(7)
-                endDate.value = LocalDate.now()
+                startDate.value = now.minusDays(now.dayOfWeek.ordinal)
+                endDate.value = now
             }
 
+            // Текущий месяц: 1-е число месяца — сегодня
             2 -> {
                 lastSelectedTabIndex.value = tab.id
-                startDate.value = LocalDate.now().minusMonths(1)
-                endDate.value = LocalDate.now()
+                startDate.value = LocalDate(
+                    year = now.year,
+                    month = now.month.number,
+                    day = 1
+                )
+                endDate.value = now
             }
 
+            // Текущий год: 1 января — сегодня
             3 -> {
                 lastSelectedTabIndex.value = tab.id
-                startDate.value = LocalDate.now().minusMonths(6)
-                endDate.value = LocalDate.now()
+                startDate.value = LocalDate(
+                    year = now.year,
+                    month = 1,
+                    day = 1
+                )
+                endDate.value = now
             }
 
-            4 -> {
-                lastSelectedTabIndex.value = tab.id
-                startDate.value = LocalDate.now().minusYears(1)
-                endDate.value = LocalDate.now()
-            }
-
+            // Период
             else -> {
                 datePickerVisible.value = true
             }
@@ -403,7 +414,6 @@ private val dateTabs = listOf(
     UiTopBarTab(id = 0, title = "День"),
     UiTopBarTab(id = 1, title = "Неделя"),
     UiTopBarTab(id = 2, title = "Месяц"),
-    UiTopBarTab(id = 3, title = "Полгода"),
-    UiTopBarTab(id = 4, title = "Год"),
-    UiTopBarTab(id = 5, title = "Период")
+    UiTopBarTab(id = 3, title = "Год"),
+    UiTopBarTab(id = 4, title = "Период")
 )
