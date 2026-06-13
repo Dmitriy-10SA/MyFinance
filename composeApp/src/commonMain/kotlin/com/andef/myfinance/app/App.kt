@@ -13,7 +13,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.andef.myfinance.core.design.MyFinanceTheme
+import com.andef.myfinance.core.design.date.picker.ui.UiMonthPickerDialog
 import com.andef.myfinance.core.design.date.picker.ui.UiRangeDatePickerDialog
+import com.andef.myfinance.core.design.date.picker.ui.UiYearPickerDialog
 import com.andef.myfinance.core.design.fab.ui.UiFAB
 import com.andef.myfinance.core.design.navbar.item.UiNavigationBarItem
 import com.andef.myfinance.core.design.navbar.ui.UiNavigationBar
@@ -30,6 +32,7 @@ import com.andef.myfinance.core.utils.navigateWithSaveState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_add
 import myfinance.composeapp.generated.resources.my_finance_expenses
@@ -66,14 +69,24 @@ fun App() {
             startDate = state.startDate,
             endDate = state.endDate,
             datePickerVisible = state.datePickerVisible,
+            monthPickerVisible = state.monthPickerVisible,
+            yearPickerVisible = state.yearPickerVisible,
             currentRoute = state.currentRoute,
             scope = scope,
             drawerState = drawerState,
             onDatesChoose = { s, e ->
                 viewModel.send(AppIntent.DatesChoose(s, e))
             },
+            onMonthChoose = { year, month ->
+                viewModel.send(AppIntent.MonthChoose(year, month))
+            },
+            onYearChoose = { year ->
+                viewModel.send(AppIntent.YearChoose(year))
+            },
             selectedTabIndex = state.selectedTabIndex,
             onDatesDismiss = { viewModel.send(AppIntent.DatesDismiss) },
+            onMonthDismiss = { viewModel.send(AppIntent.MonthDismiss) },
+            onYearDismiss = { viewModel.send(AppIntent.YearDismiss) },
             onTabClick = { tab -> viewModel.send(AppIntent.TabClick(tab)) },
             isFirstStart = state.isFirstStart,
             onItemClick = { item ->
@@ -108,12 +121,18 @@ private fun AppDrawer(
     startDate: LocalDate,
     endDate: LocalDate,
     datePickerVisible: Boolean,
+    monthPickerVisible: Boolean,
+    yearPickerVisible: Boolean,
     selectedTabIndex: Int,
     currentRoute: String?,
     scope: CoroutineScope,
     drawerState: DrawerState,
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
+    onMonthChoose: (Int, Int) -> Unit,
+    onYearChoose: (Int) -> Unit,
     onDatesDismiss: () -> Unit,
+    onMonthDismiss: () -> Unit,
+    onYearDismiss: () -> Unit,
     onTabClick: (UiTopBarTab) -> Unit,
     onItemClick: (UiNavigationBarItem) -> Unit,
     onMainScreensLeftSwipe: () -> Unit,
@@ -139,10 +158,16 @@ private fun AppDrawer(
                 startDate = startDate,
                 endDate = endDate,
                 datePickerVisible = datePickerVisible,
+                monthPickerVisible = monthPickerVisible,
+                yearPickerVisible = yearPickerVisible,
                 scope = scope,
                 drawerState = drawerState,
                 onDatesChoose = onDatesChoose,
+                onMonthChoose = onMonthChoose,
+                onYearChoose = onYearChoose,
                 onDatesDismiss = onDatesDismiss,
+                onMonthDismiss = onMonthDismiss,
+                onYearDismiss = onYearDismiss,
                 selectedTabIndex = selectedTabIndex,
                 onTabClick = onTabClick,
                 currentRoute = currentRoute,
@@ -163,12 +188,18 @@ private fun AppDrawerContent(
     startDate: LocalDate,
     endDate: LocalDate,
     datePickerVisible: Boolean,
+    monthPickerVisible: Boolean,
+    yearPickerVisible: Boolean,
     selectedTabIndex: Int,
     currentRoute: String?,
     scope: CoroutineScope,
     drawerState: DrawerState,
     onDatesChoose: (LocalDate, LocalDate) -> Unit,
+    onMonthChoose: (Int, Int) -> Unit,
+    onYearChoose: (Int) -> Unit,
     onDatesDismiss: () -> Unit,
+    onMonthDismiss: () -> Unit,
+    onYearDismiss: () -> Unit,
     onTabClick: (UiTopBarTab) -> Unit,
     onItemClick: (UiNavigationBarItem) -> Unit,
     onMainScreensLeftSwipe: () -> Unit,
@@ -212,6 +243,21 @@ private fun AppDrawerContent(
             isLightTheme = isLightTheme,
             onDismissRequest = onDatesDismiss,
             onOkClick = { s, e -> onDatesChoose(s, e) }
+        )
+        UiMonthPickerDialog(
+            isVisible = monthPickerVisible,
+            isLightTheme = isLightTheme,
+            initialYear = startDate.year,
+            initialMonth = startDate.month.number,
+            onDismissRequest = onMonthDismiss,
+            onOkClick = onMonthChoose
+        )
+        UiYearPickerDialog(
+            isVisible = yearPickerVisible,
+            isLightTheme = isLightTheme,
+            initialYear = startDate.year,
+            onDismissRequest = onYearDismiss,
+            onOkClick = onYearChoose
         )
     }
 }

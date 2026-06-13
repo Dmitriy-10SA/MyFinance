@@ -11,6 +11,8 @@ data class AppState constructor(
     val startDate: LocalDate = LocalDate.now(),
     val endDate: LocalDate = LocalDate.now(),
     val datePickerVisible: Boolean = false,
+    val monthPickerVisible: Boolean = false,
+    val yearPickerVisible: Boolean = false,
     val currentRoute: String? = null,
     val previousRoute: String? = null
 )

@@ -10,14 +10,15 @@ import com.andef.myfinance.core.domain.preferences.usecases.GetUsernameAsFlowUse
 import com.andef.myfinance.core.domain.preferences.usecases.GetUsernameUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.SetIsLightThemeUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.SetUsernameUseCase
+import com.andef.myfinance.core.utils.date.currentDateRangeForTab
+import com.andef.myfinance.core.utils.date.selectedMonthRange
+import com.andef.myfinance.core.utils.date.selectedYearRange
 import com.andef.myfinance.core.utils.getters.now
-import com.kizitonwose.calendar.core.minusDays
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.number
 
 class AppViewModel(
     val getIsLightThemeAsFlowUseCase: GetIsLightThemeAsFlowUseCase,
@@ -45,8 +46,24 @@ class AppViewModel(
                 )
             }
 
+            is AppIntent.MonthChoose -> {
+                monthChoose(year = intent.year, month = intent.month)
+            }
+
+            is AppIntent.YearChoose -> {
+                yearChoose(year = intent.year)
+            }
+
             is AppIntent.DatesDismiss -> {
                 datesDismiss()
+            }
+
+            is AppIntent.MonthDismiss -> {
+                monthDismiss()
+            }
+
+            is AppIntent.YearDismiss -> {
+                yearDismiss()
             }
 
             is AppIntent.TabClick -> {
@@ -110,40 +127,26 @@ class AppViewModel(
 
     private fun tabClick(tab: UiTopBarTab) {
         val selectedTabIndex = _state.value.selectedTabIndex
-        if (tab.id != selectedTabIndex || tab.id == 4) {
-            val now = LocalDate.now()
-            val newLastTabIndexAndDates: Pair<Int, Pair<LocalDate, LocalDate>>? = when (tab.id) {
-                // Сегодня
-                0 -> tab.id to (now to now)
-
-                // Текущая неделя: понедельник — сегодня
-                1 -> {
-                    val startOfWeek = now.minusDays(now.dayOfWeek.ordinal)
-                    tab.id to (startOfWeek to now)
-                }
-
-                // Текущий месяц: 1-е число месяца — сегодня
-                2 -> {
-                    val startOfMonth = LocalDate(year = now.year, month = now.month.number, day = 1)
-                    tab.id to (startOfMonth to now)
-                }
-
-                // Текущий год: 1 января — сегодня
-                3 -> {
-                    val startOfYear = LocalDate(year = now.year, month = 1, day = 1)
-                    tab.id to (startOfYear to now)
-                }
-
-                else -> null
+        when {
+            tab.id == selectedTabIndex && tab.id == 2 -> {
+                _state.value = _state.value.copy(monthPickerVisible = true)
             }
-            if (newLastTabIndexAndDates != null) {
+
+            tab.id == selectedTabIndex && tab.id == 3 -> {
+                _state.value = _state.value.copy(yearPickerVisible = true)
+            }
+
+            tab.id != selectedTabIndex && tab.id in 0..3 -> {
+                val range = currentDateRangeForTab(tab.id, LocalDate.now())
                 _state.value = _state.value.copy(
                     selectedTabIndex = tab.id,
-                    lastSelectedTabIndex = newLastTabIndexAndDates.first,
-                    startDate = newLastTabIndexAndDates.second.first,
-                    endDate = newLastTabIndexAndDates.second.second
+                    lastSelectedTabIndex = tab.id,
+                    startDate = range.first,
+                    endDate = range.second
                 )
-            } else {
+            }
+
+            tab.id == 4 -> {
                 _state.value = _state.value.copy(
                     selectedTabIndex = tab.id,
                     datePickerVisible = true
@@ -165,7 +168,36 @@ class AppViewModel(
             startDate = startDate,
             endDate = endDate,
             lastSelectedTabIndex = 4,
+            selectedTabIndex = 4,
             datePickerVisible = false
+        )
+    }
+
+    private fun monthDismiss() {
+        _state.value = _state.value.copy(monthPickerVisible = false)
+    }
+
+    private fun yearDismiss() {
+        _state.value = _state.value.copy(yearPickerVisible = false)
+    }
+
+    private fun monthChoose(year: Int, month: Int) {
+        val range = selectedMonthRange(year, month)
+        _state.value = _state.value.copy(
+            startDate = range.first,
+            endDate = range.second,
+            lastSelectedTabIndex = 2,
+            monthPickerVisible = false
+        )
+    }
+
+    private fun yearChoose(year: Int) {
+        val range = selectedYearRange(year)
+        _state.value = _state.value.copy(
+            startDate = range.first,
+            endDate = range.second,
+            lastSelectedTabIndex = 3,
+            yearPickerVisible = false
         )
     }
 
