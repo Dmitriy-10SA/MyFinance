@@ -1,7 +1,9 @@
 package com.andef.myfinance.core.utils.formatters.datetime
 
+import com.andef.myfinance.core.utils.date.selectedMonthRange
+import com.andef.myfinance.core.utils.getters.minusDays
 import com.andef.myfinance.core.utils.getters.now
-import com.kizitonwose.calendar.core.minusDays
+import com.andef.myfinance.core.utils.getters.plusDays
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.number
 
@@ -27,30 +29,53 @@ fun formatLocalDateForPrint(date: LocalDate): String {
 fun formatLocalDateRange(startDate: LocalDate, endDate: LocalDate): String {
     val today = LocalDate.now()
 
-    val startOfCurrentWeek = today.minusDays(today.dayOfWeek.ordinal)
+    val startOfCurrentWeek = today.minusDays(today.dayOfWeek.ordinal.toLong())
 
-    val startOfCurrentMonth = LocalDate(year = today.year, month = today.month.number, day = 1)
+    val endOfCurrentWeek = startOfCurrentWeek.plusDays(6)
 
-    val startOfCurrentYear = LocalDate(year = today.year, month = 1, day = 1)
+    return when {
+        startDate == endDate -> formatLocalDate(startDate)
+        startDate == startOfCurrentWeek && endDate == endOfCurrentWeek -> "Текущая неделя"
 
-    return when (startDate) {
-        endDate -> formatLocalDate(startDate)
-        startOfCurrentWeek if endDate == today -> {
-            "Текущая неделя"
+        isFullMonthRange(startDate, endDate) -> {
+            getMonthName(startDate.month.number) + " " + startDate.year.toString()
         }
 
-        startOfCurrentMonth if endDate == today -> {
-            getMonthName(today.month.number)
-        }
+        isFullYearRange(startDate, endDate) -> startDate.year.toString()
 
-        startOfCurrentYear if endDate == today -> {
-            today.year.toString()
-        }
-
-        else -> {
-            "${formatLocalDateForPrint(startDate)} - ${formatLocalDateForPrint(endDate)}"
-        }
+        else -> "${formatLocalDateForPrint(startDate)} - ${formatLocalDateForPrint(endDate)}"
     }
+}
+
+private fun isFullMonthRange(startDate: LocalDate, endDate: LocalDate): Boolean {
+    val startOfMonth = LocalDate(
+        year = startDate.year,
+        month = startDate.month.number,
+        day = 1
+    )
+
+    val endOfMonth = selectedMonthRange(
+        year = startDate.year,
+        month = startDate.month.number
+    ).second
+
+    return startDate == startOfMonth && endDate == endOfMonth
+}
+
+private fun isFullYearRange(startDate: LocalDate, endDate: LocalDate): Boolean {
+    val startOfYear = LocalDate(
+        year = startDate.year,
+        month = 1,
+        day = 1
+    )
+
+    val endOfYear = LocalDate(
+        year = startDate.year,
+        month = 12,
+        day = 31
+    )
+
+    return startDate == startOfYear && endDate == endOfYear
 }
 
 private fun getMonthName(monthNumber: Int): String {

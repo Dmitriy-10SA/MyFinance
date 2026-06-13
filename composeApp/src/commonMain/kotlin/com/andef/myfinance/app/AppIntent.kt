@@ -5,7 +5,11 @@ import kotlinx.datetime.LocalDate
 
 sealed class AppIntent {
     class DatesChoose(val startDate: LocalDate, val endDate: LocalDate) : AppIntent()
+    class MonthChoose(val year: Int, val month: Int) : AppIntent()
+    class YearChoose(val year: Int) : AppIntent()
     object DatesDismiss : AppIntent()
+    object MonthDismiss : AppIntent()
+    object YearDismiss : AppIntent()
     class TabClick(val tab: UiTopBarTab) : AppIntent()
     class CurrentRouteChange(val route: String?) : AppIntent()
     object LeftSwipe : AppIntent()

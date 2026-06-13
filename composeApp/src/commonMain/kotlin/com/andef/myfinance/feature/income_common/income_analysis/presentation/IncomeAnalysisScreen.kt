@@ -35,7 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.andef.myfinance.core.design.alert.dialog.ui.UiAlertDialog
 import com.andef.myfinance.core.design.card.date.amount.row.UiDateAndAmountRow
+import com.andef.myfinance.core.design.date.picker.ui.UiMonthPickerDialog
 import com.andef.myfinance.core.design.date.picker.ui.UiRangeDatePickerDialog
+import com.andef.myfinance.core.design.date.picker.ui.UiYearPickerDialog
 import com.andef.myfinance.core.design.legend.row.ui.UiLegendAmountItem
 import com.andef.myfinance.core.design.legend.row.ui.UiLegendRows
 import com.andef.myfinance.core.design.loading.ui.UiLoading
@@ -53,10 +55,12 @@ import com.andef.myfinance.core.platform.common.getPdfPrinter
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.Red
 import com.andef.myfinance.core.utils.blackOrWhiteColor
+import com.andef.myfinance.core.utils.date.currentDateRangeForTab
+import com.andef.myfinance.core.utils.date.selectedMonthRange
+import com.andef.myfinance.core.utils.date.selectedYearRange
 import com.andef.myfinance.core.utils.generatters.generateColorFromString
 import com.andef.myfinance.core.utils.getters.getTitleForIncome
 import com.andef.myfinance.core.utils.getters.now
-import com.kizitonwose.calendar.core.minusDays
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -82,6 +86,8 @@ fun IncomeAnalysisScreen(
     val startDate = remember { mutableStateOf(LocalDate.now()) }
     val endDate = remember { mutableStateOf(LocalDate.now()) }
     val datePickerVisible = remember { mutableStateOf(false) }
+    val monthPickerVisible = remember { mutableStateOf(false) }
+    val yearPickerVisible = remember { mutableStateOf(false) }
     val lastSelectedTabIndex = remember { mutableIntStateOf(0) }
 
     var totalDrag by remember { mutableStateOf(0f) }
@@ -102,6 +108,8 @@ fun IncomeAnalysisScreen(
                 startDate = startDate,
                 endDate = endDate,
                 datePickerVisible = datePickerVisible,
+                monthPickerVisible = monthPickerVisible,
+                yearPickerVisible = yearPickerVisible,
                 navHostController = navHostController,
                 viewModel = viewModel
             )
@@ -136,7 +144,9 @@ fun IncomeAnalysisScreen(
                                         startDate,
                                         endDate,
                                         lastSelectedTabIndex,
-                                        datePickerVisible
+                                        datePickerVisible,
+                                        monthPickerVisible,
+                                        yearPickerVisible
                                     )
                                 }
                             } else if (totalDrag < -100) {
@@ -147,7 +157,9 @@ fun IncomeAnalysisScreen(
                                         startDate,
                                         endDate,
                                         lastSelectedTabIndex,
-                                        datePickerVisible
+                                        datePickerVisible,
+                                        monthPickerVisible,
+                                        yearPickerVisible
                                     )
                                 }
                             }
@@ -204,6 +216,33 @@ fun IncomeAnalysisScreen(
             selectedTabIndex.value = 4
             lastSelectedTabIndex.value = 4
             datePickerVisible.value = false
+        }
+    )
+    UiMonthPickerDialog(
+        isVisible = monthPickerVisible.value,
+        isLightTheme = isLightTheme,
+        initialYear = startDate.value.year,
+        initialMonth = startDate.value.month.number,
+        onDismissRequest = { monthPickerVisible.value = false },
+        onOkClick = { year, month ->
+            val range = selectedMonthRange(year, month)
+            startDate.value = range.first
+            endDate.value = range.second
+            lastSelectedTabIndex.value = 2
+            monthPickerVisible.value = false
+        }
+    )
+    UiYearPickerDialog(
+        isVisible = yearPickerVisible.value,
+        isLightTheme = isLightTheme,
+        initialYear = startDate.value.year,
+        onDismissRequest = { yearPickerVisible.value = false },
+        onOkClick = { year ->
+            val range = selectedYearRange(year)
+            startDate.value = range.first
+            endDate.value = range.second
+            lastSelectedTabIndex.value = 3
+            yearPickerVisible.value = false
         }
     )
     UiLoading(isLightTheme = isLightTheme, isVisible = state.value.isLoading)
@@ -280,6 +319,8 @@ private fun TopBar(
     startDate: MutableState<LocalDate>,
     endDate: MutableState<LocalDate>,
     datePickerVisible: MutableState<Boolean>,
+    monthPickerVisible: MutableState<Boolean>,
+    yearPickerVisible: MutableState<Boolean>,
     viewModel: IncomeAnalysisViewModel,
     navHostController: NavHostController
 ) {
@@ -295,7 +336,9 @@ private fun TopBar(
                     startDate,
                     endDate,
                     lastSelectedTabIndex,
-                    datePickerVisible
+                    datePickerVisible,
+                    monthPickerVisible,
+                    yearPickerVisible
                 )
             }
         ),
@@ -323,54 +366,30 @@ private fun onTabClick(
     startDate: MutableState<LocalDate>,
     endDate: MutableState<LocalDate>,
     lastSelectedTabIndex: MutableState<Int>,
-    datePickerVisible: MutableState<Boolean>
+    datePickerVisible: MutableState<Boolean>,
+    monthPickerVisible: MutableState<Boolean>,
+    yearPickerVisible: MutableState<Boolean>
 ) {
-    if (tab.id != selectedTabIndex.value || tab.id == 4) {
-        selectedTabIndex.value = tab.id
+    when {
+        tab.id == selectedTabIndex.value && tab.id == 2 -> {
+            monthPickerVisible.value = true
+        }
 
-        val now = LocalDate.now()
+        tab.id == selectedTabIndex.value && tab.id == 3 -> {
+            yearPickerVisible.value = true
+        }
 
-        when (tab.id) {
-            // Сегодня
-            0 -> {
-                lastSelectedTabIndex.value = tab.id
-                startDate.value = now
-                endDate.value = now
-            }
+        tab.id != selectedTabIndex.value && tab.id in 0..3 -> {
+            val range = currentDateRangeForTab(tab.id, LocalDate.now())
+            selectedTabIndex.value = tab.id
+            lastSelectedTabIndex.value = tab.id
+            startDate.value = range.first
+            endDate.value = range.second
+        }
 
-            // Текущая неделя: понедельник — сегодня
-            1 -> {
-                lastSelectedTabIndex.value = tab.id
-                startDate.value = now.minusDays(now.dayOfWeek.ordinal)
-                endDate.value = now
-            }
-
-            // Текущий месяц: 1-е число месяца — сегодня
-            2 -> {
-                lastSelectedTabIndex.value = tab.id
-                startDate.value = LocalDate(
-                    year = now.year,
-                    month = now.month.number,
-                    day = 1
-                )
-                endDate.value = now
-            }
-
-            // Текущий год: 1 января — сегодня
-            3 -> {
-                lastSelectedTabIndex.value = tab.id
-                startDate.value = LocalDate(
-                    year = now.year,
-                    month = 1,
-                    day = 1
-                )
-                endDate.value = now
-            }
-
-            // Период
-            else -> {
-                datePickerVisible.value = true
-            }
+        tab.id == 4 -> {
+            selectedTabIndex.value = tab.id
+            datePickerVisible.value = true
         }
     }
 }
