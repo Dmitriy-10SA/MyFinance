@@ -76,7 +76,6 @@ import myfinance.composeapp.generated.resources.my_finance_more_horiz
 import myfinance.composeapp.generated.resources.my_finance_other
 import myfinance.composeapp.generated.resources.my_finance_ruble
 import myfinance.composeapp.generated.resources.my_finance_salary
-import myfinance.composeapp.generated.resources.my_finance_schedule
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.time.ExperimentalTime
@@ -357,9 +356,7 @@ private fun RequiredFields(
         onClick = { viewModel.send(IncomeAddAndChangeIntent.ChangeDatePickerVisible(true)) },
         modifier = Modifier.fillMaxWidth(),
         placeholderText = "Дата",
-        leadingIcon = painterResource(Res.drawable.my_finance_schedule),
-        leadingIconContentDescription = "Значок часов",
-        trailingIcon = painterResource(Res.drawable.my_finance_calendar),
-        trailingIconContentDescription = "Значок календаря"
+        leadingIcon = painterResource(Res.drawable.my_finance_calendar),
+        leadingIconContentDescription = "Значок календаря"
     )
 }
