@@ -23,10 +23,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -207,19 +208,28 @@ private fun PickerItem(
         selected -> White
         else -> blackOrWhiteColor(isLightTheme = isLightTheme)
     }
-    val textDecoration = when {
-        currentYear == text && !selected -> TextDecoration.Underline
-        else -> null
+    val currentYearIndicatorModifier = if (currentYear == text && !selected) {
+        Modifier.drawBehind {
+            drawCircle(
+                color = Blue,
+                radius = 2.5.dp.toPx(),
+                center = Offset(
+                    x = size.width / 2f,
+                    y = size.height - 6.dp.toPx()
+                )
+            )
+        }
+    } else {
+        Modifier
     }
     Text(
         modifier = modifier
-            .height(42.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(backgroundColor)
             .clickable(onClick = onClick)
+            .then(currentYearIndicatorModifier)
             .padding(horizontal = 6.dp, vertical = 11.dp),
         text = text,
-        textDecoration = textDecoration,
         textAlign = TextAlign.Center,
         fontSize = 14.sp,
         maxLines = 1,
