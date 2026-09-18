@@ -12,6 +12,21 @@ class AndroidLinkOpener(private val context: Context) : LinkOpener {
         }
     }
 
+    override fun openAppOrLink(appId: String, fallbackUrl: String) {
+        val launchIntent = context.packageManager.getLaunchIntentForPackage(appId)
+        if (launchIntent == null) {
+            openLink(fallbackUrl)
+            return
+        }
+
+        runCatching {
+            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(launchIntent)
+        }.onFailure {
+            openLink(fallbackUrl)
+        }
+    }
+
     override fun openEmail(email: String) {
         Intent(Intent.ACTION_SENDTO).apply {
             data = "mailto:$email".toUri()
