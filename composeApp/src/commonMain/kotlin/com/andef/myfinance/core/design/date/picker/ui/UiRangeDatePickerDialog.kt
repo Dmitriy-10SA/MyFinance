@@ -22,10 +22,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -250,21 +251,30 @@ private fun DayText(
             .clickable(enabled = inMonth, onClick = { onClick(date) })
             .padding(vertical = 6.dp)
     }
-    val textDecoration = when {
-        isToday && !isChoose -> TextDecoration.Underline
-        else -> null
-    }
     val color = when {
         inMonth && isChoose -> White
         inMonth -> blackOrWhiteColor(isLightTheme = isLightTheme)
         else -> grayColor(isLightTheme = isLightTheme).copy(alpha = 0.4f)
     }
+    val todayIndicatorModifier = if (isToday && !isChoose) {
+        Modifier.drawBehind {
+            drawCircle(
+                color = Blue,
+                radius = 2.5.dp.toPx(),
+                center = Offset(
+                    x = size.width / 2f,
+                    y = size.height - 2.dp.toPx()
+                )
+            )
+        }
+    } else {
+        Modifier
+    }
     Text(
-        modifier = modifier,
+        modifier = modifier.then(todayIndicatorModifier),
         fontSize = 14.sp,
         text = "${date.day}",
         textAlign = TextAlign.Center,
-        textDecoration = textDecoration,
         color = color
     )
 }

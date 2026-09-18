@@ -60,9 +60,7 @@ import myfinance.composeapp.generated.resources.my_finance_arrow_back
 import myfinance.composeapp.generated.resources.my_finance_calendar
 import myfinance.composeapp.generated.resources.my_finance_comment
 import myfinance.composeapp.generated.resources.my_finance_notification_perm
-import myfinance.composeapp.generated.resources.my_finance_schedule
 import myfinance.composeapp.generated.resources.my_finance_time_picker
-import myfinance.composeapp.generated.resources.my_finance_time_sand
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -241,10 +239,8 @@ private fun ColumnScope.MainContent(
             onClick = { viewModel.send(ReminderAddIntent.ChangeDatePickerVisible(true)) },
             modifier = Modifier.fillMaxWidth(),
             placeholderText = "Дата",
-            leadingIcon = painterResource(Res.drawable.my_finance_schedule),
-            leadingIconContentDescription = "Значок часов",
-            trailingIcon = painterResource(Res.drawable.my_finance_calendar),
-            trailingIconContentDescription = "Значок календаря"
+            leadingIcon = painterResource(Res.drawable.my_finance_calendar),
+            leadingIconContentDescription = "Значок календаря"
         )
         Spacer(modifier = Modifier.height(16.dp))
         UiChooser(
@@ -253,10 +249,8 @@ private fun ColumnScope.MainContent(
             onClick = { viewModel.send(ReminderAddIntent.ChangeTimePickerVisible(true)) },
             modifier = Modifier.fillMaxWidth(),
             placeholderText = "Время",
-            leadingIcon = painterResource(Res.drawable.my_finance_time_sand),
-            leadingIconContentDescription = "Иконка песочные часы",
-            trailingIcon = painterResource(Res.drawable.my_finance_time_picker),
-            trailingIconContentDescription = "Иконка выбор времени"
+            leadingIcon = painterResource(Res.drawable.my_finance_time_picker),
+            leadingIconContentDescription = "Иконка выбор времени"
         )
         Spacer(modifier = Modifier.height(6.dp))
     }

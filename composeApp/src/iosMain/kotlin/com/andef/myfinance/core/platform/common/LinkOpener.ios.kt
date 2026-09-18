@@ -14,6 +14,10 @@ class IOSLinkOpener : LinkOpener {
         }
     }
 
+    override fun openAppOrLink(appId: String, fallbackUrl: String) {
+        openLink(fallbackUrl)
+    }
+
     override fun openEmail(email: String) {
         val mailUrl = "mailto:$email"
         NSURL.URLWithString(mailUrl)?.let { nsUrl ->

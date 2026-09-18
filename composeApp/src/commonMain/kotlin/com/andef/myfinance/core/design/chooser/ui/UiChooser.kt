@@ -1,12 +1,16 @@
 package com.andef.myfinance.core.design.chooser.ui
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
@@ -22,40 +26,40 @@ fun UiChooser(
     modifier: Modifier = Modifier,
     placeholderText: String,
     leadingIcon: Painter,
-    trailingIcon: Painter,
-    leadingIconContentDescription: String,
-    trailingIconContentDescription: String
+    leadingIconContentDescription: String
 ) {
-    OutlinedTextField(
-        modifier = modifier,
-        value = value,
-        onValueChange = {},
-        placeholder = {
-            Text(
-                text = placeholderText,
-                fontSize = 16.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        },
-        leadingIcon = {
-            Icon(
-                painter = leadingIcon,
-                contentDescription = leadingIconContentDescription
-            )
-        },
-        trailingIcon = {
-            IconButton(onClick = onClick) {
-                Icon(
-                    painter = trailingIcon,
-                    contentDescription = trailingIconContentDescription
+    val shape = textFieldShape()
+
+    Box(modifier = modifier) {
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = value,
+            onValueChange = {},
+            placeholder = {
+                Text(
+                    text = placeholderText,
+                    fontSize = 16.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
-            }
-        },
-        singleLine = true,
-        readOnly = true,
-        shape = textFieldShape(),
-        colors = textFieldColors(value = value, isLightTheme = isLightTheme),
-        textStyle = TextStyle(color = blackOrWhiteColor(isLightTheme), fontSize = 16.sp)
-    )
+            },
+            leadingIcon = {
+                Icon(
+                    painter = leadingIcon,
+                    contentDescription = leadingIconContentDescription
+                )
+            },
+            singleLine = true,
+            readOnly = true,
+            shape = shape,
+            colors = textFieldColors(value = value, isLightTheme = isLightTheme),
+            textStyle = TextStyle(color = blackOrWhiteColor(isLightTheme), fontSize = 16.sp)
+        )
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .clip(shape)
+                .clickable(role = Role.Button, onClick = onClick)
+        )
+    }
 }

@@ -58,9 +58,11 @@ import com.andef.myfinance.core.utils.GrayForDark
 import com.andef.myfinance.core.utils.GrayForLight
 import com.andef.myfinance.core.utils.White
 import com.andef.myfinance.core.utils.blackOrWhiteColor
+import com.andef.myfinance.core.utils.grayColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import myfinance.composeapp.generated.resources.Res
+import myfinance.composeapp.generated.resources.my_car_app_icon
 import myfinance.composeapp.generated.resources.my_finance_analytics
 import myfinance.composeapp.generated.resources.my_finance_backup
 import myfinance.composeapp.generated.resources.my_finance_baseline_dark
@@ -104,6 +106,7 @@ fun MainDrawerSheetContent(
             drawerState = drawerState,
             nameChangeSheetVisible = nameChangeSheetVisible,
             feedbackSheetVisible = feedbackSheetVisible,
+            linkOpener = linkOpener,
             viewModel = viewModel
         )
         UsernameChangeBottomSheet(
@@ -185,6 +188,7 @@ private fun InnerContent(
     drawerState: DrawerState,
     nameChangeSheetVisible: MutableState<Boolean>,
     feedbackSheetVisible: MutableState<Boolean>,
+    linkOpener: LinkOpener,
     viewModel: AppViewModel
 ) {
     Column(
@@ -306,6 +310,31 @@ private fun InnerContent(
                     onClick = { feedbackSheetVisible.value = true }
                 )
             }
+            item {
+                Column {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 12.dp).padding(top = 14.dp),
+                        text = "Другие приложения:",
+                        fontSize = 16.sp,
+                        color = grayColor(isLightTheme)
+                    )
+                    UiModalDrawerSheetInnerItem(
+                        isLightTheme = isLightTheme,
+                        icon = painterResource(Res.drawable.my_car_app_icon),
+                        iconContentDescription = "Иконка Мои авто",
+                        itemText = "Мои авто",
+                        onClick = {
+                            scope.launch {
+                                drawerState.close()
+                                linkOpener.openAppOrLink(
+                                    appId = MY_CARS_APP_ID,
+                                    fallbackUrl = MY_CARS_URL
+                                )
+                            }
+                        }
+                    )
+                }
+            }
         }
         HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
@@ -317,6 +346,9 @@ private fun InnerContent(
         Spacer(modifier = Modifier.height(12.dp))
     }
 }
+
+private const val MY_CARS_URL = "https://www.rustore.ru/catalog/app/com.andef.mycarandef"
+private const val MY_CARS_APP_ID = "com.andef.mycarandef"
 
 @Composable
 private fun ColumnScope.UsernameContent(

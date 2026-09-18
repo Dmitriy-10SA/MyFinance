@@ -78,7 +78,6 @@ import myfinance.composeapp.generated.resources.my_finance_more_horiz
 import myfinance.composeapp.generated.resources.my_finance_other
 import myfinance.composeapp.generated.resources.my_finance_products
 import myfinance.composeapp.generated.resources.my_finance_ruble
-import myfinance.composeapp.generated.resources.my_finance_schedule
 import myfinance.composeapp.generated.resources.my_finance_sport
 import myfinance.composeapp.generated.resources.my_finance_study
 import myfinance.composeapp.generated.resources.my_finance_transport
@@ -337,10 +336,8 @@ private fun ColumnScope.MainContent(
             onClick = { viewModel.send(ExpenseAddAndChangeIntent.ChangeDatePickerVisible(true)) },
             modifier = Modifier.fillMaxWidth(),
             placeholderText = "Дата",
-            leadingIcon = painterResource(Res.drawable.my_finance_schedule),
-            leadingIconContentDescription = "Значок часов",
-            trailingIcon = painterResource(Res.drawable.my_finance_calendar),
-            trailingIconContentDescription = "Значок календаря"
+            leadingIcon = painterResource(Res.drawable.my_finance_calendar),
+            leadingIconContentDescription = "Значок календаря"
         )
         Spacer(modifier = Modifier.height(28.dp))
         Text(
