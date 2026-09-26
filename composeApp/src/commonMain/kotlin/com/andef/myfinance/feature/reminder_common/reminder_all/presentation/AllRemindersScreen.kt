@@ -23,6 +23,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -33,11 +35,14 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,6 +55,7 @@ import com.andef.myfinance.core.design.alert.dialog.ui.UiAlertDialog
 import com.andef.myfinance.core.design.bottom.sheet.ui.UiModalBottomSheet
 import com.andef.myfinance.core.design.button.ui.UiButton
 import com.andef.myfinance.core.design.card.reminder.ui.UiReminderCard
+import com.andef.myfinance.core.design.date.picker.ui.UiReminderDatePickerDialog
 import com.andef.myfinance.core.design.fab.ui.UiFAB
 import com.andef.myfinance.core.design.loading.ui.UiLoading
 import com.andef.myfinance.core.design.scaffold.ui.UiScaffold
@@ -66,19 +72,22 @@ import com.andef.myfinance.core.utils.blackOrWhiteColor
 import com.andef.myfinance.core.utils.darkGrayOrWhiteColor
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalTime
+import com.andef.myfinance.core.utils.formatters.datetime.formatMonthAndYear
 import com.andef.myfinance.core.utils.getters.minusDays
 import com.andef.myfinance.core.utils.getters.now
-import com.andef.myfinance.core.utils.getters.plusDays
 import com.andef.myfinance.core.utils.grayColor
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.plus
 import myfinance.composeapp.generated.resources.Res
 import myfinance.composeapp.generated.resources.my_finance_add
 import myfinance.composeapp.generated.resources.my_finance_arrow_back
+import myfinance.composeapp.generated.resources.my_finance_calendar
 import myfinance.composeapp.generated.resources.my_finance_delete
 import myfinance.composeapp.generated.resources.my_finance_edit
 import myfinance.composeapp.generated.resources.my_finance_notification_perm
@@ -101,12 +110,27 @@ fun AllRemindersScreen(
 
     val reminderSheet = rememberModalBottomSheetState()
     val permissionsSheet = rememberModalBottomSheetState()
+    val today = remember { LocalDate.now() }
+    val calendarStartDate = remember(today) { today.minusDays(7) }
+    val calendarEndDate = remember(today) { today.plus(DatePeriod(years = 2)) }
     val weekCalendarState = rememberWeekCalendarState(
-        startDate = LocalDate.now().minusDays(7),
-        endDate = LocalDate.now().plusDays(21),
-        firstVisibleWeekDate = LocalDate.now(),
+        startDate = calendarStartDate,
+        endDate = calendarEndDate,
+        firstVisibleWeekDate = today,
         firstDayOfWeek = DayOfWeek.MONDAY
     )
+    val visibleMonthTitle by remember {
+        derivedStateOf {
+            val visibleWeekDays = weekCalendarState.firstVisibleWeek.days
+            val currentDate = state.value.currentDate
+            val titleDate = if (visibleWeekDays.any { it.date == currentDate }) {
+                currentDate
+            } else {
+                visibleWeekDays[visibleWeekDays.size / 2].date
+            }
+            formatMonthAndYear(titleDate)
+        }
+    }
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val permissionsGranted = permissionManager.remindersGranted.collectAsState().value
@@ -124,11 +148,27 @@ fun AllRemindersScreen(
                     onDayClick = { viewModel.send(AllRemindersIntent.DateSelected(it)) },
                     withEvent = { state.value.remindersLocalDatesForScreenAsSet.contains(it) }
                 ),
-                title = "Напоминания",
+                title = visibleMonthTitle,
                 navigationIconTint = Blue,
                 navigationIcon = painterResource(Res.drawable.my_finance_arrow_back),
                 navigationIconContentDescription = "Назад",
-                onNavigationIconClick = navHostController::popBackStack
+                onNavigationIconClick = navHostController::popBackStack,
+                actions = {
+                    IconButton(
+                        onClick = {
+                            viewModel.send(AllRemindersIntent.CalendarVisibleChange(true))
+                        },
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = Color.Transparent,
+                            contentColor = blackOrWhiteColor(isLightTheme)
+                        )
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.my_finance_calendar),
+                            contentDescription = "Открыть календарь напоминаний"
+                        )
+                    }
+                }
             )
         },
         snackbarHost = {
@@ -181,6 +221,22 @@ fun AllRemindersScreen(
         }
     }
     UiLoading(isVisible = state.value.isLoading, isLightTheme = isLightTheme)
+    UiReminderDatePickerDialog(
+        isVisible = state.value.calendarVisible,
+        isLightTheme = isLightTheme,
+        onDismissRequest = {
+            viewModel.send(AllRemindersIntent.CalendarVisibleChange(false))
+        },
+        onOkClick = { date ->
+            viewModel.send(AllRemindersIntent.DateSelected(date))
+            viewModel.send(AllRemindersIntent.CalendarVisibleChange(false))
+            scope.launch { weekCalendarState.animateScrollToWeek(date) }
+        },
+        initialSelectedDate = state.value.currentDate,
+        startDate = calendarStartDate,
+        endDate = calendarEndDate,
+        reminderDates = state.value.remindersLocalDatesForScreenAsSet
+    )
     UiAlertDialog(
         isLightTheme = isLightTheme,
         isVisible = state.value.isError,
