@@ -10,13 +10,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,6 +58,9 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.YearMonth
 import kotlinx.datetime.number
+import myfinance.composeapp.generated.resources.Res
+import myfinance.composeapp.generated.resources.my_finance_today
+import org.jetbrains.compose.resources.painterResource
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,10 +73,14 @@ fun UiDatePickerDialog(
 ) {
     if (isVisible) {
         var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+        var scrollToSelectedRequest by remember { mutableIntStateOf(0) }
 
         UiDialogContainer(isLightTheme = isLightTheme, onDismissRequest = onDismissRequest) {
             Column {
-                Header(isLightTheme = isLightTheme, selectedDate = selectedDate)
+                Header(isLightTheme = isLightTheme, selectedDate = selectedDate) {
+                    selectedDate = LocalDate.now()
+                    scrollToSelectedRequest++
+                }
                 DaysRow(isLightTheme = isLightTheme)
                 Spacer(modifier = Modifier.height(4.dp))
                 HorizontalDivider(
@@ -79,7 +91,8 @@ fun UiDatePickerDialog(
                 Calendar(
                     isLightTheme = isLightTheme,
                     onDayClick = { date -> selectedDate = date },
-                    selectedDate = selectedDate
+                    selectedDate = selectedDate,
+                    scrollToSelectedRequest = scrollToSelectedRequest
                 )
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
@@ -138,18 +151,25 @@ private fun Calendar(
     isLightTheme: Boolean,
     onDayClick: (LocalDate) -> Unit,
     selectedDate: LocalDate?,
+    scrollToSelectedRequest: Int
 ) {
     val startDateForState = LocalDate.now().minusYears(2)
     val endDateForState = LocalDate.now().plusYears(2)
+    val calendarState = rememberCalendarState(
+        firstVisibleMonth = YearMonth.now(),
+        firstDayOfWeek = DayOfWeek.MONDAY,
+        startMonth = YearMonth(startDateForState.year, startDateForState.month.number),
+        endMonth = YearMonth(endDateForState.year, endDateForState.month.number),
+        outDateStyle = OutDateStyle.EndOfRow
+    )
+    LaunchedEffect(selectedDate, scrollToSelectedRequest) {
+        selectedDate?.let {
+            calendarState.animateScrollToMonth(YearMonth(it.year, it.month.number))
+        }
+    }
     VerticalCalendar(
         modifier = Modifier.height(300.dp),
-        state = rememberCalendarState(
-            firstVisibleMonth = YearMonth.now(),
-            firstDayOfWeek = DayOfWeek.MONDAY,
-            startMonth = YearMonth(startDateForState.year, startDateForState.month.number),
-            endMonth = YearMonth(endDateForState.year, endDateForState.month.number),
-            outDateStyle = OutDateStyle.EndOfRow
-        ),
+        state = calendarState,
         monthHeader = { month ->
             Spacer(modifier = Modifier.height(14.dp))
             Text(
@@ -277,18 +297,40 @@ private fun getMonthName(month: Month): String = when (month) {
 }
 
 @Composable
-private fun Header(isLightTheme: Boolean, selectedDate: LocalDate?) {
-    AutoResizeText(
+private fun Header(
+    isLightTheme: Boolean,
+    selectedDate: LocalDate?,
+    onTodayClick: () -> Unit
+) {
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp, bottom = 12.dp)
-            .padding(horizontal = 6.dp),
-        text = selectedDate?.let { s ->
-            formatLocalDate(s)
-        } ?: "Выбор даты",
-        color = blackOrWhiteColor(isLightTheme = isLightTheme),
-        maxFontSize = 16.sp,
-        fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Center
-    )
+            .padding(vertical = 8.dp)
+            .padding(horizontal = 12.dp)
+    ) {
+        AutoResizeText(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 48.dp)
+                .align(Alignment.Center),
+            text = selectedDate?.let(::formatLocalDate) ?: "Выбор даты",
+            color = blackOrWhiteColor(isLightTheme = isLightTheme),
+            maxFontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+        IconButton(
+            modifier = Modifier
+                .size(40.dp)
+                .align(Alignment.CenterEnd),
+            onClick = onTodayClick
+        ) {
+            Icon(
+                modifier = Modifier.size(22.dp),
+                painter = painterResource(Res.drawable.my_finance_today),
+                tint = blackOrWhiteColor(isLightTheme = isLightTheme),
+                contentDescription = "Перейти к сегодняшней дате"
+            )
+        }
+    }
 }
