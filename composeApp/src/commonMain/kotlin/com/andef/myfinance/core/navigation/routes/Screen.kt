@@ -34,8 +34,6 @@ sealed class Screen(val route: String) {
         fun passId(id: Long): String = "$EXPENSE_SCREEN/$id"
     }
 
-    data object CurrencysScreen: Screen(route = CURRENCYS_SCREEN)
-
     data object AllRemindersScreen: Screen(route = ALL_REMINDERS_SCREEN)
     data object ReminderAddScreen: Screen(route = REMINDER_ADD_SCREEN)
     data object ReminderScreen: Screen(route = "$REMINDER_SCREEN/{$ID_PARAM}") {
@@ -57,7 +55,6 @@ sealed class Screen(val route: String) {
         private const val EXPENSE_SCREEN = "expense-screen"
         private const val EXPENSE_ANALYSIS_SCREEN = "expense-analysis-screen"
         private const val INCOME_ANALYSIS_SCREEN = "income-analysis-screen"
-        private const val CURRENCYS_SCREEN = "currencys-screen"
         private const val ALL_REMINDERS_SCREEN = "all-reminders-screen"
         private const val REMINDER_ADD_SCREEN = "reminder-add-screen"
         private const val REMINDER_SCREEN = "reminder-screen"
