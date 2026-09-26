@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,11 +20,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -45,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.andef.myfinance.core.design.chooser.ui.UiChooser
+import com.andef.myfinance.core.design.bottom.sheet.ui.UiDefaultCategoryBottomSheet
 import com.andef.myfinance.core.design.date.picker.ui.UiDatePickerDialog
 import com.andef.myfinance.core.design.down.button.ui.DownButton
 import com.andef.myfinance.core.design.loading.ui.UiLoading
@@ -56,6 +60,7 @@ import com.andef.myfinance.core.design.textfield.ui.UiTextField
 import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.design.topbar.ui.UiTopBar
 import com.andef.myfinance.core.domain.expense_common.expense_category.entities.BaseExpenseCategory
+import com.andef.myfinance.core.domain.expense_common.expense_category.entities.ExpenseCategoryModel
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.numbers.formatAmountForEdit
@@ -201,6 +206,8 @@ private fun ColumnScope.MainContent(
         }
     }
     var typeExpanded by remember { mutableStateOf(false) }
+    var defaultCategorySheetVisible by remember { mutableStateOf(false) }
+    val defaultCategorySheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     Column(
         modifier = Modifier
             .weight(1f)
@@ -271,38 +278,7 @@ private fun ColumnScope.MainContent(
                     else -> item.title
                 }
             },
-            itemToLeadingIcon = { item ->
-                val image = when (item.title) {
-                    BaseExpenseCategory.PRODUCTS.titleForUser -> painterResource(Res.drawable.my_finance_products)
-                    BaseExpenseCategory.CAFE.titleForUser -> painterResource(Res.drawable.my_finance_cafe)
-                    BaseExpenseCategory.HOME.titleForUser -> painterResource(Res.drawable.my_finance_home)
-                    BaseExpenseCategory.GIFTS.titleForUser -> painterResource(Res.drawable.my_finance_gifts)
-                    BaseExpenseCategory.STUDY.titleForUser -> painterResource(Res.drawable.my_finance_study)
-                    BaseExpenseCategory.HEALTH.titleForUser -> painterResource(Res.drawable.my_finance_health)
-                    BaseExpenseCategory.TRANSPORT.titleForUser -> painterResource(Res.drawable.my_finance_transport)
-                    BaseExpenseCategory.SPORT.titleForUser -> painterResource(Res.drawable.my_finance_sport)
-                    BaseExpenseCategory.CLOTHES.titleForUser -> painterResource(Res.drawable.my_finance_clothes)
-                    BaseExpenseCategory.OTHER.titleForUser -> painterResource(Res.drawable.my_finance_other)
-                    else -> null
-                }
-                if (image != null) {
-                    Image(
-                        modifier = Modifier
-                            .size(24.dp)
-                            .clip(CircleShape),
-                        painter = image,
-                        contentScale = ContentScale.Crop,
-                        contentDescription = "Фото для категории расхода"
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .size(24.dp)
-                            .background(generateColorFromString(item.title), CircleShape)
-                            .clip(CircleShape)
-                    )
-                }
-            },
+            itemToLeadingIcon = { item -> ExpenseCategoryIcon(item) },
             isLightTheme = isLightTheme,
             value = state.category?.title?.let {
                 when (it) {
@@ -328,6 +304,18 @@ private fun ColumnScope.MainContent(
             },
             onExpandedChange = { typeExpanded = it },
             expanded = typeExpanded,
+        )
+        Spacer(modifier = Modifier.height(2.dp))
+        Text(
+            text = state.defaultCategory?.let {
+                "По умолчанию: ${it.title}. Нажмите, чтобы изменить"
+            } ?: "Нажмите для выбора категории по умолчанию",
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .clickable { defaultCategorySheetVisible = true },
+            color = grayColor(isLightTheme),
+            fontSize = 13.sp
         )
         Spacer(modifier = Modifier.height(16.dp))
         UiChooser(
@@ -364,5 +352,55 @@ private fun ColumnScope.MainContent(
             )
         )
         Spacer(modifier = Modifier.height(6.dp))
+    }
+    UiDefaultCategoryBottomSheet(
+        isLightTheme = isLightTheme,
+        isVisible = defaultCategorySheetVisible,
+        sheetState = defaultCategorySheetState,
+        title = "Выбор категории расхода по умолчанию:",
+        categories = state.expenseCategories,
+        selectedCategory = state.defaultCategory,
+        categoryKey = { it.title },
+        categoryTitle = { it.title },
+        categoryIcon = { ExpenseCategoryIcon(it) },
+        onDismissRequest = { defaultCategorySheetVisible = false },
+        onCategoryClick = { category ->
+            defaultCategorySheetVisible = false
+            viewModel.send(ExpenseAddAndChangeIntent.SetDefaultCategory(category))
+        }
+    )
+}
+
+@Composable
+private fun ExpenseCategoryIcon(category: ExpenseCategoryModel) {
+    val image = when (category.title) {
+        BaseExpenseCategory.PRODUCTS.titleForUser -> painterResource(Res.drawable.my_finance_products)
+        BaseExpenseCategory.CAFE.titleForUser -> painterResource(Res.drawable.my_finance_cafe)
+        BaseExpenseCategory.HOME.titleForUser -> painterResource(Res.drawable.my_finance_home)
+        BaseExpenseCategory.GIFTS.titleForUser -> painterResource(Res.drawable.my_finance_gifts)
+        BaseExpenseCategory.STUDY.titleForUser -> painterResource(Res.drawable.my_finance_study)
+        BaseExpenseCategory.HEALTH.titleForUser -> painterResource(Res.drawable.my_finance_health)
+        BaseExpenseCategory.TRANSPORT.titleForUser -> painterResource(Res.drawable.my_finance_transport)
+        BaseExpenseCategory.SPORT.titleForUser -> painterResource(Res.drawable.my_finance_sport)
+        BaseExpenseCategory.CLOTHES.titleForUser -> painterResource(Res.drawable.my_finance_clothes)
+        BaseExpenseCategory.OTHER.titleForUser -> painterResource(Res.drawable.my_finance_other)
+        else -> null
+    }
+    if (image != null) {
+        Image(
+            modifier = Modifier
+                .size(24.dp)
+                .clip(CircleShape),
+            painter = image,
+            contentScale = ContentScale.Crop,
+            contentDescription = "Фото для категории расхода"
+        )
+    } else {
+        Box(
+            modifier = Modifier
+                .size(24.dp)
+                .background(generateColorFromString(category.title), CircleShape)
+                .clip(CircleShape)
+        )
     }
 }

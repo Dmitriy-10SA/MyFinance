@@ -38,9 +38,27 @@ class PreferencesRepositoryImpl(private val prefs: Settings) : PreferencesReposi
         prefs.putBoolean(IS_FIRST_START_KEY, isFirstStart)
     }
 
+    override fun getDefaultExpenseCategoryTitle(): String? =
+        prefs.getStringOrNull(DEFAULT_EXPENSE_CATEGORY_KEY)
+
+    override fun setDefaultExpenseCategoryTitle(title: String?) {
+        if (title == null) prefs.remove(DEFAULT_EXPENSE_CATEGORY_KEY)
+        else prefs.putString(DEFAULT_EXPENSE_CATEGORY_KEY, title)
+    }
+
+    override fun getDefaultIncomeCategoryTitle(): String? =
+        prefs.getStringOrNull(DEFAULT_INCOME_CATEGORY_KEY)
+
+    override fun setDefaultIncomeCategoryTitle(title: String?) {
+        if (title == null) prefs.remove(DEFAULT_INCOME_CATEGORY_KEY)
+        else prefs.putString(DEFAULT_INCOME_CATEGORY_KEY, title)
+    }
+
     companion object {
         private const val IS_LIGHT_THEME = "is_light_theme"
         private const val USERNAME_KEY = "username"
         private const val IS_FIRST_START_KEY = "is_first_start"
+        private const val DEFAULT_EXPENSE_CATEGORY_KEY = "default_expense_category"
+        private const val DEFAULT_INCOME_CATEGORY_KEY = "default_income_category"
     }
 }

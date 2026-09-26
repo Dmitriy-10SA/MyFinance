@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDate
 sealed class ExpenseAddAndChangeIntent {
     data class ChangeAmount(val amount: Long?) : ExpenseAddAndChangeIntent()
     data class ChangeCategory(val category: ExpenseCategoryModel) : ExpenseAddAndChangeIntent()
+    data class SetDefaultCategory(val category: ExpenseCategoryModel?) : ExpenseAddAndChangeIntent()
     data class ChangeNote(val note: String?) : ExpenseAddAndChangeIntent()
     data class ChangeDate(val date: LocalDate) : ExpenseAddAndChangeIntent()
     data class ChangeDatePickerVisible(val isVisible: Boolean) : ExpenseAddAndChangeIntent()

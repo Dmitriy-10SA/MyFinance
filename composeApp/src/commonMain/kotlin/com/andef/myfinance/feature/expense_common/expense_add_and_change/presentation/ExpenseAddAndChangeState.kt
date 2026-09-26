@@ -8,6 +8,7 @@ data class ExpenseAddAndChangeState(
     val expenseId: Long? = null,
     val amount: Long? = null,
     val category: ExpenseCategoryModel? = null,
+    val defaultCategory: ExpenseCategoryModel? = null,
     val date: LocalDate? = LocalDate.now(),
     val note: String? = null,
     val isLoading: Boolean = false,
