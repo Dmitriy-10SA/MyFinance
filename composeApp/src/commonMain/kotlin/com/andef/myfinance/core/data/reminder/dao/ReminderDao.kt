@@ -16,7 +16,8 @@ class ReminderDao(private val queries: ReminderQueries) {
         queries.insertReminder(
             reminder.text,
             reminder.date,
-            reminder.time
+            reminder.time,
+            reminder.repeat_type
         )
         return queries.lastInsertRowId().executeAsOne()
     }
@@ -25,6 +26,7 @@ class ReminderDao(private val queries: ReminderQueries) {
         reminder.text,
         reminder.date,
         reminder.time,
+        reminder.repeat_type,
         reminder.id
     )
 
@@ -37,6 +39,6 @@ class ReminderDao(private val queries: ReminderQueries) {
             .mapToList(Dispatchers.IO)
 
     fun getRemindersAsList(startDate: Int, endDate: Int): List<Reminder> =
-        queries.getRemindersBetween(startDate.toLong(), endDate.toLong())
+        queries.getRemindersAsList(startDate.toLong(), endDate.toLong())
             .executeAsList()
 }

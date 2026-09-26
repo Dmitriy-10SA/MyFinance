@@ -165,7 +165,8 @@ fun AllRemindersScreen(
                                 reminderId = reminder.id,
                                 reminderText = reminder.text,
                                 reminderDate = reminder.date,
-                                reminderTime = reminder.time
+                                reminderTime = reminder.time,
+                                reminderRepeatType = reminder.repeatType
                             )
                         )
                     },
@@ -403,7 +404,11 @@ private fun DeleteDialog(
     UiAlertDialog(
         isLightTheme = isLightTheme,
         title = "Удаление напоминания",
-        subtitle = "Вы уверены? Данное действие невозможно отменить!",
+        subtitle = if (state.value.reminderRepeatTypeInBottomSheet != null) {
+            "Будут удалены это и все будущие повторения. Действие невозможно отменить!"
+        } else {
+            "Вы уверены? Данное действие невозможно отменить!"
+        },
         yesTitle = "Удалить",
         cancelTitle = "Отмена",
         cancelTitleColor = Blue,

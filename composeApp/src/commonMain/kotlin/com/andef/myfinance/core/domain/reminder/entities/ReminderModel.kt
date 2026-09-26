@@ -14,5 +14,7 @@ data class ReminderModel(
     @SerialName("date")
     val date: LocalDate,
     @SerialName("time")
-    val time: LocalTime
+    val time: LocalTime,
+    @SerialName("repeatType")
+    val repeatType: ReminderRepeatType? = null
 )

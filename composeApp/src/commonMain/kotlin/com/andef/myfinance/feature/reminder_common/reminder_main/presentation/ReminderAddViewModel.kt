@@ -3,6 +3,7 @@ package com.andef.myfinance.feature.reminder_common.reminder_main.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andef.myfinance.core.domain.reminder.entities.ReminderModel
+import com.andef.myfinance.core.domain.reminder.entities.ReminderRepeatType
 import com.andef.myfinance.core.domain.reminder.usecases.AddReminderUseCase
 import com.andef.myfinance.core.domain.reminder.usecases.ChangeReminderUseCase
 import com.andef.myfinance.core.domain.reminder.usecases.GetReminderByIdUseCase
@@ -41,6 +42,10 @@ class ReminderAddViewModel(
                 reminderTime = intent.time
             )
 
+            is ReminderAddIntent.ChangeRepeatType -> changeInput(
+                repeatType = intent.repeatType
+            )
+
             is ReminderAddIntent.ChangeTimePickerVisible -> changeTimePickerVisible(
                 isVisible = intent.isVisible
             )
@@ -55,7 +60,8 @@ class ReminderAddViewModel(
                 onError = intent.onError,
                 reminderText = _state.value.reminderText,
                 reminderDate = _state.value.reminderDate ?: throw IllegalArgumentException(),
-                reminderTime = _state.value.reminderTime ?: throw IllegalArgumentException()
+                reminderTime = _state.value.reminderTime ?: throw IllegalArgumentException(),
+                repeatType = _state.value.repeatType
             )
         }
     }
@@ -69,7 +75,8 @@ class ReminderAddViewModel(
                 changeInput(
                     reminderText = reminder.text,
                     reminderDate = reminder.date,
-                    reminderTime = reminder.time
+                    reminderTime = reminder.time,
+                    repeatType = reminder.repeatType
                 )
                 _state.value = _state.value.copy(isAdd = false, reminderId = reminderId)
             } catch (_: Exception) {
@@ -93,7 +100,8 @@ class ReminderAddViewModel(
         onError: (String) -> Unit,
         reminderText: String,
         reminderDate: LocalDate,
-        reminderTime: LocalTime
+        reminderTime: LocalTime,
+        repeatType: ReminderRepeatType?
     ) {
         viewModelScope.launch {
             try {
@@ -107,7 +115,8 @@ class ReminderAddViewModel(
                                 id = 0,
                                 text = reminderText,
                                 date = reminderDate,
-                                time = reminderTime
+                                time = reminderTime,
+                                repeatType = repeatType
                             )
                         )
                     } else {
@@ -115,7 +124,8 @@ class ReminderAddViewModel(
                             id = reminderId ?: throw IllegalArgumentException(),
                             text = reminderText,
                             date = reminderDate,
-                            time = reminderTime
+                            time = reminderTime,
+                            repeatType = repeatType
                         )
                     }
                 }
@@ -131,12 +141,14 @@ class ReminderAddViewModel(
     private fun changeInput(
         reminderText: String = _state.value.reminderText,
         reminderDate: LocalDate? = _state.value.reminderDate,
-        reminderTime: LocalTime? = _state.value.reminderTime
+        reminderTime: LocalTime? = _state.value.reminderTime,
+        repeatType: ReminderRepeatType? = _state.value.repeatType
     ) {
         _state.value = _state.value.copy(
             reminderText = reminderText,
             reminderDate = reminderDate,
             reminderTime = reminderTime,
+            repeatType = repeatType,
             saveButtonEnabled = reminderText.isNotEmpty() && reminderDate != null && reminderTime != null
         )
     }

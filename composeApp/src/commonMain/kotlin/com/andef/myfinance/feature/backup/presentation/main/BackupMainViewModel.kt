@@ -93,7 +93,8 @@ class BackupMainViewModel (
                             id = it.id,
                             date = it.date,
                             text = it.text,
-                            time = it.time
+                            time = it.time,
+                            repeatType = it.repeatType
                         )
                     }
                 }
