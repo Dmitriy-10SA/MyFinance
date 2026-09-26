@@ -46,7 +46,8 @@ class AllRemindersViewModel(
                     reminderIdInBottomSheet = intent.reminderId,
                     reminderTextInBottomSheet = intent.reminderText,
                     reminderDateInBottomSheet = intent.reminderDate,
-                    reminderTimeInBottomSheet = intent.reminderTime
+                    reminderTimeInBottomSheet = intent.reminderTime,
+                    reminderRepeatTypeInBottomSheet = intent.reminderRepeatType
                 )
             }
 

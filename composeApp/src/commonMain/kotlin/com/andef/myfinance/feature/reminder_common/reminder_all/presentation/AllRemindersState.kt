@@ -1,6 +1,7 @@
 package com.andef.myfinance.feature.reminder_common.reminder_all.presentation
 
 import com.andef.myfinance.core.domain.reminder.entities.ReminderModel
+import com.andef.myfinance.core.domain.reminder.entities.ReminderRepeatType
 import com.andef.myfinance.core.utils.getters.now
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -13,6 +14,7 @@ data class AllRemindersState(
     val reminderIdInBottomSheet: Long? = null,
     val reminderDateInBottomSheet: LocalDate? = null,
     val reminderTimeInBottomSheet: LocalTime? = null,
+    val reminderRepeatTypeInBottomSheet: ReminderRepeatType? = null,
     val reminderSheetVisible: Boolean = false,
     val currentDate: LocalDate = LocalDate.now(),
     val deleteDialogVisible: Boolean = false,

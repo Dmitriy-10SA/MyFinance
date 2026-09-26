@@ -1,5 +1,6 @@
 package com.andef.myfinance.feature.reminder_common.reminder_all.presentation
 
+import com.andef.myfinance.core.domain.reminder.entities.ReminderRepeatType
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
@@ -14,6 +15,7 @@ sealed class AllRemindersIntent {
         val reminderId: Long? = null,
         val reminderText: String? = null,
         val reminderDate: LocalDate? = null,
-        val reminderTime: LocalTime? = null
+        val reminderTime: LocalTime? = null,
+        val reminderRepeatType: ReminderRepeatType? = null
     ) : AllRemindersIntent()
 }

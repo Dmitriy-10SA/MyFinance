@@ -97,14 +97,19 @@ private fun RowScope.TextAndStatus(reminderModel: ReminderModel, isLightTheme: B
         )
         val nowDate = LocalDate.now()
         val nowTime = LocalTime.now()
-        Text(
-            text = if (reminderModel.date > nowDate) {
+        val status = if (reminderModel.repeatType != null) {
+            reminderModel.repeatType.titleForUser
+        } else {
+            if (reminderModel.date > nowDate) {
                 "Ожидается"
             } else if (reminderModel.date == nowDate && reminderModel.time > nowTime) {
                 "Ожидается"
             } else {
                 "Завершено"
-            },
+            }
+        }
+        Text(
+            text = status,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             fontSize = 14.sp,

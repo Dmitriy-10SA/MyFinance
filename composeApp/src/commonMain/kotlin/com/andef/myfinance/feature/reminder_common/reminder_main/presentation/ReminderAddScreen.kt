@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -43,6 +44,7 @@ import com.andef.myfinance.core.design.chooser.ui.UiChooser
 import com.andef.myfinance.core.design.date.picker.ui.UiDatePickerDialog
 import com.andef.myfinance.core.design.down.button.ui.DownButton
 import com.andef.myfinance.core.design.loading.ui.UiLoading
+import com.andef.myfinance.core.design.menu.ui.UiMenu
 import com.andef.myfinance.core.design.scaffold.ui.UiScaffold
 import com.andef.myfinance.core.design.snackbar.type.UiSnackbarType
 import com.andef.myfinance.core.design.snackbar.ui.UiSnackbar
@@ -50,6 +52,7 @@ import com.andef.myfinance.core.design.textfield.ui.UiTextField
 import com.andef.myfinance.core.design.time.picker.ui.UiTimePickerDialog
 import com.andef.myfinance.core.design.topbar.type.UiTopBarType
 import com.andef.myfinance.core.design.topbar.ui.UiTopBar
+import com.andef.myfinance.core.domain.reminder.entities.ReminderRepeatType
 import com.andef.myfinance.core.utils.Blue
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalDate
 import com.andef.myfinance.core.utils.formatters.datetime.formatLocalTime
@@ -60,6 +63,7 @@ import myfinance.composeapp.generated.resources.my_finance_arrow_back
 import myfinance.composeapp.generated.resources.my_finance_calendar
 import myfinance.composeapp.generated.resources.my_finance_comment
 import myfinance.composeapp.generated.resources.my_finance_notification_perm
+import myfinance.composeapp.generated.resources.my_finance_schedule
 import myfinance.composeapp.generated.resources.my_finance_time_picker
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -187,6 +191,7 @@ private fun ColumnScope.MainContent(
     state: State<ReminderAddState>,
     viewModel: ReminderAddViewModel
 ) {
+    val repeatMenuExpanded = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .weight(1f)
@@ -251,6 +256,31 @@ private fun ColumnScope.MainContent(
             placeholderText = "Время",
             leadingIcon = painterResource(Res.drawable.my_finance_time_picker),
             leadingIconContentDescription = "Иконка выбор времени"
+        )
+        Spacer(modifier = Modifier.height(28.dp))
+        Text(
+            text = "Необязательные поля:",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Start,
+            color = grayColor(isLightTheme),
+            fontSize = 16.sp
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        UiMenu(
+            items = listOf<ReminderRepeatType?>(null) + ReminderRepeatType.entries,
+            modifier = Modifier.fillMaxWidth(),
+            itemToString = { it?.titleForUser ?: "Не повторять" },
+            isLightTheme = isLightTheme,
+            value = state.value.repeatType?.titleForUser.orEmpty(),
+            placeholderText = "Повтор",
+            textFieldLeadingIcon = painterResource(Res.drawable.my_finance_schedule),
+            textFieldLeadingIconContentDescription = "Значок повтора",
+            onItemClick = { repeatType ->
+                repeatMenuExpanded.value = false
+                viewModel.send(ReminderAddIntent.ChangeRepeatType(repeatType))
+            },
+            expanded = repeatMenuExpanded.value,
+            onExpandedChange = { repeatMenuExpanded.value = it }
         )
         Spacer(modifier = Modifier.height(6.dp))
     }
