@@ -11,4 +11,8 @@ interface PreferencesRepository {
     fun setUsername(username: String)
     fun getIsFirstStart(): Boolean
     fun setIsFirstStart(isFirstStart: Boolean)
+    fun getDefaultExpenseCategoryTitle(): String?
+    fun setDefaultExpenseCategoryTitle(title: String?)
+    fun getDefaultIncomeCategoryTitle(): String?
+    fun setDefaultIncomeCategoryTitle(title: String?)
 }

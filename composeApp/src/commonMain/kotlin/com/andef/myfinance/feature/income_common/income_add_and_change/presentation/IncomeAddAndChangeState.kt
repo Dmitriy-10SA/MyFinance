@@ -8,6 +8,7 @@ data class IncomeAddAndChangeState(
     val incomeId: Long? = null,
     val amount: Long? = null,
     val category: IncomeCategoryModel? = null,
+    val defaultCategory: IncomeCategoryModel? = null,
     val date: LocalDate? = LocalDate.now(),
     val note: String? = null,
     val isLoading: Boolean = false,

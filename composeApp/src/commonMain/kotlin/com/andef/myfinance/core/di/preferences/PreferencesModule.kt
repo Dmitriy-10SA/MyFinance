@@ -3,11 +3,15 @@ package com.andef.myfinance.core.di.preferences
 import com.andef.myfinance.core.data.preferences.repository.PreferencesRepositoryImpl
 import com.andef.myfinance.core.domain.preferences.repository.PreferencesRepository
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsFirstStartUseCase
+import com.andef.myfinance.core.domain.preferences.usecases.GetDefaultExpenseCategoryTitleUseCase
+import com.andef.myfinance.core.domain.preferences.usecases.GetDefaultIncomeCategoryTitleUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsLightThemeAsFlowUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.GetIsLightThemeUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.GetUsernameAsFlowUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.GetUsernameUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.SetIsFirstStartUseCase
+import com.andef.myfinance.core.domain.preferences.usecases.SetDefaultExpenseCategoryTitleUseCase
+import com.andef.myfinance.core.domain.preferences.usecases.SetDefaultIncomeCategoryTitleUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.SetIsLightThemeUseCase
 import com.andef.myfinance.core.domain.preferences.usecases.SetUsernameUseCase
 import org.koin.core.module.Module
@@ -21,11 +25,15 @@ expect fun settingsModule(): Module
 private val preferencesRepositoryModule = module {
     singleOf(::PreferencesRepositoryImpl).bind<PreferencesRepository>()
     factoryOf(::GetIsFirstStartUseCase)
+    factoryOf(::GetDefaultExpenseCategoryTitleUseCase)
+    factoryOf(::GetDefaultIncomeCategoryTitleUseCase)
     factoryOf(::GetIsLightThemeAsFlowUseCase)
     factoryOf(::GetIsLightThemeUseCase)
     factoryOf(::GetUsernameUseCase)
     factoryOf(::GetUsernameAsFlowUseCase)
     factoryOf(::SetIsFirstStartUseCase)
+    factoryOf(::SetDefaultExpenseCategoryTitleUseCase)
+    factoryOf(::SetDefaultIncomeCategoryTitleUseCase)
     factoryOf(::SetIsLightThemeUseCase)
     factoryOf(::SetUsernameUseCase)
 }

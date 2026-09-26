@@ -9,6 +9,8 @@ import com.andef.myfinance.core.domain.expense_common.expense.usecases.UpdateExp
 import com.andef.myfinance.core.domain.expense_common.expense_category.entities.BaseExpenseCategory
 import com.andef.myfinance.core.domain.expense_common.expense_category.entities.ExpenseCategoryModel
 import com.andef.myfinance.core.domain.expense_common.expense_category.usecases.GetExpenseCategoriesUseCase
+import com.andef.myfinance.core.domain.preferences.usecases.GetDefaultExpenseCategoryTitleUseCase
+import com.andef.myfinance.core.domain.preferences.usecases.SetDefaultExpenseCategoryTitleUseCase
 import com.andef.myfinance.core.utils.getters.getTitleForExpense
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -21,7 +23,9 @@ class ExpenseAddAndChangeViewModel(
     private val addExpenseUseCase: AddExpenseUseCase,
     private val updateExpenseUseCase: UpdateExpenseUseCase,
     private val getExpenseByIdUseCase: GetExpenseByIdUseCase,
-    private val getExpenseCategoriesUseCase: GetExpenseCategoriesUseCase
+    private val getExpenseCategoriesUseCase: GetExpenseCategoriesUseCase,
+    private val getDefaultExpenseCategoryTitleUseCase: GetDefaultExpenseCategoryTitleUseCase,
+    private val setDefaultExpenseCategoryTitleUseCase: SetDefaultExpenseCategoryTitleUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(ExpenseAddAndChangeState())
     val state: StateFlow<ExpenseAddAndChangeState> = _state
@@ -36,6 +40,10 @@ class ExpenseAddAndChangeViewModel(
             is ExpenseAddAndChangeIntent.ChangeCategory -> {
                 _state.value = _state.value.copy(category = intent.category)
                 buttonStateCheck()
+            }
+
+            is ExpenseAddAndChangeIntent.SetDefaultCategory -> {
+                setDefaultCategory(intent.category)
             }
 
             is ExpenseAddAndChangeIntent.ChangeDate -> {
@@ -127,14 +135,37 @@ class ExpenseAddAndChangeViewModel(
                     }
                 val userExpenseCategories =
                     withContext(Dispatchers.IO) { getExpenseCategoriesUseCase.invoke() }
-                _state.value =
-                    _state.value.copy(expenseCategories = baseExpenseCategories + userExpenseCategories)
+                val expenseCategories = baseExpenseCategories + userExpenseCategories
+                val defaultCategoryTitle = getDefaultExpenseCategoryTitleUseCase.invoke()
+                val defaultCategory = expenseCategories.find { it.title == defaultCategoryTitle }
+                if (defaultCategoryTitle != null && defaultCategory == null) {
+                    setDefaultExpenseCategoryTitleUseCase.invoke(null)
+                }
+                _state.value = _state.value.copy(
+                    expenseCategories = expenseCategories,
+                    defaultCategory = defaultCategory,
+                    category = if (id == null) defaultCategory else _state.value.category
+                )
+                buttonStateCheck()
             } catch (_: Exception) {
                 onError("Ошибка! Попробуйте ещё раз!")
             } finally {
                 _state.value = _state.value.copy(isLoading = false)
             }
         }
+    }
+
+    private fun setDefaultCategory(category: ExpenseCategoryModel?) {
+        setDefaultExpenseCategoryTitleUseCase.invoke(category?.title)
+        _state.value = _state.value.copy(
+            defaultCategory = category,
+            category = if (category != null && _state.value.isAdd) {
+                category
+            } else {
+                _state.value.category
+            }
+        )
+        buttonStateCheck()
     }
 
     private fun buttonStateCheck() {

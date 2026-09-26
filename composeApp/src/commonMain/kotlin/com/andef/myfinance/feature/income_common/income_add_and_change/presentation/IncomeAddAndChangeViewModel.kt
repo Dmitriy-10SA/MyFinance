@@ -9,6 +9,8 @@ import com.andef.myfinance.core.domain.income_common.income.usecases.UpdateIncom
 import com.andef.myfinance.core.domain.income_common.income_category.entities.BaseIncomeCategory
 import com.andef.myfinance.core.domain.income_common.income_category.entities.IncomeCategoryModel
 import com.andef.myfinance.core.domain.income_common.income_category.usecases.GetIncomeCategoriesUseCase
+import com.andef.myfinance.core.domain.preferences.usecases.GetDefaultIncomeCategoryTitleUseCase
+import com.andef.myfinance.core.domain.preferences.usecases.SetDefaultIncomeCategoryTitleUseCase
 import com.andef.myfinance.core.utils.getters.getTitleForIncome
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -21,7 +23,9 @@ class IncomeAddAndChangeViewModel(
     private val getIncomeByIdUseCase: GetIncomeByIdUseCase,
     private val addIncomeUseCase: AddIncomeUseCase,
     private val updateIncomeUseCase: UpdateIncomeUseCase,
-    private val getIncomeCategoriesUseCase: GetIncomeCategoriesUseCase
+    private val getIncomeCategoriesUseCase: GetIncomeCategoriesUseCase,
+    private val getDefaultIncomeCategoryTitleUseCase: GetDefaultIncomeCategoryTitleUseCase,
+    private val setDefaultIncomeCategoryTitleUseCase: SetDefaultIncomeCategoryTitleUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(IncomeAddAndChangeState())
     val state: StateFlow<IncomeAddAndChangeState> = _state
@@ -36,6 +40,10 @@ class IncomeAddAndChangeViewModel(
             is IncomeAddAndChangeIntent.ChangeCategory -> {
                 _state.value = _state.value.copy(category = intent.category)
                 buttonStateCheck()
+            }
+
+            is IncomeAddAndChangeIntent.SetDefaultCategory -> {
+                setDefaultCategory(intent.category)
             }
 
             is IncomeAddAndChangeIntent.ChangeDate -> {
@@ -135,13 +143,36 @@ class IncomeAddAndChangeViewModel(
                     }
                 val userIncomeCategories =
                     withContext(Dispatchers.IO) { getIncomeCategoriesUseCase.invoke() }
-                _state.value =
-                    _state.value.copy(incomeCategories = baseIncomeCategories + userIncomeCategories)
+                val incomeCategories = baseIncomeCategories + userIncomeCategories
+                val defaultCategoryTitle = getDefaultIncomeCategoryTitleUseCase.invoke()
+                val defaultCategory = incomeCategories.find { it.title == defaultCategoryTitle }
+                if (defaultCategoryTitle != null && defaultCategory == null) {
+                    setDefaultIncomeCategoryTitleUseCase.invoke(null)
+                }
+                _state.value = _state.value.copy(
+                    incomeCategories = incomeCategories,
+                    defaultCategory = defaultCategory,
+                    category = if (incomeId == null) defaultCategory else _state.value.category
+                )
+                buttonStateCheck()
             } catch (_: Exception) {
                 onError("Ошибка! Попробуйте ещё раз!")
             } finally {
                 _state.value = _state.value.copy(isLoading = false)
             }
         }
+    }
+
+    private fun setDefaultCategory(category: IncomeCategoryModel?) {
+        setDefaultIncomeCategoryTitleUseCase.invoke(category?.title)
+        _state.value = _state.value.copy(
+            defaultCategory = category,
+            category = if (category != null && _state.value.isAdd) {
+                category
+            } else {
+                _state.value.category
+            }
+        )
+        buttonStateCheck()
     }
 }

@@ -75,6 +75,7 @@ import myfinance.composeapp.generated.resources.my_finance_icon
 import myfinance.composeapp.generated.resources.my_finance_outline_dark
 import myfinance.composeapp.generated.resources.my_finance_outline_light
 import myfinance.composeapp.generated.resources.my_finance_person
+import myfinance.composeapp.generated.resources.my_finance_privacy_policy
 import myfinance.composeapp.generated.resources.my_finance_reminder
 import myfinance.composeapp.generated.resources.my_finance_trending_down
 import myfinance.composeapp.generated.resources.my_finance_trending_up
@@ -104,6 +105,8 @@ fun MainDrawerSheetContent(
     var usernameValue by remember { mutableStateOf(username) }
     val feedbackSheetState = rememberModalBottomSheetState()
     val feedbackSheetVisible = rememberSaveable { mutableStateOf(false) }
+    val privacyPolicySheetState = rememberModalBottomSheetState()
+    val privacyPolicySheetVisible = rememberSaveable { mutableStateOf(false) }
 
     UiModalDrawerSheet(isLightTheme = isLightTheme, drawerState = drawerState) {
         InnerContent(
@@ -114,6 +117,7 @@ fun MainDrawerSheetContent(
             drawerState = drawerState,
             nameChangeSheetVisible = nameChangeSheetVisible,
             feedbackSheetVisible = feedbackSheetVisible,
+            privacyPolicySheetVisible = privacyPolicySheetVisible,
             linkOpener = linkOpener,
             viewModel = viewModel
         )
@@ -134,6 +138,26 @@ fun MainDrawerSheetContent(
             onTelegramClick = { linkOpener.openLink("https://t.me/dsemkin") },
             onMailClick = { linkOpener.openLink("mailto:semkin_dmitriy10@vk.com") }
         )
+        UiModalBottomSheet(
+            isLightTheme = isLightTheme,
+            isVisible = privacyPolicySheetVisible.value,
+            onDismissRequest = { privacyPolicySheetVisible.value = false },
+            sheetState = privacyPolicySheetState
+        ) {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                item {
+                    Text(
+                        text = privacyPolicyText,
+                        color = blackOrWhiteColor(isLightTheme),
+                        fontSize = 15.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 24.dp)
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -196,6 +220,7 @@ private fun InnerContent(
     drawerState: DrawerState,
     nameChangeSheetVisible: MutableState<Boolean>,
     feedbackSheetVisible: MutableState<Boolean>,
+    privacyPolicySheetVisible: MutableState<Boolean>,
     linkOpener: LinkOpener,
     viewModel: AppViewModel
 ) {
@@ -316,6 +341,20 @@ private fun InnerContent(
                     iconContentDescription = "Иконка почты",
                     itemText = "Обратная связь",
                     onClick = { feedbackSheetVisible.value = true }
+                )
+            }
+            item {
+                UiModalDrawerSheetInnerItem(
+                    isLightTheme = isLightTheme,
+                    icon = painterResource(Res.drawable.my_finance_privacy_policy),
+                    iconContentDescription = "Иконка документа",
+                    itemText = "Политика конфиденциальности",
+                    onClick = {
+                        scope.launch {
+                            drawerState.close()
+                            privacyPolicySheetVisible.value = true
+                        }
+                    }
                 )
             }
             item {
