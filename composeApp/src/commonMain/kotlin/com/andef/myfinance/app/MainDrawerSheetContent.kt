@@ -62,6 +62,7 @@ import com.andef.myfinance.core.utils.grayColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import myfinance.composeapp.generated.resources.Res
+import myfinance.composeapp.generated.resources.fitnesssdk_app_icon
 import myfinance.composeapp.generated.resources.my_car_app_icon
 import myfinance.composeapp.generated.resources.my_finance_analytics
 import myfinance.composeapp.generated.resources.my_finance_backup
@@ -79,6 +80,13 @@ import myfinance.composeapp.generated.resources.my_finance_trending_down
 import myfinance.composeapp.generated.resources.my_finance_trending_up
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.getKoin
+
+private const val MY_CARS_URL = "https://www.rustore.ru/catalog/app/com.andef.mycarandef"
+private const val MY_CARS_APP_ID = "com.andef.mycarandef"
+
+private const val FITNESS_SDK_URL =
+    "https://www.rustore.ru/catalog/app/com.fitnesssdk.kmpfit.android"
+private const val FITNESS_SDK_APP_ID = "com.fitnesssdk.kmpfit.android"
 
 @OptIn(markerClass = [ExperimentalMaterial3Api::class])
 @Composable
@@ -333,6 +341,21 @@ private fun InnerContent(
                             }
                         }
                     )
+                    UiModalDrawerSheetInnerItem(
+                        isLightTheme = isLightTheme,
+                        icon = painterResource(Res.drawable.fitnesssdk_app_icon),
+                        iconContentDescription = "Иконка FitnessSDK",
+                        itemText = "FitnessSDK",
+                        onClick = {
+                            scope.launch {
+                                drawerState.close()
+                                linkOpener.openAppOrLink(
+                                    appId = FITNESS_SDK_APP_ID,
+                                    fallbackUrl = FITNESS_SDK_URL
+                                )
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -346,9 +369,6 @@ private fun InnerContent(
         Spacer(modifier = Modifier.height(12.dp))
     }
 }
-
-private const val MY_CARS_URL = "https://www.rustore.ru/catalog/app/com.andef.mycarandef"
-private const val MY_CARS_APP_ID = "com.andef.mycarandef"
 
 @Composable
 private fun ColumnScope.UsernameContent(
