@@ -26,6 +26,9 @@ fun formatLocalDateForPrint(date: LocalDate): String {
             "${date.year}"
 }
 
+fun formatMonthAndYear(date: LocalDate): String =
+    "${getMonthName(date.month.number)} ${date.year}"
+
 fun formatLocalDateRange(startDate: LocalDate, endDate: LocalDate): String {
     val today = LocalDate.now()
 

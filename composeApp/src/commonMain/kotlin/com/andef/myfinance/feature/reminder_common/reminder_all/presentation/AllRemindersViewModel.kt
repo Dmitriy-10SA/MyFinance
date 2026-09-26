@@ -17,7 +17,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 
 class AllRemindersViewModel(
     private val deleteReminderUseCase: DeleteReminderUseCase,
@@ -30,6 +32,10 @@ class AllRemindersViewModel(
         when (intent) {
             is AllRemindersIntent.DateSelected -> {
                 dateSelected(intent.date)
+            }
+
+            is AllRemindersIntent.CalendarVisibleChange -> {
+                _state.value = _state.value.copy(calendarVisible = intent.isVisible)
             }
 
             is AllRemindersIntent.DeleteDialogVisibleChange -> {
@@ -82,9 +88,9 @@ class AllRemindersViewModel(
             job = viewModelScope.launch {
                 val today = LocalDate.now()
                 val lastWeek = today.minusDays(7)
-                val nextWeek = today.plusDays(21)
+                val twoYearsAhead = today.plus(DatePeriod(years = 2))
                 val previousMonday = getFirstMondayInWeekOfDate(lastWeek)
-                val endSunday = getLastSundayInWeekOfDate(nextWeek)
+                val endSunday = getLastSundayInWeekOfDate(twoYearsAhead)
                 getRemindersUseCase.invoke(previousMonday, endSunday)
                     .onStart {
                         _state.value = _state.value.copy(isLoading = true, isError = false)
@@ -131,16 +137,9 @@ class AllRemindersViewModel(
     }
 
     private fun dateSelected(date: LocalDate) {
-        viewModelScope.launch {
-            val reminders = _state.value.reminders
-            _state.value = _state.value.copy(currentDate = date, isLoading = true)
-            val remindersForScreenAsList = withContext(Dispatchers.IO) {
-                reminders.filter { it.date == _state.value.currentDate }
-            }
-            _state.value = _state.value.copy(
-                remindersForScreenAsList = remindersForScreenAsList,
-                isLoading = false
-            )
-        }
+        _state.value = _state.value.copy(
+            currentDate = date,
+            remindersForScreenAsList = _state.value.reminders.filter { it.date == date }
+        )
     }
 }

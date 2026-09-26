@@ -8,6 +8,7 @@ sealed class AllRemindersIntent {
     data object SubscribeToReminders : AllRemindersIntent()
 
     data class DateSelected(val date: LocalDate) : AllRemindersIntent()
+    data class CalendarVisibleChange(val isVisible: Boolean) : AllRemindersIntent()
     data class DeleteDialogVisibleChange(val isVisible: Boolean) : AllRemindersIntent()
     data class DeleteReminder(val id: Long, val onError: (String) -> Unit) : AllRemindersIntent()
     data class ReminderBottomSheetVisibleChange(
